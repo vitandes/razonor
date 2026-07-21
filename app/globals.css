@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  background: #f7f5f0;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Fondo "noche de misterio": cielo azul medianoche con estrellas tenues y un
+   resplandor ámbar de linterna. Para las secciones oscuras (hero, cierre). */
+.night-sky {
+  background-color: #0e1530;
+  background-image:
+    radial-gradient(ellipse 60% 45% at 78% 12%, rgba(255, 190, 61, 0.16), transparent 70%),
+    radial-gradient(ellipse 45% 35% at 12% 85%, rgba(124, 108, 242, 0.14), transparent 70%),
+    radial-gradient(1.5px 1.5px at 12% 22%, rgba(255, 255, 255, 0.5), transparent 100%),
+    radial-gradient(1px 1px at 28% 68%, rgba(255, 255, 255, 0.35), transparent 100%),
+    radial-gradient(1.5px 1.5px at 43% 15%, rgba(255, 255, 255, 0.4), transparent 100%),
+    radial-gradient(1px 1px at 61% 42%, rgba(255, 255, 255, 0.3), transparent 100%),
+    radial-gradient(1.5px 1.5px at 74% 75%, rgba(255, 255, 255, 0.45), transparent 100%),
+    radial-gradient(1px 1px at 88% 32%, rgba(255, 255, 255, 0.35), transparent 100%),
+    radial-gradient(1px 1px at 52% 88%, rgba(255, 255, 255, 0.3), transparent 100%),
+    radial-gradient(1.5px 1.5px at 91% 62%, rgba(255, 255, 255, 0.4), transparent 100%);
+}
+
+/* Aparición al hacer scroll (components/landing/Reveal.jsx añade .is-visible
+   cuando el bloque entra al viewport). */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
