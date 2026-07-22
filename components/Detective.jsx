@@ -11,7 +11,7 @@ export default function Detective({ size = 96, mood = "happy", className = "" })
       height={size}
       className={className}
       role="img"
-      aria-label="Astu, tu detective"
+      aria-label="Razo, tu detective"
     >
       {/* sombra suave */}
       <ellipse cx="60" cy="112" rx="26" ry="5" fill="#141B36" opacity="0.12" />

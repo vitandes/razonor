@@ -101,7 +101,7 @@ export async function POST(req) {
       method: "POST",
       headers: deviceId ? { "X-meli-session-id": deviceId } : {},
       body: {
-        reason: `Astuto ${details.label} (${billing === "semestral" ? "semestral" : "mensual"})`,
+        reason: `Razonor ${details.label} (${billing === "semestral" ? "semestral" : "mensual"})`,
         // Guardamos userId + plan para que el webhook sepa a quién y qué activar.
         external_reference: `${userId}::${plan}`,
         payer_email: email,

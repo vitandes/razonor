@@ -244,7 +244,7 @@ export default function Onboarding() {
                 ¡El caso de {name} está abierto!
               </h1>
               <p className="mx-auto mt-4 max-w-md text-lg leading-relaxed text-muted">
-                Astuto va a entrenar a {name} para{" "}
+                Razonor va a entrenar a {name} para{" "}
                 <span className="font-semibold text-ink">{goalsPhrase(goals)}</span>
                 , con retos de {interestsPhrase(interests)} dentro de una
                 historia de misterio. En tu panel verás su progreso real.

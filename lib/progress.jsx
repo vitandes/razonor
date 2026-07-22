@@ -31,7 +31,7 @@ import {
   playerLevelFromXp,
 } from "@/lib/leveling";
 
-// Habilidades que rastrea Astuto (deben coincidir con SKILLS de lib/world.js).
+// Habilidades que rastrea Razonor (deben coincidir con SKILLS de lib/world.js).
 // Se listan aquí para no importar el contenido (grande) en el estado.
 const SKILL_IDS = [
   "deduccion",
@@ -79,12 +79,12 @@ const EMPTY_PROFILE = {
   streak: 0,
   lastActive: null, // "YYYY-MM-DD"
   onboarding: { ageBand: null, goals: [], interests: [], done: false },
-  // --- Astuto (retos de misterio) ---
+  // --- Razonor (retos de misterio) ---
   skills: emptySkills(), // por habilidad: { correct, total }
   cases: {}, // { [caseId]: { completed, stars, plays, lastPlayed } }
   justChapterMedal: null, // transitorio: id de capítulo recién completado
   lastCase: null, // transitorio: desglose XP/monedas del último caso
-  // --- legado del producto de lectura (no se usa en Astuto; se conserva para
+  // --- legado del producto de lectura (no se usa en Razonor; se conserva para
   //     no romper cuentas viejas y por si se reactiva) ---
   comp: {
     literal: { correct: 0, total: 0 },
@@ -149,7 +149,7 @@ function mergeProfile(parsed, id) {
     bands: base.bands || {},
     maxLevel: Math.max(1, base.maxLevel || 1),
     report: { ...EMPTY_PROFILE.report, ...(base.report || {}) },
-    // Astuto
+    // Razonor
     skills: { ...emptySkills(), ...(base.skills || {}) },
     cases: base.cases || {},
     // los transitorios nunca persisten
@@ -557,7 +557,7 @@ export function ProgressProvider({ children }) {
         });
       },
 
-      // Cierra un caso de Astuto: acumula habilidades, marca el caso, suma XP,
+      // Cierra un caso de Razonor: acumula habilidades, marca el caso, suma XP,
       // actualiza la racha y detecta subidas de nivel y medalla de capítulo.
       // results: [{ skill, firstTry }].
       finishCase({

@@ -1,25 +1,25 @@
 import LegalLayout, { LegalSection } from "@/components/landing/LegalLayout";
 
 export const metadata = {
-  title: "Privacidad — Astuto",
+  title: "Privacidad — Razonor",
   description:
-    "Cómo Astuto cuida los datos de tu familia y la privacidad infantil.",
+    "Cómo Razonor cuida los datos de tu familia y la privacidad infantil.",
 };
 
 export default function Privacidad() {
   return (
     <LegalLayout
       title="Política de privacidad"
-      intro="En Astuto cuidamos los datos de tu familia, en especial los de los niños. Esta página explica en lenguaje claro qué información usamos y para qué."
+      intro="En Razonor cuidamos los datos de tu familia, en especial los de los niños. Esta página explica en lenguaje claro qué información usamos y para qué."
       updated="18 de julio de 2026"
     >
       <LegalSection heading="Quién es responsable de tus datos">
         <p>
-          Astuto es el responsable del tratamiento de los datos personales que
+          Razonor es el responsable del tratamiento de los datos personales que
           nos compartes, conforme a la Ley 1581 de 2012 de protección de datos
           personales en Colombia. Si tienes dudas, escríbenos a{" "}
-          <a className="text-honey-deep underline" href="mailto:hola@astuto.app">
-            hola@astuto.app
+          <a className="text-honey-deep underline" href="mailto:hola@razonor.com">
+            hola@razonor.com
           </a>
           .
         </p>
@@ -30,7 +30,7 @@ export default function Privacidad() {
           Del papá o la mamá: nombre, correo y los datos necesarios para tu
           cuenta y tu suscripción. Del niño: un nombre o apodo, la edad y su
           actividad en la app (retos resueltos, respuestas y progreso por
-          habilidad). Pedimos lo mínimo para que Astuto funcione y para armar tu
+          habilidad). Pedimos lo mínimo para que Razonor funcione y para armar tu
           panel de padres.
         </p>
       </LegalSection>
@@ -57,7 +57,7 @@ export default function Privacidad() {
 
       <LegalSection heading="Privacidad infantil">
         <p>
-          La cuenta la crea y la controla un adulto. Dentro de Astuto no hay
+          La cuenta la crea y la controla un adulto. Dentro de Razonor no hay
           publicidad, ni compras dentro de la app, ni chats con desconocidos ni
           contenido generado por otros usuarios: el niño solo resuelve los retos
           de la historia. La cuenta del niño está siempre bajo la supervisión
@@ -71,8 +71,8 @@ export default function Privacidad() {
           quieras, como lo establece la Ley 1581. Si cierras tu cuenta, borramos
           los datos personales salvo lo que la ley nos obligue a conservar. Para
           ejercer cualquiera de estos derechos, escríbenos a{" "}
-          <a className="text-honey-deep underline" href="mailto:hola@astuto.app">
-            hola@astuto.app
+          <a className="text-honey-deep underline" href="mailto:hola@razonor.com">
+            hola@razonor.com
           </a>
           .
         </p>

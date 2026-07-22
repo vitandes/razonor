@@ -1,6 +1,6 @@
 import Reveal from "@/components/landing/Reveal";
 
-// Las habilidades que entrena Astuto (informe, sección 5: mecánicas de juego).
+// Las habilidades que entrena Razonor (informe, sección 5: mecánicas de juego).
 // Reemplaza a la sección de "niveles de comprensión" del producto anterior.
 
 const SKILLS = [

@@ -310,7 +310,7 @@ export default function CaseSession({ caseData }) {
           <div className="mt-3 flex items-start gap-3 rounded-2xl border-2 border-grape/25 bg-grape-soft p-4">
             <span className="text-2xl" aria-hidden="true">🤖</span>
             <p className="text-sm leading-snug text-ink">
-              <span className="font-bold">Astubot dice:</span> “{reto.aiSays}”
+              <span className="font-bold">Razobot dice:</span> “{reto.aiSays}”
             </p>
           </div>
         )}

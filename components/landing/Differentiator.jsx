@@ -10,7 +10,7 @@ export default function Differentiator() {
       <div className="mx-auto max-w-6xl px-5 py-20 sm:py-24">
         <Reveal className="mx-auto max-w-2xl text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-wide text-honey">
-            Lo que hace distinto a Astuto
+            Lo que hace distinto a Razonor
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
             Razonamiento con disfraz de misterio, no ejercicios con disfraz de
@@ -58,7 +58,7 @@ export default function Differentiator() {
           </Reveal>
           <Reveal delay={140}>
             <div className="h-full rounded-4xl bg-honey p-6 shadow-glow">
-              <p className="font-display text-lg font-semibold text-ink">Astuto</p>
+              <p className="font-display text-lg font-semibold text-ink">Razonor</p>
               <ul className="mt-4 space-y-2.5 text-sm text-ink">
                 <Check>Una historia que pide el siguiente capítulo.</Check>
                 <Check>Escrito en español, pensado en español.</Check>

@@ -23,7 +23,7 @@ const FAQS_US = [
 
 const FAQS = [
   {
-    q: "¿Para qué edades es Astuto?",
+    q: "¿Para qué edades es Razonor?",
     a: "Para niños de 7 a 12 años. Un test inicial de 5 retos — que para tu hijo es solo un juego — lo ubica en su ruta: 7–9 o 10–12 años.",
   },
   {

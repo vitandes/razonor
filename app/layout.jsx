@@ -38,12 +38,12 @@ const body = Nunito({
 });
 
 export const metadata = {
-  title: "Astuto — retos de misterio que entrenan la mente de tu hijo",
+  title: "Razonor — retos de misterio que entrenan la mente de tu hijo",
   description:
     "Retos cortos de lógica y deducción dentro de una historia de misterio, para niños de 7 a 12 años. 15 minutos al día: mejor en matemáticas, mejor leyendo y listo para el mundo de la IA.",
 };
 
-// Marca de Astuto aplicada a los componentes de Clerk (login/registro).
+// Marca de Razonor aplicada a los componentes de Clerk (login/registro).
 const clerkAppearance = {
   variables: {
     colorPrimary: "#FFBE3D", // honey

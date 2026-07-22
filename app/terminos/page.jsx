@@ -2,9 +2,9 @@ import LegalLayout, { LegalSection } from "@/components/landing/LegalLayout";
 import { HAS_TRIAL, TRIAL_LABEL } from "@/lib/trial";
 
 export const metadata = {
-  title: "Términos y condiciones — Astuto",
+  title: "Términos y condiciones — Razonor",
   description:
-    "Las reglas para usar Astuto, incluyendo los pagos y las cancelaciones.",
+    "Las reglas para usar Razonor, incluyendo los pagos y las cancelaciones.",
 };
 
 export default function Terminos() {
@@ -13,14 +13,14 @@ export default function Terminos() {
       title="Términos y condiciones"
       intro={
         HAS_TRIAL
-          ? "Estas son las reglas para usar Astuto. Al crear una cuenta o iniciar la prueba gratis, aceptas estos términos."
-          : "Estas son las reglas para usar Astuto. Al crear una cuenta o suscribirte, aceptas estos términos."
+          ? "Estas son las reglas para usar Razonor. Al crear una cuenta o iniciar la prueba gratis, aceptas estos términos."
+          : "Estas son las reglas para usar Razonor. Al crear una cuenta o suscribirte, aceptas estos términos."
       }
       updated="18 de julio de 2026"
     >
-      <LegalSection heading="Qué es Astuto">
+      <LegalSection heading="Qué es Razonor">
         <p>
-          Astuto es una aplicación de retos de lógica y razonamiento dentro de
+          Razonor es una aplicación de retos de lógica y razonamiento dentro de
           historias de misterio, para niños de 7 a 12 años. Un adulto crea y
           administra la cuenta, y es responsable del uso que el niño hace de la
           app.
@@ -79,7 +79,7 @@ export default function Terminos() {
 
       <LegalSection heading="Uso correcto">
         <p>
-          Astuto es para uso personal y familiar. No puedes revender el acceso,
+          Razonor es para uso personal y familiar. No puedes revender el acceso,
           copiar el contenido de los retos o las historias, ni intentar dañar o
           vulnerar el servicio.
         </p>
@@ -89,8 +89,8 @@ export default function Terminos() {
         <p>
           Podemos actualizar estos términos; si el cambio es importante, te
           avisaremos. Para cualquier duda, escríbenos a{" "}
-          <a className="text-honey-deep underline" href="mailto:hola@astuto.app">
-            hola@astuto.app
+          <a className="text-honey-deep underline" href="mailto:hola@razonor.com">
+            hola@razonor.com
           </a>
           .
         </p>

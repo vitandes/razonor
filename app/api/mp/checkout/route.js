@@ -103,9 +103,9 @@ export async function POST(req) {
         items: [
           {
             id: `${plan}-${billing}`,
-            title: `Astuto ${details.label} (${billing === "semestral" ? "semestral" : "mensual"})`,
+            title: `Razonor ${details.label} (${billing === "semestral" ? "semestral" : "mensual"})`,
             description:
-              "Acceso a Astuto, retos de lógica y misterio para niños de 7 a 12 años.",
+              "Acceso a Razonor, retos de lógica y misterio para niños de 7 a 12 años.",
             category_id: "learnings",
             quantity: 1,
             unit_price: details.amount,
@@ -130,7 +130,7 @@ export async function POST(req) {
         },
         auto_return: "approved",
         notification_url: `${base}/api/mp/webhook`,
-        statement_descriptor: "LEOTUTOR",
+        statement_descriptor: "RAZONOR",
         metadata: { user_id: userId, plan, billing },
       },
     });

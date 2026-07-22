@@ -1,4 +1,4 @@
-// Marca de Astuto: una lupa con destello, dibujada por código (sin imágenes).
+// Marca de Razonor: una lupa con destello, dibujada por código (sin imágenes).
 // Reemplaza a la mascota en landing y funnel; Mascot.jsx queda solo para el
 // producto viejo. `Logo` = símbolo solo; `LogoWordmark` = símbolo + nombre
 // (`dark` para usarlo sobre fondos noche).
@@ -11,7 +11,7 @@ export default function Logo({ size = 34, className = "" }) {
       height={size}
       className={className}
       role="img"
-      aria-label="Astuto"
+      aria-label="Razonor"
     >
       {/* fondo redondeado azul medianoche con borde tenue */}
       <rect
@@ -61,7 +61,7 @@ export function LogoWordmark({ size = 34, dark = false, className = "" }) {
       <span
         className={`font-display text-xl font-bold ${dark ? "text-white" : "text-ink"}`}
       >
-        Astuto
+        Razonor
       </span>
     </span>
   );

@@ -1,7 +1,7 @@
 // Genera /sitemap.xml con las páginas públicas indexables (landing + legales).
 // Las páginas de la app y login no van aquí porque requieren sesión.
 
-const base = (process.env.NEXT_PUBLIC_APP_URL || "https://www.leotutor.com").replace(
+const base = (process.env.NEXT_PUBLIC_APP_URL || "https://www.razonor.com").replace(
   /\/+$/,
   "",
 );

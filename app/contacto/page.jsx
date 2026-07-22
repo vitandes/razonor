@@ -3,17 +3,17 @@ import { TrialButton } from "@/components/landing/bits";
 import { HAS_TRIAL, TRIAL_LABEL, CTA_START } from "@/lib/trial";
 
 export const metadata = {
-  title: "Contacto — Astuto",
-  description: "Habla con el equipo de Astuto. Te respondemos por correo.",
+  title: "Contacto — Razonor",
+  description: "Habla con el equipo de Razonor. Te respondemos por correo.",
 };
 
 const CHANNELS = [
   {
     emoji: "✉️",
     title: "Correo",
-    desc: "Para cualquier duda sobre Astuto, tu cuenta o tu suscripción.",
-    action: "hola@astuto.app",
-    href: "mailto:hola@astuto.app",
+    desc: "Para cualquier duda sobre Razonor, tu cuenta o tu suscripción.",
+    action: "hola@razonor.com",
+    href: "mailto:hola@razonor.com",
   },
 ];
 
@@ -21,7 +21,7 @@ export default function Contacto() {
   return (
     <LegalLayout
       title="Hablemos"
-      intro="¿Tienes una pregunta antes de empezar, o quieres contarnos cómo le va a tu hijo con Astuto? Estamos para ayudarte."
+      intro="¿Tienes una pregunta antes de empezar, o quieres contarnos cómo le va a tu hijo con Razonor? Estamos para ayudarte."
     >
       <div className="grid gap-4 sm:grid-cols-2">
         {CHANNELS.map((c) => (
@@ -54,7 +54,7 @@ export default function Contacto() {
 
       <div className="rounded-4xl bg-honey p-7 text-center shadow-card">
         <p className="font-display text-xl font-semibold text-ink">
-          ¿Aún no has probado Astuto?
+          ¿Aún no has probado Razonor?
         </p>
         <p className="mx-auto mt-2 max-w-md text-ink/80">
           {HAS_TRIAL

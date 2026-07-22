@@ -203,7 +203,7 @@ export default function ParentReport() {
           </div>
 
           <div className="bg-cream px-6 py-4 text-center text-sm text-muted sm:px-8">
-            Con Astuto · {p.xp.toLocaleString("es-CO")} ⭐ en total
+            Con Razonor · {p.xp.toLocaleString("es-CO")} ⭐ en total
           </div>
         </section>
       </div>

@@ -81,12 +81,12 @@ export default function WeeklyWrapped({ open, onClose, data }) {
   }
 
   async function share() {
-    const text = `${name} resolvió ${data.retos} retos de lógica esta semana con Astuto 🕵️🔍 y ya es ${data.rank.name} (nivel ${data.playerLevel}). `;
+    const text = `${name} resolvió ${data.retos} retos de lógica esta semana con Razonor 🕵️🔍 y ya es ${data.rank.name} (nivel ${data.playerLevel}). `;
     try {
       if (navigator.share) {
-        await navigator.share({ text, url: "https://www.astuto.app" });
+        await navigator.share({ text, url: "https://www.razonor.com" });
       } else {
-        await navigator.clipboard.writeText(text + "https://www.astuto.app");
+        await navigator.clipboard.writeText(text + "https://www.razonor.com");
       }
     } catch {
       /* usuario canceló */
@@ -147,7 +147,7 @@ export default function WeeklyWrapped({ open, onClose, data }) {
 
       {slide.id !== "final" && (
         <div className="pointer-events-none absolute inset-x-0 bottom-5 z-20 text-center text-sm font-semibold tracking-wide text-white/60">
-          🔍 astuto.app
+          🔍 razonor.com
         </div>
       )}
 
@@ -164,7 +164,7 @@ export default function WeeklyWrapped({ open, onClose, data }) {
               className="mt-2 font-display text-5xl font-bold leading-tight"
             />
             <p className="mt-4 animate-slidein text-white/80" style={{ animationDelay: "0.7s" }}>
-              como detective de Astuto 🕵️
+              como detective de Razonor 🕵️
             </p>
           </div>
         )}
@@ -293,7 +293,7 @@ export default function WeeklyWrapped({ open, onClose, data }) {
                   <div className="text-xs font-semibold text-ink/70">{data.rank.name}</div>
                 </div>
               </div>
-              <p className="mt-3 text-xs text-muted">astuto.app · retos de misterio que entrenan la mente 🔍</p>
+              <p className="mt-3 text-xs text-muted">razonor.com · retos de misterio que entrenan la mente 🔍</p>
             </div>
             <div className="pointer-events-auto mt-5 flex justify-center gap-3">
               <button

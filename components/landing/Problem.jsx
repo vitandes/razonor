@@ -41,8 +41,8 @@ export default function Problem({ market = "co" }) {
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted">
             {us
-              ? "Que le vaya bien en la escuela, que no pierda el español y que la pantalla sume en vez de restar. Astuto ataca las tres a la vez."
-              : "Un profesor particular cuesta $40.000–$70.000 la hora y ataca el síntoma. Astuto entrena la raíz: la forma de pensar."}
+              ? "Que le vaya bien en la escuela, que no pierda el español y que la pantalla sume en vez de restar. Razonor ataca las tres a la vez."
+              : "Un profesor particular cuesta $40.000–$70.000 la hora y ataca el síntoma. Razonor entrena la raíz: la forma de pensar."}
           </p>
         </Reveal>
 
@@ -66,7 +66,7 @@ export default function Problem({ market = "co" }) {
           <p className="mx-auto mt-10 max-w-2xl text-center font-display text-xl font-semibold text-ink">
             {us
               ? "Retos pensados y escritos en español — no traducidos — para que razone, lea y calcule mejor en sus dos idiomas."
-              : "Entender, deducir y razonar es la base de todas las materias. Eso es lo que Astuto entrena todos los días."}
+              : "Entender, deducir y razonar es la base de todas las materias. Eso es lo que Razonor entrena todos los días."}
           </p>
         </Reveal>
       </div>

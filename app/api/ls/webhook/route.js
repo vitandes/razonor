@@ -1,7 +1,7 @@
 // Webhook de Lemon Squeezy (cobros internacionales en USD).
 //
 // Configúralo en el panel de LS -> Settings -> Webhooks:
-//   URL: https://www.leotutor.com/api/ls/webhook
+//   URL: https://www.razonor.com/api/ls/webhook
 //   Eventos: subscription_created, subscription_updated, subscription_cancelled,
 //            subscription_resumed, subscription_expired
 //   Signing secret -> LEMONSQUEEZY_WEBHOOK_SECRET

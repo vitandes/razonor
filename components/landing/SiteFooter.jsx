@@ -31,7 +31,7 @@ export default function SiteFooter() {
             🔒 Sin publicidad, sin compras dentro del juego, sin chats con
             desconocidos.
           </p>
-          <p>© {new Date().getFullYear()} Astuto · Entrena la mente, no la memoria.</p>
+          <p>© {new Date().getFullYear()} Razonor · Entrena la mente, no la memoria.</p>
         </div>
       </div>
     </footer>

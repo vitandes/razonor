@@ -5,7 +5,7 @@
 //      quien no tiene tarjeta. El pago único da acceso por el periodo, sin
 //      renovar (cancel_at_period_end = true + current_period_end).
 //
-// Configúralo en el panel de MP -> Webhooks: https://www.leotutor.com/api/mp/webhook
+// Configúralo en el panel de MP -> Webhooks: https://www.razonor.com/api/mp/webhook
 //   Eventos: "Pagos" + "Planes y suscripciones".
 //
 // Es la fuente de verdad de la suscripción: el cliente nunca se marca "active".

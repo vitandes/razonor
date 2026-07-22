@@ -504,7 +504,7 @@ function NamePrompt({ onSave }) {
       <Detective size={56} className="shrink-0" />
       <div className="flex-1">
         <p className="font-display text-lg font-semibold text-ink">
-          ¡Hola! Soy Astu, tu detective. ¿Cómo te llamas?
+          ¡Hola! Soy Razo, tu detective. ¿Cómo te llamas?
         </p>
         <p className="text-sm text-muted">Así te saludo cada vez que entres.</p>
       </div>
