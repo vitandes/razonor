@@ -44,7 +44,7 @@ const FAQS = [
   },
   {
     q: "¿Con qué puedo pagar?",
-    a: "Con tarjeta de crédito o débito, PSE y Nequi si estás en Colombia. Fuera de Colombia, con tarjeta en dólares.",
+    a: "Con tarjeta de crédito o débito. En Colombia el cobro es en pesos a través de Mercado Pago; fuera de Colombia, con tarjeta en dólares.",
   },
   {
     q: "¿Puedo cancelar cuando quiera?",

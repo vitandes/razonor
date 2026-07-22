@@ -41,9 +41,9 @@ export default function Soporte() {
       <LegalSection heading="Cambiar de plan o de medio de pago">
         <p>
           Puedes pasar del plan Individual al Familiar (o al revés) cuando
-          quieras; el cambio aplica en tu siguiente renovación. Los medios de
-          pago disponibles —Nequi, PSE y tarjeta— se gestionan dentro de Mercado
-          Pago al momento de pagar.
+          quieras; el cambio aplica en tu siguiente renovación. El pago con
+          tarjeta se gestiona de forma segura dentro de Mercado Pago al momento
+          de suscribirte.
         </p>
       </LegalSection>
 

@@ -311,10 +311,7 @@ export default function Planes() {
             {currency ? "Lemon Squeezy" : "Mercado Pago"}
           </p>
           <p className="text-xs leading-relaxed text-muted">
-            {currency
-              ? "Aceptamos tarjeta de crédito y débito. "
-              : "Aceptamos tarjeta de crédito y débito, PSE y Nequi. "}
-            Sin permanencia ni cláusulas:
+            Aceptamos tarjeta de crédito y débito. Sin permanencia ni cláusulas:
             cancela cuando quieras, sin llamadas ni letra pequeña.
           </p>
           <p className="mt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-muted">
