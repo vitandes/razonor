@@ -7,17 +7,17 @@ import { ProgressProvider } from "@/lib/progress";
 import PixelIdentify from "@/components/PixelIdentify";
 
 // Google Analytics (gtag.js). Configurable con NEXT_PUBLIC_GA_ID.
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-MP62DB3R71";
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-R2FD24XVJY";
 
 // Meta Pixel (Facebook/Instagram Ads). Configurable con NEXT_PUBLIC_META_PIXEL_ID.
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "1038053602238449";
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "";
 
 // TikTok Pixel (TikTok Ads). Acepta VARIOS ids separados por coma (cada
 // campaña puede tener su pixel): todos los eventos van a todos los pixels.
 // Configurable con NEXT_PUBLIC_TIKTOK_PIXEL_ID.
 const TIKTOK_PIXEL_IDS = (
   process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID ||
-  "D94KEOBC77UARCKAVC70,D94JU4JC77UDRLSQBQAG"
+  ""
 )
   .split(",")
   .map((s) => s.trim())

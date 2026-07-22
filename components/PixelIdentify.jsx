@@ -8,7 +8,7 @@
 import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 
-const META = process.env.NEXT_PUBLIC_META_PIXEL_ID || "1038053602238449";
+const META = process.env.NEXT_PUBLIC_META_PIXEL_ID || "";
 
 export default function PixelIdentify() {
   const { isLoaded, user } = useUser();
