@@ -10,7 +10,8 @@ import PixelIdentify from "@/components/PixelIdentify";
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-R2FD24XVJY";
 
 // Meta Pixel (Facebook/Instagram Ads). Configurable con NEXT_PUBLIC_META_PIXEL_ID.
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "";
+const META_PIXEL_ID =
+  process.env.NEXT_PUBLIC_META_PIXEL_ID || "3306518122853604";
 
 // TikTok Pixel (TikTok Ads). Acepta VARIOS ids separados por coma (cada
 // campaña puede tener su pixel): todos los eventos van a todos los pixels.
