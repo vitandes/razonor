@@ -17,8 +17,8 @@ export default function Hero({ market = "co" }) {
           <div className="animate-slidein">
             <span className="inline-flex items-center gap-2 rounded-full border border-honey/30 bg-honey/10 px-3 py-1 text-sm font-semibold text-honey">
               {us
-                ? "🔍 Retos de lógica en español para niños de 7 a 12"
-                : "🔍 Retos de lógica para niños de 7 a 12 años"}
+                ? "🔍 Pensamiento crítico en español · 7 a 12 años"
+                : "🔍 Pensamiento crítico para niños de 7 a 12 años"}
             </span>
           </div>
 
@@ -26,9 +26,9 @@ export default function Hero({ market = "co" }) {
             className="mt-4 animate-slidein font-display text-4xl font-bold leading-tight text-white sm:text-5xl"
             style={{ animationDelay: "120ms" }}
           >
-            15 minutos al día que entrenan{" "}
+            La IA da respuestas. Tu hijo necesita{" "}
             <span className="relative whitespace-nowrap text-honey">
-              la mente
+              aprender a pensar
               {/* subrayado a mano alzada */}
               <svg
                 viewBox="0 0 220 14"
@@ -44,8 +44,7 @@ export default function Hero({ market = "co" }) {
                   opacity="0.6"
                 />
               </svg>
-            </span>{" "}
-            de tu hijo
+            </span>
           </h1>
 
           <p
@@ -53,8 +52,8 @@ export default function Hero({ market = "co" }) {
             style={{ animationDelay: "240ms" }}
           >
             {us
-              ? "Retos cortos de misterio, en español de verdad: tu hijo resuelve casos como detective mientras entrena lógica, lectura y matemáticas. Mejor en el colegio y listo para el mundo de la IA."
-              : "Tu hijo resuelve casos de misterio como un detective. Sin darse cuenta, entrena deducción, comprensión de lectura y matemáticas: mejor en el colegio y listo para el mundo de la IA."}
+              ? "Con casos de misterio escritos en español, convierte 15 minutos de pantalla en práctica de las bases que vienen antes de la IA y la programación: comprender, detectar patrones, ordenar pasos, deducir y verificar."
+              : "Con casos de misterio, convierte 15 minutos de pantalla en práctica de las bases que vienen antes de la IA y la programación: comprender, detectar patrones, ordenar pasos, deducir y verificar."}
           </p>
 
           <div

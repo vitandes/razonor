@@ -6,21 +6,21 @@ import Reveal from "@/components/landing/Reveal";
 
 const NERVIOS = [
   {
-    emoji: "📉",
-    title: "“Se sabe la fórmula, pero no entiende el problema”",
-    desc: "El problema casi nunca es falta de estudio: es razonamiento y comprensión. Y eso se entrena con repetición corta y diaria, no con más tareas.",
+    emoji: "🧠",
+    title: "Encuentra una respuesta, pero no sabe explicarla",
+    desc: "Memorizar una fórmula o copiar un resultado no es comprender. Cuando aprende a explicar el porqué, mejora la raíz de su desempeño en lectura, matemáticas y ciencias.",
     color: "text-coral",
   },
   {
     emoji: "🤖",
-    title: "“Todo va a cambiar con la IA… ¿mi hijo está listo?”",
-    desc: "No le enseñamos a programar: la IA ya escribe código. Le entrenamos lo que sube de valor — pensar, deducir y tener criterio frente a lo que una máquina responde.",
+    title: "La IA responde con seguridad, incluso cuando se equivoca",
+    desc: "Saber usar una herramienta no basta. Tu hijo necesita hacer buenas preguntas, detectar incoherencias y comprobar antes de aceptar una respuesta como cierta.",
     color: "text-grape",
   },
   {
-    emoji: "📱",
-    title: "“Pasa horas en el celular y me siento culpable”",
-    desc: "El mismo celular, haciendo algo distinto: 15 minutos al día, sin publicidad, sin compras dentro del juego, sin videos infinitos.",
+    emoji: "🧩",
+    title: "Usa tecnología, pero ¿sabe resolver problemas?",
+    desc: "Programar y trabajar con IA empiezan mucho antes del código: dividir un problema, reconocer patrones, ordenar instrucciones y encontrar qué salió mal.",
     color: "text-teal",
   },
 ];
@@ -32,17 +32,15 @@ export default function Problem({ market = "co" }) {
       <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
         <Reveal className="mx-auto max-w-2xl text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-wide text-coral">
-            Por qué importa
+            La habilidad que no puede delegar
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-ink sm:text-4xl">
-            {us
-              ? "Tres preocupaciones que conoces bien"
-              : "Tres cosas que te quitan el sueño"}
+            Antes de usar la IA, necesita criterio propio
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted">
             {us
-              ? "Que le vaya bien en la escuela, que no pierda el español y que la pantalla sume en vez de restar. Razonor ataca las tres a la vez."
-              : "Un profesor particular cuesta $40.000–$70.000 la hora y ataca el síntoma. Razonor entrena la raíz: la forma de pensar."}
+              ? "La IA puede ayudarle a aprender o acostumbrarlo a aceptar respuestas sin entenderlas. La diferencia está en las bases mentales con las que la usa — y Razonor las entrena en español."
+              : "La IA puede ayudarle a aprender o acostumbrarlo a aceptar respuestas sin entenderlas. La diferencia no está en saber qué botón tocar, sino en las bases mentales con las que la usa."}
           </p>
         </Reveal>
 
@@ -65,8 +63,8 @@ export default function Problem({ market = "co" }) {
         <Reveal>
           <p className="mx-auto mt-10 max-w-2xl text-center font-display text-xl font-semibold text-ink">
             {us
-              ? "Retos pensados y escritos en español — no traducidos — para que razone, lea y calcule mejor en sus dos idiomas."
-              : "Entender, deducir y razonar es la base de todas las materias. Eso es lo que Razonor entrena todos los días."}
+              ? "Razonor entrena en español el pensamiento que luego aplicará en el colegio, al programar y cada vez que use una IA."
+              : "Razonor entrena el pensamiento que luego aplicará en el colegio, al programar y cada vez que use una IA."}
           </p>
         </Reveal>
       </div>

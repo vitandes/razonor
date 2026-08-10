@@ -39,9 +39,9 @@ const body = Nunito({
 });
 
 export const metadata = {
-  title: "Razonor — retos de misterio que entrenan la mente de tu hijo",
+  title: "Razonor — pensamiento crítico para niños en la era de la IA",
   description:
-    "Retos cortos de lógica y deducción dentro de una historia de misterio, para niños de 7 a 12 años. 15 minutos al día: mejor en matemáticas, mejor leyendo y listo para el mundo de la IA.",
+    "Casos de misterio para niños de 7 a 12 años que entrenan pensamiento crítico y las bases de la IA y la programación: comprender, detectar patrones, ordenar pasos, deducir y verificar.",
 };
 
 // Marca de Razonor aplicada a los componentes de Clerk (login/registro).

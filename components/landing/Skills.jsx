@@ -57,11 +57,12 @@ export default function Skills() {
             Lo que entrena cada caso
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
-            Seis habilidades, un solo misterio
+            Las bases que vienen antes del código y de la IA
           </h2>
           <p className="mt-4 text-lg text-muted">
-            Cada reto trabaja una habilidad concreta. En el panel de padres ves
-            cuáles domina tu hijo y cuáles le cuestan.
+            Cada misterio convierte una habilidad abstracta en algo que tu hijo
+            practica y tú puedes ver. En el panel de padres descubres cuáles
+            domina y cuáles necesita reforzar.
           </p>
         </Reveal>
 

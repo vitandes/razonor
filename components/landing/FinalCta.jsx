@@ -14,9 +14,7 @@ export default function FinalCta({ market = "co" }) {
             🔍
           </div>
           <h2 className="mx-auto mt-5 max-w-2xl font-display text-3xl font-bold leading-tight text-white sm:text-4xl">
-            {us
-              ? "Dale 15 minutos al día que valen por horas de refuerzo"
-              : "15 minutos al día que entrenan la mente de tu hijo"}
+            Dale una ventaja que no caduca cuando cambia la tecnología
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-white/70">
             {us
@@ -24,8 +22,8 @@ export default function FinalCta({ market = "co" }) {
                 ? `Empieza hoy la prueba gratis de ${TRIAL_LABEL}: misterios en español que entrenan lógica, lectura y matemáticas.`
                 : "Empieza hoy: misterios en español que entrenan lógica, lectura y matemáticas."
               : HAS_TRIAL
-                ? `Empieza hoy la prueba gratis de ${TRIAL_LABEL} y mira cómo su primer caso lo atrapa: mejor en matemáticas, mejor leyendo y listo para el mundo de la IA.`
-                : "Empieza hoy y mira cómo su primer caso lo atrapa: mejor en matemáticas, mejor leyendo y listo para el mundo de la IA."}
+                ? `Empieza hoy la prueba gratis de ${TRIAL_LABEL}: 15 minutos de misterios para aprender a comprender, razonar y verificar antes de depender de una respuesta.`
+                : "Empieza hoy: 15 minutos de misterios para aprender a comprender, razonar y verificar antes de depender de una respuesta."}
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-3">

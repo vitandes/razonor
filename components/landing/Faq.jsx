@@ -31,8 +31,8 @@ const FAQS = [
     a: "Sí, conviene una lectura básica: los casos se leen para resolverse. Justo por eso cada misterio entrena comprensión de lectura sin que el niño lo note.",
   },
   {
-    q: "¿Esto es para aprender a programar?",
-    a: "No exactamente, y es a propósito. La IA ya escribe código; lo que sube de valor es pensar con lógica, ordenar pasos, deducir y tener criterio frente a lo que responde una máquina. Eso es lo que entrenan los retos.",
+    q: "¿Razonor enseña IA o programación?",
+    a: "Enseña sus fundamentos, no un lenguaje de código ni una aplicación específica. Los niños practican cómo dividir problemas, detectar patrones, ordenar instrucciones, encontrar errores, hacer buenas preguntas y verificar respuestas. Esa base les permite aprender programación y usar la IA con más criterio después.",
   },
   {
     q: "¿No es una pantalla más?",

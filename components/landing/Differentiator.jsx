@@ -13,13 +13,13 @@ export default function Differentiator() {
             Lo que hace distinto a Razonor
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
-            Razonamiento con disfraz de misterio, no ejercicios con disfraz de
-            juego
+            Aprende a pensar resolviendo, no memorizando
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-white/70">
-            Tu hijo no ve una guía de ejercicios con puntos de colores. Ve un
-            caso que solo él puede resolver. La historia es lo que lo hace
-            volver — y de paso mete comprensión de lectura sin anunciarla.
+            Tu hijo no ve una clase de programación ni un tutorial sobre una
+            herramienta de IA. Ve un caso que solo él puede resolver. Para
+            avanzar tiene que leer, conectar pistas, ordenar ideas y defender
+            por qué su respuesta tiene sentido.
           </p>
         </Reveal>
 
@@ -37,7 +37,7 @@ export default function Differentiator() {
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <Tag>Lo que él siente: resolver un caso 🕵️</Tag>
-              <Tag>Lo que entrena: ordenar pasos = lógica de programación</Tag>
+              <Tag>Lo que entrena: ordenar pasos = pensamiento computacional</Tag>
             </div>
           </div>
         </Reveal>
@@ -63,7 +63,7 @@ export default function Differentiator() {
                 <Check>Una historia que pide el siguiente capítulo.</Check>
                 <Check>Escrito en español, pensado en español.</Check>
                 <Check>Panel de padres con progreso y recomendaciones.</Check>
-                <Check>Criterio frente a la IA, no moda de programación.</Check>
+                <Check>Fundamentos para la IA y la programación, no trucos de una herramienta.</Check>
               </ul>
             </div>
           </Reveal>
