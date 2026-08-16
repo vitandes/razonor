@@ -6,7 +6,6 @@ import Torn from "@/components/landing/Torn";
 import { CTA_START_LONG } from "@/lib/trial";
 
 export default function Hero({ market = "co" }) {
-  const us = market === "us";
   return (
     <section className="night-sky relative overflow-hidden">
       {/* linterna que sigue el mouse, estrellas y pistas flotando */}
@@ -16,9 +15,7 @@ export default function Hero({ market = "co" }) {
         <div className="text-center md:text-left">
           <div className="animate-slidein">
             <span className="inline-flex items-center gap-2 rounded-full border border-honey/30 bg-honey/10 px-3 py-1 text-sm font-semibold text-honey">
-              {us
-                ? "🔍 Pensamiento crítico en español · 7 a 12 años"
-                : "🔍 Pensamiento crítico para niños de 7 a 12 años"}
+              🧠 Entrenamiento personalizado · 6 a 12 años
             </span>
           </div>
 
@@ -26,9 +23,9 @@ export default function Hero({ market = "co" }) {
             className="mt-4 animate-slidein font-display text-4xl font-bold leading-tight text-white sm:text-5xl"
             style={{ animationDelay: "120ms" }}
           >
-            La IA da respuestas. Tu hijo necesita{" "}
+            Matemáticas que{" "}
             <span className="relative whitespace-nowrap text-honey">
-              aprender a pensar
+              enseñan a pensar
               {/* subrayado a mano alzada */}
               <svg
                 viewBox="0 0 220 14"
@@ -51,9 +48,8 @@ export default function Hero({ market = "co" }) {
             className="mx-auto mt-5 max-w-xl animate-slidein text-lg leading-relaxed text-white/70 md:mx-0"
             style={{ animationDelay: "240ms" }}
           >
-            {us
-              ? "Con casos de misterio escritos en español, convierte 15 minutos de pantalla en práctica de las bases que vienen antes de la IA y la programación: comprender, detectar patrones, ordenar pasos, deducir y verificar."
-              : "Con casos de misterio, convierte 15 minutos de pantalla en práctica de las bases que vienen antes de la IA y la programación: comprender, detectar patrones, ordenar pasos, deducir y verificar."}
+            15 minutos al día para mejorar matemáticas, lógica y resolución de
+            problemas con un plan adaptado a tu hijo.
           </p>
 
           <div
@@ -69,8 +65,7 @@ export default function Hero({ market = "co" }) {
           >
             <Stars value={5} />
             <span className="text-sm text-white/60">
-              A <span className="font-bold text-white">+3.000 familias</span>{" "}
-              les encanta
+              Descubre sus fortalezas y qué necesita reforzar
             </span>
           </div>
         </div>

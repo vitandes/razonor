@@ -78,7 +78,22 @@ const EMPTY_PROFILE = {
   xp: 0,
   streak: 0,
   lastActive: null, // "YYYY-MM-DD"
-  onboarding: { ageBand: null, goals: [], interests: [], done: false },
+  onboarding: {
+    age: null,
+    ageBand: null,
+    primaryGoal: null,
+    mathFeeling: null,
+    dailyMinutes: 15,
+    goals: [],
+    interests: [],
+    done: false,
+  },
+  diagnostic: {
+    completed: false,
+    completedAt: null,
+    scores: null,
+    answers: [],
+  },
   // --- Razonor (retos de misterio) ---
   skills: emptySkills(), // por habilidad: { correct, total }
   cases: {}, // { [caseId]: { completed, stars, plays, lastPlayed } }
@@ -146,6 +161,7 @@ function mergeProfile(parsed, id) {
     createdAt: base.createdAt || 0,
     comp: { ...EMPTY_PROFILE.comp, ...base.comp },
     onboarding: { ...EMPTY_PROFILE.onboarding, ...(base.onboarding || {}) },
+    diagnostic: { ...EMPTY_PROFILE.diagnostic, ...(base.diagnostic || {}) },
     bands: base.bands || {},
     maxLevel: Math.max(1, base.maxLevel || 1),
     report: { ...EMPTY_PROFILE.report, ...(base.report || {}) },
@@ -349,6 +365,21 @@ export function ProgressProvider({ children }) {
     if (userRef.current === userId) return;
     userRef.current = userId;
 
+    // Si el padre hizo onboarding y diagnóstico antes de registrarse, mueve
+    // ese progreso invitado a su cuenta de Clerk. Así el funnel puede pedir el
+    // correo después de entregar valor sin perder la personalización.
+    if (userId) {
+      try {
+        const userKey = storageKey(userId);
+        const guestKey = storageKey(null);
+        if (!window.localStorage.getItem(userKey)) {
+          const guest = window.localStorage.getItem(guestKey);
+          if (guest) window.localStorage.setItem(userKey, guest);
+        }
+      } catch {
+        /* almacenamiento bloqueado: continuamos con una cuenta limpia */
+      }
+    }
     clearOtherCaches(userId);
 
     // 1) pintar al instante el cache local DE ESTA cuenta (o vacío)
@@ -443,15 +474,43 @@ export function ProgressProvider({ children }) {
         updateActive((s) => ({ ...s, name: name.trim().slice(0, 24) }));
       },
 
-      saveOnboarding({ name, ageBand, goals, interests }) {
+      saveOnboarding({
+        name,
+        age,
+        ageBand,
+        primaryGoal,
+        mathFeeling,
+        dailyMinutes,
+        goals,
+        interests,
+      }) {
         updateActive((s) => ({
           ...s,
           name: name ? name.trim().slice(0, 24) : s.name,
           onboarding: {
-            ageBand: ageBand ?? s.onboarding.ageBand,
+            ...s.onboarding,
+            age: age ?? s.onboarding.age,
+            ageBand:
+              ageBand ??
+              (age ? (Number(age) <= 9 ? "7-9" : "10-12") : s.onboarding.ageBand),
+            primaryGoal: primaryGoal ?? s.onboarding.primaryGoal,
+            mathFeeling: mathFeeling ?? s.onboarding.mathFeeling,
+            dailyMinutes: dailyMinutes ?? s.onboarding.dailyMinutes ?? 15,
             goals: goals ?? s.onboarding.goals,
             interests: interests ?? s.onboarding.interests,
             done: true,
+          },
+        }));
+      },
+
+      saveDiagnostic({ scores, answers = [] }) {
+        updateActive((s) => ({
+          ...s,
+          diagnostic: {
+            completed: true,
+            completedAt: new Date().toISOString(),
+            scores,
+            answers,
           },
         }));
       },

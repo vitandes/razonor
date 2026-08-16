@@ -5,46 +5,32 @@ import Reveal from "@/components/landing/Reveal";
 
 const SKILLS = [
   {
-    emoji: "🕵️",
-    name: "Deducción",
+    emoji: "🧮",
+    name: "Matemáticas",
     dot: "bg-teal",
-    parent: "¿Quién miente? ¿Qué pista no encaja?",
-    desc: "Sacar conclusiones a partir de pistas: la base del razonamiento lógico y de los problemas de matemáticas.",
+    parent: "¿Entiende los números o solo repite el procedimiento?",
+    desc: "Conceptos, operaciones y sentido numérico aplicados a situaciones que exigen comprender el porqué.",
   },
   {
     emoji: "🧩",
-    name: "Patrones y secuencias",
+    name: "Lógica",
     dot: "bg-grape",
-    parent: "¿Qué sigue? ¿Qué se repite?",
-    desc: "Descubrir la regla escondida detrás de números, figuras y códigos secretos.",
+    parent: "¿Puede detectar la regla y explicar su estrategia?",
+    desc: "Patrones, secuencias, relaciones, clasificación, analogías y deducciones.",
   },
   {
-    emoji: "📖",
-    name: "Comprensión de lectura",
+    emoji: "🔎",
+    name: "Resolución de problemas",
     dot: "bg-coral",
-    parent: "¿Entendió de verdad lo que leyó?",
-    desc: "Cada caso se lee. Para resolverlo hay que entender la historia — la comprensión entra sin anunciarse.",
+    parent: "¿Sabe convertir la información en una estrategia?",
+    desc: "Interpretar datos, elegir operaciones, descartar información y resolver problemas de varios pasos.",
   },
   {
-    emoji: "🪜",
-    name: "Pensamiento computacional",
+    emoji: "🧭",
+    name: "Razonamiento espacial",
     dot: "bg-honey",
-    parent: "¿Puede ordenar los pasos de un plan?",
-    desc: "Ordenar instrucciones, detectar el error, pensar en secuencias: la lógica detrás de la programación, sin pantallas de código.",
-  },
-  {
-    emoji: "➗",
-    name: "Ingenio matemático",
-    dot: "bg-teal",
-    parent: "¿Usa los números para resolver, no para memorizar?",
-    desc: "Acertijos numéricos dentro de la historia: el niño calcula porque quiere abrir la caja fuerte, no porque toca.",
-  },
-  {
-    emoji: "🤖",
-    name: "Criterio frente a la IA",
-    dot: "bg-grape",
-    parent: "¿Sabe cuándo una respuesta no tiene sentido?",
-    desc: "La habilidad que más sube de valor: dudar, verificar y pensar por sí mismo frente a lo que responde una máquina.",
+    parent: "¿Puede imaginar giros, posiciones y relaciones visuales?",
+    desc: "Figuras, orientación, rotaciones y composición espacial para comprender el mundo visualmente.",
   },
 ];
 
@@ -54,19 +40,18 @@ export default function Skills() {
       <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
         <Reveal className="mx-auto max-w-2xl text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-wide text-grape">
-            Lo que entrena cada caso
+            Las cuatro habilidades centrales
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
-            Las bases que vienen antes del código y de la IA
+            Aprende a entender, razonar y resolver
           </h2>
           <p className="mt-4 text-lg text-muted">
-            Cada misterio convierte una habilidad abstracta en algo que tu hijo
-            practica y tú puedes ver. En el panel de padres descubres cuáles
-            domina y cuáles necesita reforzar.
+            Cada sesión combina habilidades distintas según el perfil de tu hijo.
+            Los misterios y desafíos conservan la esencia especial de Razonor.
           </p>
         </Reveal>
 
-        <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {SKILLS.map((s, i) => (
             <Reveal key={s.name} delay={(i % 3) * 120}>
               <li className="group h-full rounded-4xl bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-soft">

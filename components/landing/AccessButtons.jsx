@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Show, UserButton } from "@clerk/nextjs";
 import { TrialButton, RiskReversal } from "@/components/landing/bits";
 import { CTA_START } from "@/lib/trial";
+import { isSubscribed, useProgress } from "@/lib/progress";
 
 // Botones de la landing según el estado de sesión (Clerk):
 // - sin sesión  -> CTA para empezar (lleva a registro) + reversa de riesgo
@@ -14,6 +15,16 @@ export default function AccessButtons({
   dark = false,
   trialLabel = CTA_START,
 }) {
+  const progress = useProgress();
+  const subscribed = progress.hydrated && isSubscribed(progress.subscription);
+  const memberHref = subscribed
+    ? "/aprendo"
+    : progress.diagnostic?.completed
+      ? "/resultados"
+      : progress.onboarding?.done
+        ? "/diagnostico"
+        : "/onboarding";
+  const memberLabel = subscribed ? "Entrar a la app" : "Continuar evaluación";
   // ---------- HEADER ----------
   if (context === "header") {
     return (
@@ -31,10 +42,10 @@ export default function AccessButtons({
         </Show>
         <Show when="signed-in">
           <Link
-            href="/aprendo"
+            href={memberHref}
             className="rounded-full bg-honey px-4 py-2.5 text-sm font-bold text-night shadow-card transition hover:bg-honey-deep hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey"
           >
-            Entrar a la app
+            {memberLabel}
           </Link>
           <UserButton />
         </Show>
@@ -56,16 +67,16 @@ export default function AccessButtons({
       <Show when="signed-in">
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
           <Link
-            href="/aprendo"
+            href={memberHref}
             className="inline-flex items-center justify-center rounded-full bg-honey px-7 py-3.5 font-display text-base font-bold text-night shadow-card transition hover:-translate-y-0.5 hover:bg-honey-deep hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey"
           >
-            Entrar como estudiante
+            {subscribed ? "Entrar como estudiante" : "Continuar evaluación"}
           </Link>
           <Link
-            href="/padres"
+            href={subscribed ? "/padres" : "/resultados"}
             className={`inline-flex items-center justify-center rounded-full px-7 py-3.5 font-display text-base font-bold transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey ${parentCls}`}
           >
-            Entrar como padre
+            {subscribed ? "Entrar como padre" : "Ver resultados"}
           </Link>
         </div>
       </Show>

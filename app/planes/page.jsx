@@ -21,9 +21,12 @@ const PLANS = {
     monthly: 49900,
     semestral: 149900,
     perks: [
-      "Todos los casos y capítulos del misterio",
+      "Actividades adaptadas a su edad y nivel",
+      "Nuevos desafíos y sesiones personalizadas",
+      "Matemáticas, lógica y resolución de problemas",
       "Panel de padres con progreso por habilidad",
-      "Rachas, medallas y mascota acompañante",
+      "Dificultad que aumenta según su avance",
+      "Reportes de fortalezas y áreas por mejorar",
     ],
   },
   familiar: {
@@ -186,9 +189,9 @@ export default function Planes() {
           <h1 className="mt-1 font-display text-3xl font-semibold text-ink sm:text-4xl">
             {kid
               ? HAS_TRIAL
-                ? `Empieza la prueba gratis de ${kid}`
-                : `Elige el plan de ${kid}`
-              : "Un caso nuevo para su mente, todos los días"}
+                ? `El plan de ${kid} está listo`
+                : `El plan de ${kid} está listo`
+              : "Su plan personalizado está listo"}
           </h1>
           {HAS_TRIAL && (
             <p className="mt-4">
@@ -198,8 +201,8 @@ export default function Planes() {
             </p>
           )}
           <p className="mx-auto mt-3 max-w-md text-muted">
-            Menos de lo que cuesta una hora de refuerzo escolar · cancela cuando
-            quieras.
+            15 minutos al día para mejorar matemáticas, lógica y resolución de
+            problemas. Cancela cuando quieras.
           </p>
 
           {/* toggle: tipo de plan */}

@@ -1,7 +1,6 @@
 import { SignUp } from "@clerk/nextjs";
 import Link from "next/link";
 import { LogoWordmark } from "@/components/Logo";
-import { HAS_TRIAL, TRIAL_LABEL } from "@/lib/trial";
 
 export default function SignUpPage() {
   return (
@@ -14,11 +13,9 @@ export default function SignUpPage() {
           Crea tu cuenta de papá o mamá
         </h1>
         <p className="mb-6 mt-1 text-center text-muted">
-          {HAS_TRIAL
-            ? `Es el primer paso de la prueba gratis de ${TRIAL_LABEL}.`
-            : "Es el primer paso para abrir el primer caso de tu hijo."}
+          Guarda el perfil y el plan personalizado de tu hijo.
         </p>
-        <SignUp signInUrl="/sign-in" fallbackRedirectUrl="/onboarding" />
+        <SignUp signInUrl="/sign-in" fallbackRedirectUrl="/planes" />
       </div>
     </main>
   );

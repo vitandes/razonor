@@ -3,23 +3,23 @@ import Reveal from "@/components/landing/Reveal";
 const STEPS = [
   {
     emoji: "🧭",
-    title: "Un test disfrazado de juego",
-    desc: "5 retos iniciales ubican a tu hijo en su ruta: 7–9 o 10–12 años. Para él fue un juego; para nosotros, su punto de partida.",
+    title: "Descubrimos cómo piensa",
+    desc: "Un diagnóstico breve mide matemáticas, lógica, resolución de problemas y razonamiento espacial sin sentirse como un examen.",
   },
   {
     emoji: "🔍",
-    title: "El caso del día",
-    desc: "Cada lección dura 3–5 minutos: 4–6 retos de deducción, patrones y lógica escondidos dentro de una historia de misterio.",
+    title: "Creamos su plan",
+    desc: "Razonor identifica sus fortalezas y oportunidades para elegir actividades acordes a su edad y punto de partida.",
   },
   {
     emoji: "🗺️",
-    title: "Avanza por el mapa",
-    desc: "Cada caso resuelto desbloquea el siguiente capítulo. Rachas, medallas y su mascota acompañante hacen que quiera volver solo.",
+    title: "Entrena 15 minutos",
+    desc: "Cada sesión mezcla matemáticas, lógica, problemas y un Desafío Razonor especial. La dificultad cambia con su desempeño.",
   },
   {
     emoji: "📈",
     title: "Tú ves el progreso",
-    desc: "En tu panel de padres: retos resueltos, racha, fortalezas y debilidades por habilidad, y una recomendación en lenguaje claro.",
+    desc: "El panel traduce la práctica en avances por habilidad, tendencias y recomendaciones concretas para la siguiente semana.",
   },
 ];
 
@@ -32,10 +32,10 @@ export default function HowItWorks() {
             Cómo funciona
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
-            Él resuelve un misterio. Tú ves el resultado.
+            Un plan que empieza por conocerlo
           </h2>
           <p className="mt-4 text-lg text-muted">
-            15 minutos al día bastan. Sin profesores, sin horarios, sin peleas.
+            Primero descubrimos su nivel. Después adaptamos cada sesión.
           </p>
         </Reveal>
 

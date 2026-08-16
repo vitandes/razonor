@@ -39,9 +39,9 @@ const body = Nunito({
 });
 
 export const metadata = {
-  title: "Razonor — pensamiento crítico para niños en la era de la IA",
+  title: "Razonor — Matemáticas que enseñan a pensar",
   description:
-    "Casos de misterio para niños de 7 a 12 años que entrenan pensamiento crítico y las bases de la IA y la programación: comprender, detectar patrones, ordenar pasos, deducir y verificar.",
+    "15 minutos al día para mejorar matemáticas, lógica y resolución de problemas con un plan adaptado a tu hijo.",
 };
 
 // Marca de Razonor aplicada a los componentes de Clerk (login/registro).

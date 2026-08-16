@@ -7,40 +7,38 @@ import Reveal from "@/components/landing/Reveal";
 const NERVIOS = [
   {
     emoji: "🧠",
-    title: "Encuentra una respuesta, pero no sabe explicarla",
-    desc: "Memorizar una fórmula o copiar un resultado no es comprender. Cuando aprende a explicar el porqué, mejora la raíz de su desempeño en lectura, matemáticas y ciencias.",
+    title: "Memoriza, pero no siempre entiende",
+    desc: "Recordar una fórmula no basta cuando el problema cambia. Razonor trabaja el porqué para que pueda aplicar lo aprendido en situaciones nuevas.",
     color: "text-coral",
   },
   {
-    emoji: "🤖",
-    title: "La IA responde con seguridad, incluso cuando se equivoca",
-    desc: "Saber usar una herramienta no basta. Tu hijo necesita hacer buenas preguntas, detectar incoherencias y comprobar antes de aceptar una respuesta como cierta.",
+    emoji: "🔎",
+    title: "Las operaciones sueltas no enseñan a resolver",
+    desc: "Aprender a identificar datos, descartar información y elegir una estrategia es lo que convierte las matemáticas en una herramienta para pensar.",
     color: "text-grape",
   },
   {
     emoji: "🧩",
-    title: "Usa tecnología, pero ¿sabe resolver problemas?",
-    desc: "Programar y trabajar con IA empiezan mucho antes del código: dividir un problema, reconocer patrones, ordenar instrucciones y encontrar qué salió mal.",
+    title: "Necesita un reto a su nivel",
+    desc: "Si todo es demasiado fácil, se aburre. Si todo es muy difícil, se frustra. La práctica debe avanzar con él y reforzar lo que realmente necesita.",
     color: "text-teal",
   },
 ];
 
 export default function Problem({ market = "co" }) {
-  const us = market === "us";
   return (
     <section className="bg-cloud">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
         <Reveal className="mx-auto max-w-2xl text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-wide text-coral">
-            La habilidad que no puede delegar
+            Progreso que empieza por comprender
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-ink sm:text-4xl">
-            Antes de usar la IA, necesita criterio propio
+            No se trata de hacer más ejercicios
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted">
-            {us
-              ? "La IA puede ayudarle a aprender o acostumbrarlo a aceptar respuestas sin entenderlas. La diferencia está en las bases mentales con las que la usa — y Razonor las entrena en español."
-              : "La IA puede ayudarle a aprender o acostumbrarlo a aceptar respuestas sin entenderlas. La diferencia no está en saber qué botón tocar, sino en las bases mentales con las que la usa."}
+            Se trata de entender cómo piensa tu hijo y darle el desafío correcto
+            para que aprenda a razonar, elegir estrategias y explicar sus respuestas.
           </p>
         </Reveal>
 
@@ -62,9 +60,7 @@ export default function Problem({ market = "co" }) {
 
         <Reveal>
           <p className="mx-auto mt-10 max-w-2xl text-center font-display text-xl font-semibold text-ink">
-            {us
-              ? "Razonor entrena en español el pensamiento que luego aplicará en el colegio, al programar y cada vez que use una IA."
-              : "Razonor entrena el pensamiento que luego aplicará en el colegio, al programar y cada vez que use una IA."}
+            Razonor no vende una colección de ejercicios. Construye progreso académico medible.
           </p>
         </Reveal>
       </div>
