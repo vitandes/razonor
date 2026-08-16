@@ -4,11 +4,110 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Detective from "@/components/Detective";
 import { useProgress } from "@/lib/progress";
-import { routeFromProfile, resolveReto, MECHANIC_LABEL, chapterCaseCount } from "@/lib/world";
-import { playerLevelFromXp, rankTitle } from "@/lib/leveling";
+import {
+  routeFromProfile,
+  resolveReto,
+  MECHANIC_LABEL,
+  chapterCaseCount,
+  SKILLS,
+} from "@/lib/world";
+import { rankTitle } from "@/lib/leveling";
 import { CountUp, Confetti, Glow, StaggerTitle } from "@/components/fx";
 
-// Baraja un arreglo (Fisher-Yates). Se usa para las opciones y para los pasos.
+const C1_ASSET_BASE = "/assets/cases/c1-noche/raw";
+
+const CASE_ASSETS = {
+  "c1-noche": {
+    location: "Museo Razonor",
+    hero: `${C1_ASSET_BASE}/hero-museum-night.png`,
+    mascot: {
+      happy: `${C1_ASSET_BASE}/razo-happy.png`,
+      think: `${C1_ASSET_BASE}/razo-thinking.png`,
+      celebrate: `${C1_ASSET_BASE}/razo-celebrating.png`,
+    },
+    evidence: [
+      { label: "Vitrina vacía", image: `${C1_ASSET_BASE}/evidence-empty-display-case.png` },
+      { label: "Linterna", image: `${C1_ASSET_BASE}/evidence-flashlight.png` },
+      { label: "Cámara 03", image: `${C1_ASSET_BASE}/evidence-security-camera.png` },
+      { label: "Código de alarma", image: `${C1_ASSET_BASE}/evidence-alarm-keypad.png` },
+    ],
+    visualEvidence: {
+      diamond: `${C1_ASSET_BASE}/evidence-diamond.png`,
+      report: `${C1_ASSET_BASE}/evidence-guard-report.png`,
+      roofWindow: `${C1_ASSET_BASE}/evidence-roof-window.png`,
+      backDoor: `${C1_ASSET_BASE}/evidence-back-door.png`,
+    },
+    suspects: {
+      rosa: `${C1_ASSET_BASE}/suspect-rosa.png`,
+      beto: `${C1_ASSET_BASE}/suspect-beto.png`,
+      cata: `${C1_ASSET_BASE}/suspect-cata.png`,
+    },
+    mechanics: {
+      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.png`,
+      error: `${C1_ASSET_BASE}/mechanic-error.png`,
+      patron: `${C1_ASSET_BASE}/mechanic-pattern.png`,
+      matematico: `${C1_ASSET_BASE}/mechanic-math.png`,
+      orden: `${C1_ASSET_BASE}/mechanic-order.png`,
+    },
+    palette: "from-[#141B36] via-[#2C2258] to-[#0E1530]",
+  },
+  "c1-cifrado": {
+    location: "Bóveda secreta",
+    evidence: [
+      { label: "Nota cifrada" },
+      { label: "Llave dorada" },
+      { label: "Caja fuerte" },
+      { label: "Foto oculta" },
+    ],
+    palette: "from-[#141B36] via-[#47346D] to-[#0E1530]",
+  },
+};
+
+const MECHANIC_TONE = {
+  deduccion: {
+    icon: "🧭",
+    ring: "ring-teal/25",
+    chip: "bg-teal-soft text-teal",
+    accent: "bg-teal",
+  },
+  patron: {
+    icon: "🧩",
+    ring: "ring-grape/25",
+    chip: "bg-grape-soft text-grape",
+    accent: "bg-grape",
+  },
+  error: {
+    icon: "⚠️",
+    ring: "ring-coral/25",
+    chip: "bg-coral-soft text-coral",
+    accent: "bg-coral",
+  },
+  comprension: {
+    icon: "📖",
+    ring: "ring-coral/25",
+    chip: "bg-coral-soft text-coral",
+    accent: "bg-coral",
+  },
+  orden: {
+    icon: "🧠",
+    ring: "ring-honey/30",
+    chip: "bg-honey-soft text-honey-deep",
+    accent: "bg-honey",
+  },
+  matematico: {
+    icon: "🔢",
+    ring: "ring-teal/25",
+    chip: "bg-teal-soft text-teal",
+    accent: "bg-teal",
+  },
+  ia: {
+    icon: "🤖",
+    ring: "ring-grape/25",
+    chip: "bg-grape-soft text-grape",
+    accent: "bg-grape",
+  },
+};
+
 function shuffle(arr) {
   const a = [...arr];
   for (let k = a.length - 1; k > 0; k--) {
@@ -18,11 +117,113 @@ function shuffle(arr) {
   return a;
 }
 
-function Bubble({ children, mood = "happy" }) {
+function assetFor(caseData) {
+  return (
+    CASE_ASSETS[caseData.id] || {
+      location: `Capítulo ${caseData.chapter}`,
+      evidence: [
+        { label: "Pista clave" },
+        { label: "Mapa" },
+        { label: "Nota" },
+        { label: "Señal" },
+      ],
+      palette: "from-[#141B36] via-[#33235D] to-[#0E1530]",
+    }
+  );
+}
+
+function evidenceLabel(item) {
+  return typeof item === "string" ? item : item.label;
+}
+
+function evidenceImage(item) {
+  return typeof item === "string" ? null : item.image || null;
+}
+
+function normalizeAssetKey(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function mechanicAssetFor(caseData, mechanic) {
+  return assetFor(caseData).mechanics?.[mechanic] || null;
+}
+
+function optionAssetFor(caseData, option) {
+  const suspects = assetFor(caseData).suspects || {};
+  const key = normalizeAssetKey(option);
+  if (key.includes("rosa")) return suspects.rosa;
+  if (key.includes("beto")) return suspects.beto;
+  if (key.includes("cata")) return suspects.cata;
+  return null;
+}
+
+function clueAssetFor(caseData, clue) {
+  const assets = assetFor(caseData);
+  const key = normalizeAssetKey(clue);
+  const speaker = normalizeAssetKey(String(clue).split(":")[0]);
+
+  if (speaker.includes("rosa")) return assets.suspects?.rosa || null;
+  if (speaker.includes("beto")) return assets.suspects?.beto || null;
+  if (speaker.includes("cata")) return assets.suspects?.cata || null;
+
+  if (key.includes("rosa")) return assets.suspects?.rosa || null;
+  if (key.includes("beto")) return assets.suspects?.beto || null;
+  if (key.includes("cata")) return assets.suspects?.cata || null;
+  if (key.includes("reporte") || key.includes("guardia")) return assets.visualEvidence?.report || null;
+  if (key.includes("ventana") || key.includes("techo")) return assets.visualEvidence?.roofWindow || null;
+  if (key.includes("diamante")) return assets.visualEvidence?.diamond || null;
+  if (key.includes("puerta")) return assets.visualEvidence?.backDoor || null;
+  return null;
+}
+
+function stepAssetFor(caseData, step) {
+  const assets = assetFor(caseData);
+  const key = normalizeAssetKey(step);
+  if (key.includes("ventana") || key.includes("techo")) return assets.visualEvidence?.roofWindow || null;
+  if (key.includes("alarma") || key.includes("codigo")) {
+    return assets.evidence?.find((item) => normalizeAssetKey(evidenceLabel(item)).includes("alarma") || normalizeAssetKey(evidenceLabel(item)).includes("codigo"))?.image || null;
+  }
+  if (key.includes("diamante") || key.includes("vitrina")) return assets.visualEvidence?.diamond || assets.evidence?.[0]?.image || null;
+  if (key.includes("puerta")) return assets.visualEvidence?.backDoor || null;
+  return null;
+}
+
+function Mascot({ caseData, mood = "happy", size = 52, className = "" }) {
+  const assets = assetFor(caseData);
+  const key = mood === "think" ? "think" : mood === "celebrate" ? "celebrate" : "happy";
+  const src = assets.mascot?.[key];
+
+  if (!src) {
+    return <Detective size={size} mood={mood === "think" ? "think" : "happy"} className={className} />;
+  }
+
+  return (
+    <img
+      src={src}
+      alt="Razo, tu detective"
+      className={`object-contain ${className}`}
+      style={{ width: size, height: size }}
+    />
+  );
+}
+
+function Bubble({ children, caseData, mood = "happy", dark = false }) {
   return (
     <div className="mt-5 flex items-start gap-3">
-      <Detective size={52} mood={mood} className="shrink-0" />
-      <div className="rounded-3xl rounded-tl-md bg-grape-soft px-4 py-3 text-ink">
+      <Mascot
+        caseData={caseData}
+        size={58}
+        mood={mood}
+        className="shrink-0 drop-shadow-[0_10px_20px_rgba(0,0,0,0.22)]"
+      />
+      <div
+        className={`rounded-3xl rounded-tl-md px-4 py-3 ${
+          dark ? "bg-white/12 text-white ring-1 ring-white/15" : "bg-grape-soft text-ink"
+        }`}
+      >
         <p className="text-[15px] leading-snug">{children}</p>
       </div>
     </div>
@@ -33,28 +234,24 @@ export default function CaseSession({ caseData }) {
   const progress = useProgress();
   const route = routeFromProfile(progress);
 
-  // Retos resueltos a su forma concreta según la ruta de edad.
   const retos = useMemo(
     () => (caseData.retos || []).map((r) => resolveReto(r, route)),
     [caseData, route],
   );
 
-  const [phase, setPhase] = useState("intro"); // intro | retos | done
+  const [phase, setPhase] = useState("intro");
   const [qi, setQi] = useState(0);
   const [solved, setSolved] = useState(false);
   const [usedHint, setUsedHint] = useState(false);
-  const [picked, setPicked] = useState(null); // opción elegida (choice)
-  const [wrong, setWrong] = useState(false); // para el shake
-  const [seq, setSeq] = useState([]); // pasos elegidos (mecánica orden)
+  const [picked, setPicked] = useState(null);
+  const [wrong, setWrong] = useState(false);
+  const [seq, setSeq] = useState([]);
 
   const startRef = useRef(Date.now());
-  const resultsRef = useRef([]); // [{ skill, firstTry }]
+  const resultsRef = useRef([]);
   const committedRef = useRef(false);
   const [splashSeen, setSplashSeen] = useState(false);
 
-  // ¿Hay progreso parcial guardado? El hook hidrata desde localStorage tras el
-  // primer render, así que revisamos cuando `hydrated` cambia a true, una sola
-  // vez, antes de que el niño haya interactuado.
   const resumedRef = useRef(false);
   useEffect(() => {
     if (resumedRef.current || !progress.hydrated) return;
@@ -65,14 +262,12 @@ export default function CaseSession({ caseData }) {
       setQi(Math.min(saved.length, (caseData.retos || []).length - 1));
       setPhase("retos");
     } else {
-      resumedRef.current = true; // no hay nada que retomar; marcamos igual
+      resumedRef.current = true;
     }
   }, [progress.hydrated, progress.cases, caseData]);
 
   const reto = retos[qi];
   const isOrder = reto?.mechanic === "orden";
-
-  // Opciones / pasos barajados: se recalculan solo al cambiar de reto.
   const options = useMemo(
     () => (reto && !isOrder ? shuffle(reto.options) : []),
     [reto, isOrder],
@@ -86,7 +281,6 @@ export default function CaseSession({ caseData }) {
     resultsRef.current.push({ skill: reto.skill, firstTry: !usedHint });
   }
 
-  // --- Mecánicas de opción (deducción, patrón, error, matemático) ---
   function choose(opt) {
     if (solved) return;
     setPicked(opt);
@@ -100,7 +294,6 @@ export default function CaseSession({ caseData }) {
     }
   }
 
-  // --- Mecánica de ordenar los pasos ---
   function tapStep(step) {
     if (solved || seq.includes(step)) return;
     const nextSeq = [...seq, step];
@@ -115,7 +308,7 @@ export default function CaseSession({ caseData }) {
         setWrong(true);
         setTimeout(() => {
           setWrong(false);
-          setSeq([]); // reinicia el orden para reintentar
+          setSeq([]);
         }, 600);
       }
     }
@@ -123,7 +316,6 @@ export default function CaseSession({ caseData }) {
 
   function next() {
     if (qi + 1 < retos.length) {
-      // Persistimos el progreso parcial: si sale ahora, retoma en el siguiente.
       progress.saveCaseProgress({
         caseId: caseData.id,
         chapter: caseData.chapter,
@@ -140,7 +332,6 @@ export default function CaseSession({ caseData }) {
     }
   }
 
-  // Al llegar al resumen, guardamos el progreso real una sola vez.
   useEffect(() => {
     if (phase !== "done" || committedRef.current) return;
     committedRef.current = true;
@@ -163,32 +354,42 @@ export default function CaseSession({ caseData }) {
     });
   }, [phase, progress, caseData, route]);
 
-  /* ---------- INTRO (expediente del caso) ---------- */
   if (phase === "intro") {
     return (
-      <div className="mx-auto max-w-2xl px-5 py-6">
-        <TopLink />
-        <div className="mt-4 rounded-4xl bg-white p-6 shadow-card sm:p-8">
-          <span className="text-5xl">{caseData.emoji}</span>
-          <p className="mt-3 font-display text-sm font-semibold uppercase tracking-wide text-honey-deep">
-            Caso · Capítulo {caseData.chapter}
-          </p>
-          <h1 className="mt-1 font-display text-3xl font-bold leading-tight text-ink">
-            {caseData.title}
-          </h1>
-          <Bubble>{caseData.brief}</Bubble>
+      <CaseBackdrop caseData={caseData}>
+        <div className="mx-auto max-w-5xl px-5 py-6 sm:py-8">
+          <TopLink light />
+          <section className="mt-5 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div className="text-white">
+              <span className="inline-flex items-center rounded-full bg-white/12 px-3 py-1 text-xs font-semibold uppercase text-white/75 ring-1 ring-white/15">
+                Expediente · Capítulo {caseData.chapter}
+              </span>
+              <h1 className="mt-4 font-display text-4xl font-bold leading-tight sm:text-5xl">
+                {caseData.title}
+              </h1>
+              <p className="mt-3 max-w-xl text-lg leading-relaxed text-white/78">
+                {caseData.brief}
+              </p>
+              <Bubble caseData={caseData} dark>{caseData.brief}</Bubble>
+              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {assetFor(caseData).evidence.map((item, i) => (
+                  <EvidenceToken key={evidenceLabel(item)} index={i + 1} item={item} />
+                ))}
+              </div>
+              <button
+                onClick={() => setPhase("retos")}
+                className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-honey px-6 py-4 font-display text-lg font-bold text-night shadow-glow transition hover:bg-honey-deep hover:text-white sm:w-auto"
+              >
+                Abrir expediente <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <CaseScene caseData={caseData} />
+          </section>
         </div>
-        <button
-          onClick={() => setPhase("retos")}
-          className="mt-6 w-full rounded-full bg-honey px-6 py-4 font-display text-lg font-bold text-night shadow-card transition hover:bg-honey-deep hover:text-white"
-        >
-          Abrir el caso 🔍
-        </button>
-      </div>
+      </CaseBackdrop>
     );
   }
 
-  /* ---------- RESUMEN (caso resuelto) ---------- */
   if (phase === "done") {
     const firstTries = resultsRef.current.filter((r) => r.firstTry).length;
     const session = progress.lastCase;
@@ -198,7 +399,6 @@ export default function CaseSession({ caseData }) {
     const rank = playerLeveledTo ? rankTitle(playerLeveledTo) : null;
     const medalChapter = progress.justChapterMedal;
 
-    // Splash de subida de nivel o de medalla de capítulo (momento videojuego).
     if ((playerLeveledTo || medalChapter) && !splashSeen) {
       const isMedal = Boolean(medalChapter) && !playerLeveledTo;
       return (
@@ -240,193 +440,536 @@ export default function CaseSession({ caseData }) {
     }
 
     return (
-      <div className="mx-auto max-w-2xl px-5 py-10">
+      <CaseBackdrop caseData={caseData}>
         <div className="pointer-events-none fixed inset-0 z-10">
           <Confetti count={30} />
         </div>
-        <TopLink />
-        <div className="mt-6 animate-pop rounded-4xl bg-white p-8 text-center shadow-soft">
-          <Detective size={96} className="mx-auto animate-floaty" />
-          <h1 className="mt-4 font-display text-3xl font-bold text-ink">
-            ¡Caso resuelto{progress.name ? `, ${progress.name}` : ""}! 🕵️
-          </h1>
-          <p className="mt-2 text-muted">Cerraste “{caseData.title}”.</p>
+        <div className="relative z-20 mx-auto max-w-2xl px-5 py-10">
+          <TopLink light />
+          <div className="mt-6 animate-pop overflow-hidden rounded-[1.5rem] bg-white text-center shadow-soft ring-1 ring-white/60">
+            <div className="bg-gradient-to-br from-honey-soft via-white to-teal-soft px-7 py-8">
+              <Mascot
+                caseData={caseData}
+                size={124}
+                mood="celebrate"
+                className="mx-auto animate-floaty drop-shadow-[0_12px_24px_rgba(0,0,0,0.16)]"
+              />
+              <p className="mt-4 text-sm font-semibold uppercase text-honey-deep">
+                Expediente cerrado
+              </p>
+              <h1 className="mt-1 font-display text-3xl font-bold text-ink">
+                ¡Caso resuelto{progress.name ? `, ${progress.name}` : ""}!
+              </h1>
+              <p className="mt-2 text-muted">Cerraste “{caseData.title}”.</p>
+            </div>
 
-          <div className="mt-6 grid grid-cols-3 gap-3">
-            <Stat top={<>+<CountUp to={xpGained} duration={1200} /></>} bottom="XP" tone="bg-honey-soft text-honey-deep" />
-            <Stat top={`${firstTries}/${retos.length}`} bottom="sin pista" tone="bg-teal-soft text-teal" />
-            <Stat top={`🔥 ${progress.streak}`} bottom={progress.streak === 1 ? "día de racha" : "días de racha"} tone="bg-coral-soft text-coral" />
-          </div>
+            <div className="grid grid-cols-3 gap-3 px-6 py-6">
+              <Stat top={<>+<CountUp to={xpGained} duration={1200} /></>} bottom="XP" tone="bg-honey-soft text-honey-deep" />
+              <Stat top={`${firstTries}/${retos.length}`} bottom="sin pista" tone="bg-teal-soft text-teal" />
+              <Stat top={`🔥 ${progress.streak}`} bottom={progress.streak === 1 ? "día de racha" : "días de racha"} tone="bg-coral-soft text-coral" />
+            </div>
 
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/aprendo"
-              onClick={() => progress.clearLevelUp()}
-              className="flex-1 rounded-full bg-night px-6 py-3.5 font-semibold text-white transition hover:bg-night-soft"
-            >
-              Volver al cuartel
-            </Link>
-            <Link
-              href="/padres"
-              className="flex-1 rounded-full border border-ink/15 bg-white px-6 py-3.5 font-semibold text-ink transition hover:border-ink/30"
-            >
-              Ver panel de papás
-            </Link>
+            <div className="flex flex-col gap-3 border-t border-ink/5 px-6 pb-6 sm:flex-row">
+              <Link
+                href="/aprendo"
+                onClick={() => progress.clearLevelUp()}
+                className="flex-1 rounded-full bg-night px-6 py-3.5 font-semibold text-white transition hover:bg-night-soft"
+              >
+                Volver al cuartel
+              </Link>
+              <Link
+                href="/padres"
+                className="flex-1 rounded-full border border-ink/15 bg-white px-6 py-3.5 font-semibold text-ink transition hover:border-ink/30"
+              >
+                Ver panel de papás
+              </Link>
+            </div>
           </div>
+        </div>
+      </CaseBackdrop>
+    );
+  }
+
+  const tone = MECHANIC_TONE[reto.mechanic] || MECHANIC_TONE.deduccion;
+  const skill = SKILLS[reto.skill];
+
+  return (
+    <CaseBackdrop caseData={caseData}>
+      <div className="mx-auto max-w-6xl px-5 py-6 sm:py-8">
+        <TopLink light />
+        <ProgressRail total={retos.length} current={qi} />
+
+        <section className="mt-5 grid gap-5 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
+          <aside className="order-2 space-y-4 lg:order-1">
+            <CaseMiniFile caseData={caseData} current={qi + 1} total={retos.length} />
+            <RetoVisual reto={reto} caseData={caseData} tone={tone} />
+            {skill && (
+              <div className="rounded-[1.25rem] bg-white/10 p-4 text-white ring-1 ring-white/15 backdrop-blur">
+                <p className="text-xs font-semibold uppercase text-white/55">
+                  Habilidad en juego
+                </p>
+                <p className="mt-1 font-display text-lg font-semibold">
+                  {skill.name}
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-white/70">
+                  {skill.desc}
+                </p>
+              </div>
+            )}
+          </aside>
+
+          <div
+            key={wrong ? `shake-${qi}` : `reto-${qi}`}
+            className={`order-1 overflow-hidden rounded-[1.5rem] bg-white shadow-soft ring-1 ring-white/70 lg:order-2 ${wrong ? "animate-shake" : ""}`}
+          >
+            <div className="border-b border-ink/5 bg-gradient-to-r from-cream to-white px-5 py-4 sm:px-7">
+              <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase ${tone.chip}`}>
+                <MechanicMark caseData={caseData} mechanic={reto.mechanic} tone={tone} size="sm" />
+                Reto {qi + 1} de {retos.length} · {MECHANIC_LABEL[reto.mechanic]}
+              </span>
+              <p className="mt-4 text-lg font-semibold leading-relaxed text-ink">
+                {reto.prompt}
+              </p>
+            </div>
+
+            <div className="px-5 py-5 sm:px-7 sm:py-6">
+              {reto.aiSays && <AiCard text={reto.aiSays} />}
+              {reto.clues && <EvidenceList clues={reto.clues} tone={tone} caseData={caseData} />}
+
+              <div className="mt-5 rounded-[1.25rem] bg-night p-4 text-white shadow-card">
+                <p className="text-xs font-semibold uppercase text-honey">
+                  Pregunta clave
+                </p>
+                <p className="mt-1 font-display text-xl font-bold leading-snug">
+                  {reto.question}
+                </p>
+              </div>
+
+              {!isOrder ? (
+                <div className="mt-4 grid gap-3">
+                  {options.map((opt, index) => {
+                    const isAnswer = solved && opt === reto.answer;
+                    const isWrongPick = !solved && wrong && opt === picked;
+                    return (
+                      <OptionButton
+                        key={opt}
+                        option={opt}
+                        index={index}
+                        solved={solved}
+                        isAnswer={isAnswer}
+                        isWrongPick={isWrongPick}
+                        caseData={caseData}
+                        onClick={() => choose(opt)}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <OrderBoard
+                  steps={reto.steps}
+                  selected={seq}
+                  pool={stepPool}
+                  solved={solved}
+                  caseData={caseData}
+                  onPick={tapStep}
+                />
+              )}
+
+              {!solved && usedHint && (
+                <Bubble caseData={caseData} mood="think">Todavía no... {reto.hint}</Bubble>
+              )}
+
+              {solved && (
+                <div className="mt-5 animate-pop overflow-hidden rounded-[1.25rem] border border-teal/20 bg-teal-soft">
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal text-white">
+                      ✓
+                    </span>
+                    <div>
+                      <p className="font-display font-bold text-teal">
+                        {usedHint ? "¡Ahí está! Lo lograste." : "¡Exacto! A la primera."}
+                      </p>
+                      <p className="text-sm leading-relaxed text-ink/80">{reto.explicacion}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {solved && (
+                <button
+                  onClick={next}
+                  className="mt-6 w-full rounded-full bg-honey px-6 py-4 font-display text-lg font-bold text-night shadow-card transition hover:bg-honey-deep hover:text-white"
+                >
+                  {qi + 1 < retos.length ? "Siguiente pista →" : "Cerrar el caso"}
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+      </div>
+    </CaseBackdrop>
+  );
+}
+
+function CaseBackdrop({ caseData, children }) {
+  const assets = assetFor(caseData);
+  return (
+    <div className={`relative min-h-screen overflow-hidden bg-gradient-to-br ${assets.palette}`}>
+      <div className="absolute inset-0 night-sky opacity-70" />
+      <div className="absolute left-0 top-24 h-44 w-44 rounded-full bg-honey/18 blur-3xl" />
+      <div className="absolute bottom-12 right-0 h-56 w-56 rounded-full bg-teal/14 blur-3xl" />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+}
+
+function CaseScene({ caseData }) {
+  const assets = assetFor(caseData);
+  if (assets.hero) {
+    return (
+      <div className="relative min-h-[430px] overflow-hidden rounded-[1.75rem] bg-night/70 shadow-soft ring-1 ring-white/15">
+        <img
+          src={assets.hero}
+          alt={`Escena ilustrada de ${caseData.title}`}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-night/95 via-night/20 to-transparent" />
+        <div className="absolute left-5 top-5 rounded-full bg-white/14 px-3 py-1 text-xs font-semibold uppercase text-white/80 ring-1 ring-white/20 backdrop-blur">
+          Escena del misterio
+        </div>
+        <div className="absolute bottom-5 left-5 right-5 rounded-[1.25rem] bg-night/72 p-4 text-white shadow-card ring-1 ring-white/12 backdrop-blur">
+          <p className="text-xs font-semibold uppercase text-honey">{assets.location}</p>
+          <p className="mt-1 font-display text-xl font-bold">{caseData.title}</p>
+          <p className="mt-1 text-sm text-white/70">{caseData.minutes} min · {caseData.retos.length} retos</p>
         </div>
       </div>
     );
   }
 
-  /* ---------- RETOS ---------- */
   return (
-    <div className="mx-auto max-w-2xl px-5 py-6">
-      <TopLink />
-
-      {/* progreso */}
-      <div className="mt-4 flex items-center gap-2">
-        {retos.map((_, i) => (
-          <span
-            key={i}
-            className={`h-2 flex-1 rounded-full ${
-              i < qi ? "bg-honey" : i === qi ? "bg-honey/50" : "bg-ink/10"
-            }`}
-          />
-        ))}
+    <div className="relative min-h-[430px] overflow-hidden rounded-[1.75rem] bg-white/10 p-5 shadow-soft ring-1 ring-white/15 backdrop-blur">
+      <div className="absolute inset-x-8 top-10 h-28 rounded-full bg-honey/25 blur-2xl" />
+      <div className="relative mx-auto mt-8 flex h-64 max-w-sm items-end justify-center">
+        <div className="absolute bottom-0 h-24 w-72 rounded-t-[3rem] bg-night/70 ring-1 ring-white/10" />
+        <div className="relative z-10 grid h-56 w-48 place-items-center rounded-t-[5rem] border-4 border-honey/70 bg-gradient-to-b from-white/22 to-white/5 shadow-glow">
+          <span className="absolute top-6 text-6xl">{caseData.emoji}</span>
+          <span className="absolute bottom-12 grid h-16 w-16 place-items-center rounded-2xl bg-honey text-4xl shadow-card">
+            💎
+          </span>
+          <span className="absolute bottom-4 rounded-full bg-white/12 px-3 py-1 text-xs font-semibold text-white/70">
+            Evidencia central
+          </span>
+        </div>
+        <div className="absolute left-4 top-9 h-16 w-28 -rotate-12 rounded-full bg-honey/35 blur-xl" />
+        <div className="absolute right-0 top-20 h-16 w-32 rotate-12 rounded-full bg-grape/30 blur-xl" />
       </div>
-
-      <div
-        key={wrong ? `shake-${qi}` : `reto-${qi}`}
-        className={`mt-4 rounded-4xl bg-white p-6 shadow-card sm:p-7 ${wrong ? "animate-shake" : ""}`}
-      >
-        <span className="inline-flex items-center gap-2 rounded-full bg-cloud px-3 py-1 text-xs font-semibold uppercase tracking-wide text-ink">
-          🔍 Reto {qi + 1} de {retos.length} · {MECHANIC_LABEL[reto.mechanic]}
-        </span>
-
-        <p className="mt-4 font-medium text-ink">{reto.prompt}</p>
-
-        {/* lo que "dice" la IA: el niño debe evaluarlo con criterio */}
-        {reto.aiSays && (
-          <div className="mt-3 flex items-start gap-3 rounded-2xl border-2 border-grape/25 bg-grape-soft p-4">
-            <span className="text-2xl" aria-hidden="true">🤖</span>
-            <p className="text-sm leading-snug text-ink">
-              <span className="font-bold">Razobot dice:</span> “{reto.aiSays}”
-            </p>
-          </div>
-        )}
-
-        {reto.clues && (
-          <ul className="mt-3 space-y-2 rounded-2xl bg-cloud p-4 text-sm text-ink">
-            {reto.clues.map((c) => (
-              <li key={c}>{c}</li>
-            ))}
-          </ul>
-        )}
-
-        <p className="mt-4 font-display text-lg font-semibold text-ink">
-          {reto.question}
-        </p>
-
-        {/* ---- UI por mecánica ---- */}
-        {!isOrder ? (
-          <div className="mt-4 grid gap-2.5">
-            {options.map((opt) => {
-              const isAnswer = solved && opt === reto.answer;
-              const isWrongPick = !solved && wrong && opt === picked;
-              return (
-                <button
-                  key={opt}
-                  onClick={() => choose(opt)}
-                  disabled={solved}
-                  className={`rounded-2xl border-2 px-4 py-3 text-left font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey ${
-                    isAnswer
-                      ? "animate-pop border-teal bg-teal-soft text-ink"
-                      : isWrongPick
-                        ? "border-coral bg-coral-soft text-ink"
-                        : "border-ink/10 bg-white text-ink hover:-translate-y-0.5 hover:border-honey hover:shadow-card"
-                  }`}
-                >
-                  {opt}
-                </button>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="mt-4">
-            {/* secuencia armada */}
-            <ol className="mb-3 space-y-2">
-              {seq.map((step, i) => (
-                <li
-                  key={step}
-                  className="flex items-center gap-3 rounded-2xl border-2 border-teal bg-teal-soft px-4 py-2.5 font-semibold text-ink"
-                >
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-teal text-sm text-white">
-                    {i + 1}
-                  </span>
-                  {step}
-                </li>
-              ))}
-              {Array.from({ length: reto.steps.length - seq.length }).map((_, i) => (
-                <li
-                  key={`empty-${i}`}
-                  className="flex items-center gap-3 rounded-2xl border-2 border-dashed border-ink/15 px-4 py-2.5 text-muted"
-                >
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-cloud text-sm">
-                    {seq.length + i + 1}
-                  </span>
-                  Toca un paso…
-                </li>
-              ))}
-            </ol>
-            {/* pasos disponibles */}
-            <div className="flex flex-wrap gap-2">
-              {stepPool
-                .filter((s) => !seq.includes(s))
-                .map((step) => (
-                  <button
-                    key={step}
-                    onClick={() => tapStep(step)}
-                    disabled={solved}
-                    className="rounded-full border-2 border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:border-honey hover:shadow-card"
-                  >
-                    {step}
-                  </button>
-                ))}
-            </div>
-          </div>
-        )}
-
-        {/* feedback */}
-        {!solved && usedHint && (
-          <Bubble mood="think">Todavía no… {reto.hint}</Bubble>
-        )}
-        {solved && (
-          <div className="mt-4 animate-pop rounded-2xl bg-teal-soft p-4">
-            <p className="text-sm font-semibold text-teal">
-              {usedHint ? "¡Ahí está! Lo lograste. 🔎" : "¡Exacto! A la primera. 🎉"}
-            </p>
-            <p className="mt-1 text-sm text-ink/80">{reto.explicacion}</p>
-          </div>
-        )}
-
-        {solved && (
-          <button
-            onClick={next}
-            className="mt-6 w-full rounded-full bg-honey px-6 py-4 font-display text-lg font-bold text-night shadow-card transition hover:bg-honey-deep hover:text-white"
-          >
-            {qi + 1 < retos.length ? "Siguiente pista →" : "Cerrar el caso"}
-          </button>
-        )}
+      <div className="relative mt-4 rounded-[1.25rem] bg-night/60 p-4 text-white ring-1 ring-white/10">
+        <p className="text-xs font-semibold uppercase text-honey">{assets.location}</p>
+        <p className="mt-1 font-display text-xl font-bold">{caseData.title}</p>
+        <p className="mt-1 text-sm text-white/65">{caseData.minutes} min · {caseData.retos.length} retos</p>
       </div>
     </div>
   );
 }
 
-function TopLink() {
+function EvidenceToken({ index, item }) {
+  const label = evidenceLabel(item);
+  const image = evidenceImage(item);
+
+  return (
+    <div className="group overflow-hidden rounded-[1.1rem] bg-white/10 p-3 text-white ring-1 ring-white/15 backdrop-blur">
+      <span className="grid h-8 w-8 place-items-center rounded-full bg-honey font-display text-sm font-bold text-night shadow-card">
+        {index}
+      </span>
+      {image ? (
+        <img
+          src={image}
+          alt=""
+          className="mx-auto mt-1 h-16 w-full object-contain drop-shadow-[0_10px_14px_rgba(0,0,0,0.22)] transition group-hover:scale-105"
+          aria-hidden="true"
+        />
+      ) : (
+        <p className="mt-2 text-2xl" aria-hidden="true">{itemIcon(label)}</p>
+      )}
+      <p className="mt-2 text-sm font-semibold leading-tight">{label}</p>
+    </div>
+  );
+}
+
+function CaseMiniFile({ caseData, current, total }) {
+  const assets = assetFor(caseData);
+  const cover = assets.evidence?.[1]?.image || assets.evidence?.[0]?.image || null;
+
+  return (
+    <div className="overflow-hidden rounded-[1.25rem] bg-white/10 text-white ring-1 ring-white/15 backdrop-blur">
+      <div className="flex items-center gap-3 border-b border-white/10 p-4">
+        <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-honey-soft shadow-card">
+          {cover ? (
+            <img src={cover} alt="" className="h-12 w-12 object-contain drop-shadow-sm" aria-hidden="true" />
+          ) : (
+            <span className="text-2xl">{caseData.emoji}</span>
+          )}
+        </span>
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase text-white/55">{assets.location}</p>
+          <p className="truncate font-display text-lg font-bold">{caseData.title}</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-2 p-4 text-sm">
+        <MiniMetric label="Pista actual" value={`${current}/${total}`} />
+        <MiniMetric label="Tiempo" value={`${caseData.minutes} min`} />
+      </div>
+    </div>
+  );
+}
+
+function MiniMetric({ label, value }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-3">
+      <p className="text-xs text-white/55">{label}</p>
+      <p className="mt-1 font-display text-lg font-bold">{value}</p>
+    </div>
+  );
+}
+
+function RetoVisual({ reto, caseData, tone }) {
+  const assets = assetFor(caseData);
+  const mechanicImage = mechanicAssetFor(caseData, reto.mechanic);
+
+  return (
+    <div className={`relative overflow-hidden rounded-[1.25rem] bg-white p-5 shadow-soft ring-4 ${tone.ring}`}>
+      <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-honey-soft" />
+      <div className="relative flex items-center gap-4">
+        <span className={`grid h-16 w-16 shrink-0 place-items-center rounded-3xl ${tone.chip} text-3xl`}>
+          {mechanicImage ? (
+            <img src={mechanicImage} alt="" className="h-14 w-14 object-contain drop-shadow-sm" aria-hidden="true" />
+          ) : (
+            tone.icon
+          )}
+        </span>
+        <div>
+          <p className="text-xs font-semibold uppercase text-muted">Tipo de reto</p>
+          <p className="font-display text-xl font-bold leading-tight text-ink">
+            {MECHANIC_LABEL[reto.mechanic]}
+          </p>
+        </div>
+      </div>
+      <div className="relative mt-5 grid grid-cols-3 gap-2">
+        {assets.evidence.slice(0, 3).map((item) => {
+          const label = evidenceLabel(item);
+          const image = evidenceImage(item);
+          return (
+          <div key={label} className="rounded-2xl bg-cream p-3 text-center ring-1 ring-ink/5">
+            {image ? (
+              <img
+                src={image}
+                alt=""
+                className="mx-auto h-14 w-full object-contain drop-shadow-[0_8px_12px_rgba(0,0,0,0.14)]"
+                aria-hidden="true"
+              />
+            ) : (
+              <p className="text-2xl">{itemIcon(label)}</p>
+            )}
+            <p className="mt-1 text-[11px] font-semibold leading-tight text-muted">{label}</p>
+          </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function itemIcon(item) {
+  const text = normalizeAssetKey(evidenceLabel(item));
+  if (text.includes("camara") || text.includes("cámara")) return "📹";
+  if (text.includes("codigo") || text.includes("código")) return "🔐";
+  if (text.includes("linterna")) return "🔦";
+  if (text.includes("llave")) return "🗝️";
+  if (text.includes("caja") || text.includes("boveda") || text.includes("bóveda")) return "🔒";
+  if (text.includes("nota")) return "📝";
+  if (text.includes("foto")) return "📸";
+  return "🗂️";
+}
+
+function ProgressRail({ total, current }) {
+  return (
+    <div className="mt-5 rounded-full bg-white/10 p-2 ring-1 ring-white/15 backdrop-blur">
+      <div className="flex items-center gap-2">
+        {Array.from({ length: total }).map((_, i) => (
+          <span
+            key={i}
+            className={`h-2 flex-1 rounded-full transition ${
+              i < current ? "bg-honey" : i === current ? "bg-honey/70" : "bg-white/18"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AiCard({ text }) {
+  return (
+    <div className="mb-4 flex items-start gap-3 rounded-[1.25rem] border-2 border-grape/20 bg-grape-soft p-4">
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-grape text-xl text-white" aria-hidden="true">
+        🤖
+      </span>
+      <p className="text-sm leading-relaxed text-ink">
+        <span className="font-bold">Razobot dice:</span> “{text}”
+      </p>
+    </div>
+  );
+}
+
+function MechanicMark({ caseData, mechanic, tone, size = "md" }) {
+  const image = mechanicAssetFor(caseData, mechanic);
+  const box = size === "sm" ? "h-5 w-5" : "h-9 w-9";
+
+  if (!image) return <span aria-hidden="true">{tone.icon}</span>;
+
+  return (
+    <img
+      src={image}
+      alt=""
+      className={`${box} object-contain drop-shadow-sm`}
+      aria-hidden="true"
+    />
+  );
+}
+
+function EvidenceList({ clues, tone, caseData }) {
+  return (
+    <ul className="grid gap-2.5">
+      {clues.map((clue, index) => {
+        const image = clueAssetFor(caseData, clue);
+        return (
+          <li
+            key={clue}
+            className="flex items-start gap-3 rounded-[1rem] bg-cream px-4 py-3 text-sm leading-relaxed text-ink ring-1 ring-ink/5"
+          >
+            <span className={`mt-0.5 grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-xl ${image ? "bg-white" : tone.accent} text-xs font-bold text-white shadow-sm`}>
+              {image ? (
+                <img src={image} alt="" className="h-9 w-9 object-contain" aria-hidden="true" />
+              ) : (
+                index + 1
+              )}
+            </span>
+            <span className="pt-1">{clue}</span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function OptionButton({ option, index, solved, isAnswer, isWrongPick, caseData, onClick }) {
+  const marker = String.fromCharCode(65 + index);
+  const image = optionAssetFor(caseData, option);
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={solved}
+      className={`group flex items-center gap-3 rounded-[1.15rem] border-2 px-4 py-3 text-left font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey ${
+        isAnswer
+          ? "animate-pop border-teal bg-teal-soft text-ink"
+          : isWrongPick
+            ? "border-coral bg-coral-soft text-ink"
+            : "border-ink/10 bg-white text-ink hover:-translate-y-0.5 hover:border-honey hover:shadow-card"
+      }`}
+    >
+      <span
+        className={`grid h-9 w-9 shrink-0 place-items-center rounded-full font-display text-sm font-bold ${
+          isAnswer
+            ? "bg-teal text-white"
+            : isWrongPick
+              ? "bg-coral text-white"
+              : "bg-cream text-muted group-hover:bg-honey group-hover:text-night"
+        }`}
+      >
+        {isAnswer ? "✓" : isWrongPick ? "×" : marker}
+      </span>
+      {image && (
+        <span className="grid h-14 w-14 shrink-0 place-items-end overflow-hidden rounded-2xl bg-cream ring-1 ring-ink/5 transition group-hover:scale-105">
+          <img
+            src={image}
+            alt=""
+            className="h-14 w-14 object-contain object-bottom drop-shadow-sm"
+            aria-hidden="true"
+          />
+        </span>
+      )}
+      <span className="min-w-0 flex-1">{option}</span>
+    </button>
+  );
+}
+
+function OrderBoard({ steps, selected, pool, solved, caseData, onPick }) {
+  return (
+    <div className="mt-4">
+      <ol className="space-y-2.5">
+        {selected.map((step, i) => {
+          const image = stepAssetFor(caseData, step);
+          return (
+            <li
+              key={step}
+              className="flex items-center gap-3 rounded-[1rem] border-2 border-teal bg-teal-soft px-4 py-3 font-semibold text-ink"
+            >
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-teal text-sm text-white">
+                {i + 1}
+              </span>
+              {image && <img src={image} alt="" className="h-10 w-10 shrink-0 object-contain drop-shadow-sm" aria-hidden="true" />}
+              <span>{step}</span>
+            </li>
+          );
+        })}
+        {Array.from({ length: steps.length - selected.length }).map((_, i) => (
+          <li
+            key={`empty-${i}`}
+            className="flex items-center gap-3 rounded-[1rem] border-2 border-dashed border-ink/15 bg-white px-4 py-3 text-muted"
+          >
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-cloud text-sm">
+              {selected.length + i + 1}
+            </span>
+            Toca un paso para ponerlo aquí
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-4 rounded-[1.25rem] bg-cream p-3">
+        <p className="mb-2 px-1 text-xs font-semibold uppercase text-muted">
+          Pasos disponibles
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {pool
+            .filter((s) => !selected.includes(s))
+            .map((step) => {
+              const image = stepAssetFor(caseData, step);
+              return (
+              <button
+                key={step}
+                onClick={() => onPick(step)}
+                disabled={solved}
+                className="inline-flex items-center gap-2 rounded-full border-2 border-ink/10 bg-white py-2 pl-2 pr-4 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:border-honey hover:shadow-card"
+              >
+                {image && <img src={image} alt="" className="h-8 w-8 object-contain" aria-hidden="true" />}
+                <span>{step}</span>
+              </button>
+              );
+            })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TopLink({ light = false }) {
   return (
     <Link
       href="/aprendo"
-      className="inline-flex items-center gap-1 text-sm font-medium text-muted transition hover:text-ink"
+      className={`inline-flex items-center gap-1 text-sm font-medium transition ${
+        light ? "text-white/65 hover:text-white" : "text-muted hover:text-ink"
+      }`}
     >
       ← Mi cuartel
     </Link>
