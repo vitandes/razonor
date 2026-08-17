@@ -41,7 +41,6 @@ const C2_SHARED_ASSETS = {
     freezer: `${C2_ASSET_BASE}/evidence-freezer.png`,
     redCap: `${C2_ASSET_BASE}/evidence-red-cap.png`,
     sequence: `${C2_ASSET_BASE}/sequence-squares-circle.png`,
-    lumi: `${C2_ASSET_BASE}/character-lumi-thinking.png`,
   },
   mechanics: {
     ia: `${C2_ASSET_BASE}/mechanic-ai-verification.png`,
@@ -321,7 +320,6 @@ function optionAssetFor(caseData, option) {
   if (key.includes("rosa")) return suspects.rosa;
   if (key.includes("beto")) return suspects.beto;
   if (key.includes("cata")) return suspects.cata;
-  if (key.includes("lumi")) return assets.visualEvidence?.lumi || null;
   if (key.includes("razobot") || key.includes("maquina")) return assets.aiSpeaker || null;
   if (key.includes("25:00")) return assets.visualEvidence?.clock || null;
   if (key.includes("congelador") || key.includes("helado")) return assets.visualEvidence?.freezer || null;
