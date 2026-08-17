@@ -24,7 +24,7 @@ export default function FinalCta({ market = "co" }) {
           </div>
 
           <p className="mt-6 text-sm text-white/60">
-            Sin prueba inicial · Configuración para padres · Cancela cuando quieras
+            Sin prueba inicial · Configuración sencilla para padres
           </p>
         </div>
         </Reveal>

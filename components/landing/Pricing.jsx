@@ -63,8 +63,8 @@ export default function Pricing() {
           </h2>
           <p className="mx-auto mt-4 max-w-md text-lg text-muted">
             {HAS_TRIAL
-              ? `Empieza con ${TRIAL_LABEL} gratis y cancela cuando quieras.`
-              : "Elige tu plan y cancela cuando quieras."}
+              ? `Empieza con ${TRIAL_LABEL} gratis.`
+              : "Elige el plan que mejor se adapte a tu familia."}
           </p>
 
           {/* toggle: tipo de plan */}

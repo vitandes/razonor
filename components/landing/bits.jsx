@@ -49,12 +49,3 @@ export function TrialButton({
     </Link>
   );
 }
-
-// Reversa de riesgo: siempre acompaña al CTA.
-export function RiskReversal({ className = "" }) {
-  return (
-    <p className={`text-sm text-muted ${className}`}>
-     Cancela cuando quieras
-    </p>
-  );
-}

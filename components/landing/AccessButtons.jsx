@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Show, UserButton } from "@clerk/nextjs";
-import { TrialButton, RiskReversal } from "@/components/landing/bits";
+import { TrialButton } from "@/components/landing/bits";
 import { CTA_START } from "@/lib/trial";
 import { isSubscribed, useProgress } from "@/lib/progress";
 
@@ -64,7 +64,6 @@ export default function AccessButtons({
     <>
       <Show when="signed-out">
         <TrialButton size="lg">{trialLabel}</TrialButton>
-        <RiskReversal className={dark ? "text-white/60" : ""} />
       </Show>
       <Show when="signed-in">
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
