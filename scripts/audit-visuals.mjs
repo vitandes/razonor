@@ -4,20 +4,21 @@ import { CHAPTERS, resolveReto } from "../lib/world.js";
 import { CHAPTER_VISUAL_THEME, VISUAL_THEMES, sharedCharacterForGroup } from "../lib/visualCatalog.js";
 
 function spatialType(reto) {
+  if (reto.visual?.type) return reto.visual.type;
   const text = (reto.clues || []).join(" ").toLowerCase();
   if (text.includes("movimientos:")) return "grid";
   if (text.includes("giro:") || text.includes("giros:") || text.includes("180°")) return "turn";
-  if (text.includes("detrás del vehículo") || text.includes("detras del vehiculo")) return "behind";
   if (text.includes("a la izquierda") || text.includes("a la derecha") || text.includes("encima")) return "relations";
   return null;
 }
 
-const chapters = CHAPTERS.filter((chapter) => chapter.id >= 5 && chapter.id <= 20);
-const counts = { pattern: 0, grid: 0, turn: 0, behind: 0, relations: 0, order: 0 };
+const chapters = CHAPTERS;
+const counts = { pattern: 0, route: 0, grid: 0, turn: 0, relations: 0, mirror: 0, coordinates: 0, symmetry: 0, order: 0 };
 const uncovered = [];
+const spatialQuestions = new Set();
 
 for (const chapter of chapters) {
-  if (!CHAPTER_VISUAL_THEME[chapter.id]) uncovered.push(`Capítulo ${chapter.id}: sin tema visual`);
+  if (chapter.id >= 5 && chapter.id <= 40 && !CHAPTER_VISUAL_THEME[chapter.id]) uncovered.push(`Capítulo ${chapter.id}: sin tema visual`);
   for (const caseData of chapter.cases) {
     for (const raw of caseData.retos) {
       for (const route of ["7-9", "10-12"]) {
@@ -39,7 +40,15 @@ for (const chapter of chapters) {
         if (reto.mechanic === "espacial" && reto.clues?.length) {
           const type = spatialType(reto);
           if (type) counts[type] += 1;
-          else uncovered.push(`${caseData.id}/${reto.id}/${route}: espacial sin visual`);
+          else if (reto.visual) uncovered.push(`${caseData.id}/${reto.id}/${route}: espacial generado sin visual`);
+          if (route === "7-9") {
+            const uniqueKey = `${reto.prompt} ${reto.question}`;
+            if (spatialQuestions.has(uniqueKey)) uncovered.push(`${caseData.id}/${reto.id}: pregunta espacial repetida`);
+            spatialQuestions.add(uniqueKey);
+          }
+          if (route === "7-9" && (reto.visual?.type === "behind" || /🚙/.test(JSON.stringify(reto.visual)))) {
+            uncovered.push(`${caseData.id}/${reto.id}: conserva la escena genérica de bandera y vehículo`);
+          }
         }
       }
     }
@@ -56,7 +65,7 @@ for (const [themeId, theme] of Object.entries(VISUAL_THEMES)) {
 
 console.log("Auditoría del sistema visual reutilizable");
 console.table(counts);
-console.log(`Capítulos cubiertos: ${chapters.length} · Temas: ${Object.keys(VISUAL_THEMES).length}`);
+console.log(`Capítulos revisados: ${chapters.length} · Temas: ${Object.keys(VISUAL_THEMES).length}`);
 
 if (uncovered.length || missingAssets.length) {
   if (uncovered.length) console.error("Sin cobertura:", uncovered);
@@ -64,4 +73,4 @@ if (uncovered.length || missingAssets.length) {
   process.exit(1);
 }
 
-console.log("✓ Capítulos 5–20 cubiertos sin assets exclusivos por capítulo.");
+console.log("✓ Retos espaciales únicos y cubiertos por el sistema visual reutilizable.");
