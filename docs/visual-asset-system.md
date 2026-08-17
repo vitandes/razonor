@@ -63,6 +63,18 @@ capítulos 1–4 mantienen sus personajes definidos explícitamente.
 - Originales PNG y fuentes SVG: `design-assets/raw`.
 - Previsualizaciones: `design-assets/asset-previews`.
 
+## Optimización WebP
+
+Ejecuta `npm run assets:optimize` después de agregar o reemplazar imágenes. El
+comando comprime todos los WebP públicos a calidad 75, elimina metadatos y usa
+el método WebP 6. Solo conserva el resultado cuando pesa menos.
+
+`design-assets/optimization-manifest.json` guarda la huella de cada salida para
+evitar recomprimirla en cada ejecución. `npm run assets:check` valida que no haya
+imágenes nuevas o modificadas pendientes de optimización.
+
+El script requiere ImageMagick con el comando `magick` disponible.
+
 ## Regla editorial
 
 Al escribir un caso nuevo:

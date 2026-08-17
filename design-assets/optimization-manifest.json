@@ -1,0 +1,392 @@
+{
+  "version": 1,
+  "quality": 75,
+  "root": "public/assets",
+  "files": {
+    "public/assets/cases/c1-cifrado/optimized/evidence-encrypted-note.webp": {
+      "quality": 75,
+      "bytes": 113122,
+      "outputHash": "91c8da67b9991e43573c89a6390d720027fd2e909602a5306338615ff4027ce1"
+    },
+    "public/assets/cases/c1-cifrado/optimized/evidence-golden-key.webp": {
+      "quality": 75,
+      "bytes": 121680,
+      "outputHash": "f860d89260a78672c15b613417a078a57960cb877ae955d7cf9564a7c106fec4"
+    },
+    "public/assets/cases/c1-cifrado/optimized/evidence-hidden-photo.webp": {
+      "quality": 75,
+      "bytes": 139126,
+      "outputHash": "d9dc223b50b2c7bf03f1f1d6f734f45195b121893485cc737a580d095edd27be"
+    },
+    "public/assets/cases/c1-cifrado/optimized/evidence-mechanical-safe.webp": {
+      "quality": 75,
+      "bytes": 90200,
+      "outputHash": "25cb04e341ab3b14e5aa0e9b664f402d4271f4de603d8325416f4f85a030b323"
+    },
+    "public/assets/cases/c1-cifrado/optimized/grid-golden-key.webp": {
+      "quality": 75,
+      "bytes": 6796,
+      "outputHash": "e7e0f32fa179333069f3e3bf9146bb5492ade2bc4ff886deb3c047418aae2d40"
+    },
+    "public/assets/cases/c1-cifrado/optimized/hero-secret-vault.webp": {
+      "quality": 75,
+      "bytes": 42154,
+      "outputHash": "dc86d47fdc6996215c6bf95640cfe50251d7b4c5183f8ff937eb813563b8086c"
+    },
+    "public/assets/cases/c1-cifrado/optimized/sequence-safe-numbers-double.webp": {
+      "quality": 75,
+      "bytes": 6430,
+      "outputHash": "dfefcf3bfb663c446991ad983c2e384b4d14efafb07824dd508837e1d703cd68"
+    },
+    "public/assets/cases/c1-cifrado/optimized/sequence-safe-numbers.webp": {
+      "quality": 75,
+      "bytes": 6100,
+      "outputHash": "c5b8e9e7fe2f320e57eae1cdcd9ce01a41966f1d4af4007386374e720354c726"
+    },
+    "public/assets/cases/c1-cifrado/optimized/sequence-triangles-circles.webp": {
+      "quality": 75,
+      "bytes": 7590,
+      "outputHash": "7e87e16e57a8383e96eee7051e8b03b64ceabd6389dbce95beb770c49c2f6166"
+    },
+    "public/assets/cases/c1-cifrado/optimized/suspect-short-blue-cap-glasses.webp": {
+      "quality": 75,
+      "bytes": 43130,
+      "outputHash": "02e73c2f7b2c65df341d0f299e1897b179ee0466e507fadf83aa527a9451faa8"
+    },
+    "public/assets/cases/c1-cifrado/optimized/suspect-tall-red-cap.webp": {
+      "quality": 75,
+      "bytes": 36820,
+      "outputHash": "3fe9d5004757f0a4101a9395d78e3568dc91baac492a3e0cd4966ec624ad8146"
+    },
+    "public/assets/cases/c1-cifrado/optimized/suspect-woman-red-cap-glasses.webp": {
+      "quality": 75,
+      "bytes": 37628,
+      "outputHash": "5386271e27487ee9953b8614ae03c0c301de181b2a84ec3b1a901ca1b7f3f08d"
+    },
+    "public/assets/cases/c1-noche/optimized/evidence-alarm-keypad.webp": {
+      "quality": 75,
+      "bytes": 51990,
+      "outputHash": "708569422a22d2e5fffc45ea6af082476dc704e807b90d59abbffb135e5ccf0a"
+    },
+    "public/assets/cases/c1-noche/optimized/evidence-back-door.webp": {
+      "quality": 75,
+      "bytes": 52796,
+      "outputHash": "f361da652b91db0a167e3f5b297bb08a9b19e950b89d9050ddbaf84bfdccaff9"
+    },
+    "public/assets/cases/c1-noche/optimized/evidence-diamond.webp": {
+      "quality": 75,
+      "bytes": 66896,
+      "outputHash": "1055720da5d5c62616633bb7aea3f92307ad35d3adfac14eb3ad538aef16e2d2"
+    },
+    "public/assets/cases/c1-noche/optimized/evidence-empty-display-case.webp": {
+      "quality": 75,
+      "bytes": 61452,
+      "outputHash": "21d0c68ed3c5983e79c5dfec75d3f42c4ba8e180fa6285cd4e3605e5ee729485"
+    },
+    "public/assets/cases/c1-noche/optimized/evidence-flashlight.webp": {
+      "quality": 75,
+      "bytes": 39678,
+      "outputHash": "108cdd865af5c64880dce9fab4b63b6fba49b2439eff651d447458239a83ba33"
+    },
+    "public/assets/cases/c1-noche/optimized/evidence-guard-report.webp": {
+      "quality": 75,
+      "bytes": 48594,
+      "outputHash": "263d351faba83af69d536beebad892f35cfcf6ab162b1d9404aba6b642b8798c"
+    },
+    "public/assets/cases/c1-noche/optimized/evidence-roof-window.webp": {
+      "quality": 75,
+      "bytes": 43412,
+      "outputHash": "662f596c5e6d4166b61d5835847f910ab70833d06cf7917a9a1c241e22b1bdbd"
+    },
+    "public/assets/cases/c1-noche/optimized/evidence-security-camera.webp": {
+      "quality": 75,
+      "bytes": 31376,
+      "outputHash": "19db6f8f8b283c87c204d84baf4eac94ae109920dcfc583fee879ee9b92826de"
+    },
+    "public/assets/cases/c1-noche/optimized/hero-museum-night.webp": {
+      "quality": 75,
+      "bytes": 39898,
+      "outputHash": "89da1917beb005dceb430360de1a5fbbf997c9e39b070ec3ea1c6c92919fc7da"
+    },
+    "public/assets/cases/c1-noche/optimized/mechanic-deduction.webp": {
+      "quality": 75,
+      "bytes": 67720,
+      "outputHash": "9d8f0eba69243d97cdde3236bd1bd294fbeccc7c61e5c9fcea1c8b3e77f444af"
+    },
+    "public/assets/cases/c1-noche/optimized/mechanic-error.webp": {
+      "quality": 75,
+      "bytes": 33190,
+      "outputHash": "9982b7daefb8ef3f8fcca4e3089fce8f9a7c3a7635852f7911759494be94d21d"
+    },
+    "public/assets/cases/c1-noche/optimized/mechanic-math.webp": {
+      "quality": 75,
+      "bytes": 60176,
+      "outputHash": "468e57146a2a2b94a226e20d456ae0e449aa57a6edd44c6e5948f368088a1bca"
+    },
+    "public/assets/cases/c1-noche/optimized/mechanic-order.webp": {
+      "quality": 75,
+      "bytes": 101406,
+      "outputHash": "cf7270dadf5f724152d784740ef57805d44b9302aa99e4333a0db41191f3d6a6"
+    },
+    "public/assets/cases/c1-noche/optimized/mechanic-pattern.webp": {
+      "quality": 75,
+      "bytes": 42868,
+      "outputHash": "0cb61a6035252cecbce1a170ecda08026087a305d3d87c1d262e69256baae8dd"
+    },
+    "public/assets/cases/c1-noche/optimized/razo-celebrating.webp": {
+      "quality": 75,
+      "bytes": 79534,
+      "outputHash": "9089670b36f5f0ba3d3f679cb3ca75997d17ce4cc689689b58e5fb929a0a9086"
+    },
+    "public/assets/cases/c1-noche/optimized/razo-happy.webp": {
+      "quality": 75,
+      "bytes": 71514,
+      "outputHash": "76f8eb70ce09601a37e45fb655f45d19f2fca2684a0dc0cfb6d54bd4efc8bcfe"
+    },
+    "public/assets/cases/c1-noche/optimized/razo-thinking.webp": {
+      "quality": 75,
+      "bytes": 59810,
+      "outputHash": "e72fe964b459910c8afe38f0eb7f73817fbf086a79442b0142a482fd23ff546c"
+    },
+    "public/assets/cases/c1-noche/optimized/suspect-beto.webp": {
+      "quality": 75,
+      "bytes": 47570,
+      "outputHash": "a55335abe4d7845febcb544c97db4fe625c93c98f5830c2a6a8bc87d76c95ad5"
+    },
+    "public/assets/cases/c1-noche/optimized/suspect-cata.webp": {
+      "quality": 75,
+      "bytes": 102896,
+      "outputHash": "a841a6a6e9bb5dbaa4ae937cf3335af8af2145e39bfd4598ba60a82bb80f9a33"
+    },
+    "public/assets/cases/c1-noche/optimized/suspect-rosa.webp": {
+      "quality": 75,
+      "bytes": 74986,
+      "outputHash": "6407c1742a2052d65768c6fb164a11d7cc7a84aea5f4bbafb3ee3d3e5a749578"
+    },
+    "public/assets/cases/c2-robot/optimized/character-razobot-celebrating.webp": {
+      "quality": 75,
+      "bytes": 185296,
+      "outputHash": "093457892d17974f092c5f7286b33bb0f070ff0e504deb943e1dd076f856f5c4"
+    },
+    "public/assets/cases/c2-robot/optimized/character-razobot-neutral.webp": {
+      "quality": 75,
+      "bytes": 131558,
+      "outputHash": "6e3a9e2c808893d1d28a25161007feb228b3ceccb75eb9b63dcd25dd3477dffa"
+    },
+    "public/assets/cases/c2-robot/optimized/character-razobot-warning.webp": {
+      "quality": 75,
+      "bytes": 171622,
+      "outputHash": "a5c455e4e357688c49f45050b560a26dd375550258182e225fd117c6c174e6b5"
+    },
+    "public/assets/cases/c2-robot/optimized/evidence-analysis-terminal.webp": {
+      "quality": 75,
+      "bytes": 199880,
+      "outputHash": "d630a8df4f742362d460ddccf7c45c45be0ea2770b5da48c2bc8d5eaf9dc45db"
+    },
+    "public/assets/cases/c2-robot/optimized/evidence-freezer.webp": {
+      "quality": 75,
+      "bytes": 143300,
+      "outputHash": "e0123c5211dcde07a9d798c4741be682a61919c33c0f95116af8352e5b589663"
+    },
+    "public/assets/cases/c2-robot/optimized/evidence-impossible-clock.webp": {
+      "quality": 75,
+      "bytes": 78758,
+      "outputHash": "03a66c8de12736541f086f690ff6e4082458ec9fa3added149ea096d4d306ab6"
+    },
+    "public/assets/cases/c2-robot/optimized/evidence-red-cap.webp": {
+      "quality": 75,
+      "bytes": 143546,
+      "outputHash": "622272871bceb9b39e6b4890d1e3e8fb1685f0dd0dbc45fc8cc4937153136c87"
+    },
+    "public/assets/cases/c2-robot/optimized/evidence-security-door.webp": {
+      "quality": 75,
+      "bytes": 143324,
+      "outputHash": "9c01773099b332b55440acf4c46304a47c791468de0346f439f66600534f6581"
+    },
+    "public/assets/cases/c2-robot/optimized/hero-robot-museum.webp": {
+      "quality": 75,
+      "bytes": 50480,
+      "outputHash": "aa183d875c828e5a6fdd55cd147dc68f58e99b899a1b2d1b59d8507fae2cd27c"
+    },
+    "public/assets/cases/c2-robot/optimized/mechanic-ai-verification.webp": {
+      "quality": 75,
+      "bytes": 121214,
+      "outputHash": "4e157228804b12f964e03a66cb4260c4182f07cbde4be2395df189adb224e560"
+    },
+    "public/assets/cases/c2-robot/optimized/mechanic-math-check.webp": {
+      "quality": 75,
+      "bytes": 210086,
+      "outputHash": "822966aa6354cfee402a0b55a56589613a36f2491e481c68026ec3d46f83a8ab"
+    },
+    "public/assets/cases/c2-robot/optimized/mechanic-spatial.webp": {
+      "quality": 75,
+      "bytes": 123796,
+      "outputHash": "18d78328b031b5a2d6a57e904fa82b87d7e8c004d4421a9d3ff55114b006f37e"
+    },
+    "public/assets/cases/c2-robot/optimized/sequence-squares-circle.webp": {
+      "quality": 75,
+      "bytes": 36976,
+      "outputHash": "f27e12a60372d6f4c17b136efd15968993a1372d357527ae64c4b0a6a426d776"
+    },
+    "public/assets/cases/c3-faro/optimized/accomplice-radio-elder.webp": {
+      "quality": 75,
+      "bytes": 104616,
+      "outputHash": "c51acf20801bdcede86e0d2e396412895e6c5caefbf4d1007110b2f26ba3051c"
+    },
+    "public/assets/cases/c3-faro/optimized/accomplice-telegraphist.webp": {
+      "quality": 75,
+      "bytes": 82696,
+      "outputHash": "5d2919d7a2df18bc526a82760114e0512036d26a9213a38c3092747663f7253e"
+    },
+    "public/assets/cases/c3-faro/optimized/accomplice-young-sailor.webp": {
+      "quality": 75,
+      "bytes": 111640,
+      "outputHash": "6b275b148025f0063878aa28448887e05088ecf8b3e96081e099f60626ad5e00"
+    },
+    "public/assets/cases/c3-faro/optimized/evidence-beach-sunset.webp": {
+      "quality": 75,
+      "bytes": 245468,
+      "outputHash": "800fb8293c163d5c7ba330184d9bad11550b5982590ac4a2591c4206913d0650"
+    },
+    "public/assets/cases/c3-faro/optimized/evidence-morse-notebook.webp": {
+      "quality": 75,
+      "bytes": 260266,
+      "outputHash": "7723d71978c5b65bcf4bf6e28184e48a5c5cf551d9bba47d0ab4b8b7785da5eb"
+    },
+    "public/assets/cases/c3-faro/optimized/evidence-signal-panel.webp": {
+      "quality": 75,
+      "bytes": 214788,
+      "outputHash": "d312ae1a9c36d9848d8ed47a154e0943edb0d77674b56149462e5cf32cb71a68"
+    },
+    "public/assets/cases/c3-faro/optimized/hero-coded-lighthouse.webp": {
+      "quality": 75,
+      "bytes": 38760,
+      "outputHash": "acba044e820a3f9ced6f3d7e611e49d4a0c0de5b4b7ff49009c858616ff52766"
+    },
+    "public/assets/cases/c3-faro/optimized/route-lighthouse-panel.webp": {
+      "quality": 75,
+      "bytes": 7048,
+      "outputHash": "ec2a94bfb9a2aac0ef4f8685a3e62fa9b0e29d57bc38dffd1477d0a1d32ee394"
+    },
+    "public/assets/cases/c3-faro/optimized/sailor-lia.webp": {
+      "quality": 75,
+      "bytes": 107476,
+      "outputHash": "c24b62b949efe83276a905ba4d7c6e001c81d4dd37d430743f7a471c704ba46c"
+    },
+    "public/assets/cases/c3-faro/optimized/sailor-pol.webp": {
+      "quality": 75,
+      "bytes": 103100,
+      "outputHash": "715c8b27c5488ab3f6584e136dcfd0c39f3a2f44b4c6ef319d38932392182fb0"
+    },
+    "public/assets/cases/c3-faro/optimized/sailor-sam.webp": {
+      "quality": 75,
+      "bytes": 108454,
+      "outputHash": "a4f87e7a002f550cbd1c0e936ffd6d9eeb6e3e421ab69136e7dcd21305845603"
+    },
+    "public/assets/cases/c3-faro/optimized/sequence-lighthouse-flashes.webp": {
+      "quality": 75,
+      "bytes": 8458,
+      "outputHash": "54921a0ef23c2a91acc37cc6d71667b4974e06873300d51162941ff9862a8f41"
+    },
+    "public/assets/cases/c3-faro/optimized/sequence-morse-dots-dashes.webp": {
+      "quality": 75,
+      "bytes": 6194,
+      "outputHash": "bd28c604a9d46ea518c266c5c346ae026f3fbb77988b9b0307c3abfc4a3ef327"
+    },
+    "public/assets/cases/c4-train/optimized/diagram-map-lamp-key.webp": {
+      "quality": 75,
+      "bytes": 10626,
+      "outputHash": "53c1ace68c9af641ae32926cf90919b06f00ec314d0d1563fd7c9cfdbca9bbe0"
+    },
+    "public/assets/cases/c4-train/optimized/evidence-black-coat.webp": {
+      "quality": 75,
+      "bytes": 110476,
+      "outputHash": "38fdad1ad5bba27dbc5467982db52c0dd9c5364d373ef010d4ac6055834a315f"
+    },
+    "public/assets/cases/c4-train/optimized/evidence-cargo-crates.webp": {
+      "quality": 75,
+      "bytes": 180368,
+      "outputHash": "8d1b8f617387ca77060bffb001e5dd2dec9521afe150081552adf1c9789fc8f2"
+    },
+    "public/assets/cases/c4-train/optimized/evidence-gray-gloves.webp": {
+      "quality": 75,
+      "bytes": 246726,
+      "outputHash": "71de0d6ba6c8e01a16c12a22fa8a3b10e364a7b8b1c6d2267749f4548058f037"
+    },
+    "public/assets/cases/c4-train/optimized/evidence-locked-wagon.webp": {
+      "quality": 75,
+      "bytes": 173486,
+      "outputHash": "486f8248d353e5e2b07ffe7cc0071ec23229dd90c444d5b4828370ecdbe3d938"
+    },
+    "public/assets/cases/c4-train/optimized/evidence-master-key.webp": {
+      "quality": 75,
+      "bytes": 115348,
+      "outputHash": "bf544982842cb24233a50b3d32549f2256983cef209d51f74ce15f5e5043d680"
+    },
+    "public/assets/cases/c4-train/optimized/evidence-station-camera.webp": {
+      "quality": 75,
+      "bytes": 138086,
+      "outputHash": "bfd3c81619826cafc235c4780cebd60b0257e3715ef42f9b34dfb1db5062906b"
+    },
+    "public/assets/cases/c4-train/optimized/evidence-suspicious-ticket.webp": {
+      "quality": 75,
+      "bytes": 173200,
+      "outputHash": "fc2834e5914bc46fb4d0fef1c082b1c8744af1cf0cc03b30bf30defe344e13fe"
+    },
+    "public/assets/cases/c4-train/optimized/guard-black-gloves-night-far.webp": {
+      "quality": 75,
+      "bytes": 92020,
+      "outputHash": "c2482dacae8b2d1b563a6405e1f601f30acbea1d79b606909f36aff5321eb1df"
+    },
+    "public/assets/cases/c4-train/optimized/guard-gray-gloves-day-near.webp": {
+      "quality": 75,
+      "bytes": 98988,
+      "outputHash": "414409cd2b65361dc17d35c0226949642d7e287ee70bca1b1d11f6feb10b38e7"
+    },
+    "public/assets/cases/c4-train/optimized/guard-gray-gloves-night-near.webp": {
+      "quality": 75,
+      "bytes": 84086,
+      "outputHash": "55d4153948711387140e9bd77a6288e2764314c656badf74201dd57f136388e8"
+    },
+    "public/assets/cases/c4-train/optimized/hero-midnight-train.webp": {
+      "quality": 75,
+      "bytes": 53732,
+      "outputHash": "af258efb83446ef79d2ae142626423258e7be201b903708a760b902963adda69"
+    },
+    "public/assets/cases/c4-train/optimized/passenger-ana.webp": {
+      "quality": 75,
+      "bytes": 77608,
+      "outputHash": "428bc52e67d39821f0995e041e9c67c7ea8005fe050de88bd5ff7afb78b1b874"
+    },
+    "public/assets/cases/c4-train/optimized/passenger-ben.webp": {
+      "quality": 75,
+      "bytes": 83650,
+      "outputHash": "3ffa504e177c1989e083992cc3540040b2c60ff54f39df69528d1dfc7b557142"
+    },
+    "public/assets/cases/c4-train/optimized/passenger-coa.webp": {
+      "quality": 75,
+      "bytes": 69320,
+      "outputHash": "205ca78a622094ec260a3c09b756d069bee0de52cf780be301af0fcc22b8fc92"
+    },
+    "public/assets/cases/c4-train/optimized/sequence-master-key-teeth.webp": {
+      "quality": 75,
+      "bytes": 9470,
+      "outputHash": "c803b3d83a64cf429d469a8abf69068df52f58fba407e637f7d94fd048caae6b"
+    },
+    "public/assets/cases/c4-train/optimized/sequence-ticket-numbers.webp": {
+      "quality": 75,
+      "bytes": 10464,
+      "outputHash": "931bf7935a2be06423229a53fd769459b0c026ece47eecc76feac568da1dc8f6"
+    },
+    "public/assets/ui/avatars/optimized/avatar-child-detective.webp": {
+      "quality": 75,
+      "bytes": 37810,
+      "outputHash": "b917e8b09cf89af94e141d793f4f237716c862c876ce33503d74935790291467"
+    },
+    "public/assets/ui/avatars/optimized/avatar-parent-guide.webp": {
+      "quality": 75,
+      "bytes": 27666,
+      "outputHash": "42bdd6c4a0a21fc25d7f0a994dba214cd0e986d506615ee421622dd059a46fef"
+    }
+  }
+}
