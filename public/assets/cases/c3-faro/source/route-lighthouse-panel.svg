@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="720" viewBox="0 0 900 720">
+  <rect width="900" height="720" rx="50" fill="#F7F3EA"/>
+  <rect x="150" y="80" width="600" height="560" rx="44" fill="#111A3A"/>
+  <g stroke="#31405E" stroke-width="8"><path d="M350 80v560M550 80v560M150 267h600M150 453h600"/></g>
+  <g transform="translate(592 116)"><rect width="116" height="110" rx="22" fill="#24B7A8"/><circle cx="36" cy="43" r="16" fill="#FFB72E"/><path d="M30 77h58" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/></g>
+  <g transform="translate(396 492)" fill="#FFFFFF"><path d="M54 0l54 72H78v55H30V72H0z"/></g>
+  <path d="M450 490V345H300" fill="none" stroke="#FFB72E" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M270 345l55-35v70z" fill="#FFB72E"/>
+  <g font-family="Arial" font-weight="800" fill="#FFFFFF" font-size="32"><text x="390" y="590">PUERTA</text><text x="585" y="258">PANEL</text></g>
+</svg>

@@ -15,7 +15,9 @@ import { rankTitle } from "@/lib/leveling";
 import { CountUp, Confetti, Glow, StaggerTitle } from "@/components/fx";
 
 const C1_ASSET_BASE = "/assets/cases/c1-noche/raw";
+const C1_CIPHER_ASSET_BASE = "/assets/cases/c1-cifrado/optimized";
 const C2_ASSET_BASE = "/assets/cases/c2-robot/raw";
+const C3_ASSET_BASE = "/assets/cases/c3-faro/optimized";
 
 const C2_SHARED_ASSETS = {
   location: "Museo Razonor · Ala tecnológica",
@@ -88,12 +90,39 @@ const CASE_ASSETS = {
   },
   "c1-cifrado": {
     location: "Bóveda secreta",
+    hero: `${C1_CIPHER_ASSET_BASE}/hero-secret-vault.webp`,
+    mascot: {
+      happy: `${C1_ASSET_BASE}/razo-happy.png`,
+      think: `${C1_ASSET_BASE}/razo-thinking.png`,
+      celebrate: `${C1_ASSET_BASE}/razo-celebrating.png`,
+    },
     evidence: [
-      { label: "Nota cifrada" },
-      { label: "Llave dorada" },
-      { label: "Caja fuerte" },
-      { label: "Foto oculta" },
+      { label: "Nota cifrada", image: `${C1_CIPHER_ASSET_BASE}/evidence-encrypted-note.webp` },
+      { label: "Llave dorada", image: `${C1_CIPHER_ASSET_BASE}/evidence-golden-key.webp` },
+      { label: "Caja fuerte", image: `${C1_CIPHER_ASSET_BASE}/evidence-mechanical-safe.webp` },
+      { label: "Foto oculta", image: `${C1_CIPHER_ASSET_BASE}/evidence-hidden-photo.webp` },
     ],
+    visualEvidence: {
+      sequence: `${C1_CIPHER_ASSET_BASE}/sequence-triangles-circles.webp`,
+      numbers: `${C1_CIPHER_ASSET_BASE}/sequence-safe-numbers.webp`,
+      numbersDouble: `${C1_CIPHER_ASSET_BASE}/sequence-safe-numbers-double.webp`,
+      grid: `${C1_CIPHER_ASSET_BASE}/grid-golden-key.webp`,
+      photo: `${C1_CIPHER_ASSET_BASE}/evidence-hidden-photo.webp`,
+      key: `${C1_CIPHER_ASSET_BASE}/evidence-golden-key.webp`,
+      safe: `${C1_CIPHER_ASSET_BASE}/evidence-mechanical-safe.webp`,
+    },
+    suspects: {
+      tallRedCap: `${C1_CIPHER_ASSET_BASE}/suspect-tall-red-cap.webp`,
+      shortBlueCap: `${C1_CIPHER_ASSET_BASE}/suspect-short-blue-cap-glasses.webp`,
+      womanRedCap: `${C1_CIPHER_ASSET_BASE}/suspect-woman-red-cap-glasses.webp`,
+    },
+    mechanics: {
+      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.png`,
+      error: `${C1_ASSET_BASE}/mechanic-error.png`,
+      patron: `${C1_CIPHER_ASSET_BASE}/sequence-triangles-circles.webp`,
+      matematico: `${C1_ASSET_BASE}/mechanic-math.png`,
+      espacial: `${C1_CIPHER_ASSET_BASE}/grid-golden-key.webp`,
+    },
     palette: "from-[#141B36] via-[#47346D] to-[#0E1530]",
   },
   "c2-nocreas": C2_SHARED_ASSETS,
@@ -106,6 +135,75 @@ const CASE_ASSETS = {
       { label: "Secuencia visual", image: `${C2_ASSET_BASE}/sequence-squares-circle.png` },
       { label: "Terminal de análisis", image: `${C2_ASSET_BASE}/evidence-analysis-terminal.png` },
     ],
+  },
+  "c3-luces": {
+    location: "Faro de las señales",
+    hero: `${C3_ASSET_BASE}/hero-coded-lighthouse.webp`,
+    mascot: {
+      happy: `${C1_ASSET_BASE}/razo-happy.png`,
+      think: `${C1_ASSET_BASE}/razo-thinking.png`,
+      celebrate: `${C1_ASSET_BASE}/razo-celebrating.png`,
+    },
+    aiSpeaker: `${C2_ASSET_BASE}/character-razobot-warning.png`,
+    evidence: [
+      { label: "Señal luminosa", image: `${C3_ASSET_BASE}/evidence-signal-panel.webp` },
+      { label: "Panel del faro", image: `${C3_ASSET_BASE}/route-lighthouse-panel.webp` },
+      { label: "Registro morse", image: `${C3_ASSET_BASE}/evidence-morse-notebook.webp` },
+      { label: "Faro codificado", image: `${C3_ASSET_BASE}/hero-coded-lighthouse.webp` },
+    ],
+    visualEvidence: {
+      sequence: `${C3_ASSET_BASE}/sequence-lighthouse-flashes.webp`,
+      route: `${C3_ASSET_BASE}/route-lighthouse-panel.webp`,
+      signal: `${C3_ASSET_BASE}/evidence-signal-panel.webp`,
+      notebook: `${C3_ASSET_BASE}/evidence-morse-notebook.webp`,
+    },
+    suspects: {
+      sam: `${C3_ASSET_BASE}/sailor-sam.webp`,
+      lia: `${C3_ASSET_BASE}/sailor-lia.webp`,
+      pol: `${C3_ASSET_BASE}/sailor-pol.webp`,
+    },
+    mechanics: {
+      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.png`,
+      patron: `${C3_ASSET_BASE}/sequence-lighthouse-flashes.webp`,
+      matematico: `${C1_ASSET_BASE}/mechanic-math.png`,
+      espacial: `${C3_ASSET_BASE}/route-lighthouse-panel.webp`,
+      ia: `${C2_ASSET_BASE}/mechanic-ai-verification.png`,
+    },
+    palette: "from-[#101A38] via-[#12445B] to-[#081629]",
+  },
+  "c3-morse": {
+    location: "Sala de radio del faro",
+    hero: `${C3_ASSET_BASE}/hero-coded-lighthouse.webp`,
+    mascot: {
+      happy: `${C1_ASSET_BASE}/razo-happy.png`,
+      think: `${C1_ASSET_BASE}/razo-thinking.png`,
+      celebrate: `${C1_ASSET_BASE}/razo-celebrating.png`,
+    },
+    evidence: [
+      { label: "Libreta morse", image: `${C3_ASSET_BASE}/evidence-morse-notebook.webp` },
+      { label: "Señal del faro", image: `${C3_ASSET_BASE}/evidence-signal-panel.webp` },
+      { label: "Cita en la playa", image: `${C3_ASSET_BASE}/evidence-beach-sunset.webp` },
+      { label: "Ruta cifrada", image: `${C3_ASSET_BASE}/sequence-morse-dots-dashes.webp` },
+    ],
+    visualEvidence: {
+      sequence: `${C3_ASSET_BASE}/sequence-morse-dots-dashes.webp`,
+      morse: `${C3_ASSET_BASE}/evidence-morse-notebook.webp`,
+      beach: `${C3_ASSET_BASE}/evidence-beach-sunset.webp`,
+      signal: `${C3_ASSET_BASE}/evidence-signal-panel.webp`,
+    },
+    suspects: {
+      radioElder: `${C3_ASSET_BASE}/accomplice-radio-elder.webp`,
+      youngSailor: `${C3_ASSET_BASE}/accomplice-young-sailor.webp`,
+      telegraphist: `${C3_ASSET_BASE}/accomplice-telegraphist.webp`,
+    },
+    mechanics: {
+      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.png`,
+      error: `${C1_ASSET_BASE}/mechanic-error.png`,
+      patron: `${C3_ASSET_BASE}/sequence-morse-dots-dashes.webp`,
+      comprension: `${C3_ASSET_BASE}/evidence-beach-sunset.webp`,
+      orden: `${C3_ASSET_BASE}/evidence-morse-notebook.webp`,
+    },
+    palette: "from-[#101A38] via-[#244A61] to-[#081629]",
   },
 };
 
@@ -211,6 +309,15 @@ function optionAssetFor(caseData, option) {
   const assets = assetFor(caseData);
   const suspects = assets.suspects || {};
   const key = normalizeAssetKey(option);
+  if (key.includes("hombre alto") && key.includes("gorra roja") && key.includes("sin gafas")) return suspects.tallRedCap;
+  if (key.includes("hombre bajo") && key.includes("gorra azul")) return suspects.shortBlueCap;
+  if (key.includes("mujer alta") && key.includes("gorra roja")) return suspects.womanRedCap;
+  if (key === "sam") return suspects.sam;
+  if (key === "lia") return suspects.lia;
+  if (key === "pol") return suspects.pol;
+  if (key.includes("anciana") && key.includes("radioaficionada")) return suspects.radioElder;
+  if (key.includes("joven") && key.includes("marinero")) return suspects.youngSailor;
+  if (key.includes("telegrafista")) return suspects.telegraphist;
   if (key.includes("rosa")) return suspects.rosa;
   if (key.includes("beto")) return suspects.beto;
   if (key.includes("cata")) return suspects.cata;
@@ -218,7 +325,9 @@ function optionAssetFor(caseData, option) {
   if (key.includes("razobot") || key.includes("maquina")) return assets.aiSpeaker || null;
   if (key.includes("25:00")) return assets.visualEvidence?.clock || null;
   if (key.includes("congelador") || key.includes("helado")) return assets.visualEvidence?.freezer || null;
-  if (key.includes("gorra roja")) return assets.visualEvidence?.redCap || null;
+  if (key.includes("gorra roja")) return assets.visualEvidence?.redCap || assets.visualEvidence?.photo || null;
+  if (key.includes("3 → 6") || key.includes("3 -> 6")) return assets.visualEvidence?.numbersDouble || null;
+  if (key.includes("2 → 4") || key.includes("2 -> 4")) return assets.visualEvidence?.numbers || null;
   return null;
 }
 
@@ -226,6 +335,10 @@ function clueAssetFor(caseData, clue) {
   const assets = assetFor(caseData);
   const key = normalizeAssetKey(clue);
   const speaker = normalizeAssetKey(String(clue).split(":")[0]);
+
+  if (speaker === "sam") return assets.suspects?.sam || null;
+  if (speaker === "lia") return assets.suspects?.lia || null;
+  if (speaker === "pol") return assets.suspects?.pol || null;
 
   if (speaker.includes("rosa")) return assets.suspects?.rosa || null;
   if (speaker.includes("beto")) return assets.suspects?.beto || null;
@@ -241,7 +354,11 @@ function clueAssetFor(caseData, clue) {
   if (key.includes("25:00") || key.includes("reloj")) return assets.visualEvidence?.clock || null;
   if (key.includes("congelador") || key.includes("helado") || key.includes("frio")) return assets.visualEvidence?.freezer || null;
   if (key.includes("gorra roja")) return assets.visualEvidence?.redCap || null;
-  if (key.includes("■") || key.includes("●") || key.includes("cuadrado")) return assets.visualEvidence?.sequence || null;
+  if (key.includes("▲") || key.includes("■") || key.includes("●") || key.includes("💡") || key.includes("•") || key.includes("cuadrado")) return assets.visualEvidence?.sequence || null;
+  if (key.includes("🔑") || (key.includes("escalera") && key.includes("panel"))) return assets.visualEvidence?.grid || assets.visualEvidence?.route || null;
+  if (key.includes("norte") || key.includes("izquierda")) return assets.visualEvidence?.route || null;
+  if (key.includes("agua se junta") || key.includes("sol ya no") || key.includes("ultimo dia")) return assets.visualEvidence?.beach || null;
+  if (key.includes("sin gafas") || key.includes("mas alto")) return assets.visualEvidence?.photo || null;
   if (key.includes("razobot")) return assets.aiSpeaker || null;
   return null;
 }
@@ -258,6 +375,7 @@ function stepAssetFor(caseData, step) {
   if (key.includes("pistas") || key.includes("inventos")) return assets.visualEvidence?.terminal || null;
   if (key.includes("escondite")) return assets.visualEvidence?.freezer || null;
   if (key.includes("atrapar")) return assets.visualEvidence?.door || null;
+  if (key.includes("simbolo") || key.includes("reemplazar") || key.includes("mensaje completo")) return assets.visualEvidence?.morse || assets.visualEvidence?.notebook || null;
   return null;
 }
 
@@ -923,11 +1041,11 @@ function EvidenceList({ clues, tone, caseData }) {
     <ul className="grid gap-2.5">
       {clues.map((clue, index) => {
         const image = clueAssetFor(caseData, clue);
-        const isSequence = image && image === assets.visualEvidence?.sequence;
-        if (isSequence) {
+        const isWideEvidence = image && [assets.visualEvidence?.sequence, assets.visualEvidence?.numbers, assets.visualEvidence?.numbersDouble, assets.visualEvidence?.grid, assets.visualEvidence?.route].includes(image);
+        if (isWideEvidence) {
           return (
             <li key={clue} className="rounded-[1rem] bg-cream p-4 ring-1 ring-ink/5">
-              <img src={image} alt="Secuencia de cuadrados y círculos" className="mx-auto h-20 w-full object-contain drop-shadow-sm" />
+              <img src={image} alt="Pista visual del reto" className="mx-auto h-24 w-full object-contain drop-shadow-sm sm:h-28" />
               <p className="mt-2 text-center text-sm font-semibold tracking-wider text-ink">{clue}</p>
             </li>
           );

@@ -21,6 +21,7 @@ import { playerLevelFromXp, rankTitle } from "@/lib/leveling";
 const CHAPTER_ART = {
   1: "/assets/cases/c1-noche/raw/hero-museum-night.png",
   2: "/assets/cases/c2-robot/raw/hero-robot-museum.png",
+  3: "/assets/cases/c3-faro/optimized/hero-coded-lighthouse.webp",
 };
 
 function artworkForCase(caseData) {
