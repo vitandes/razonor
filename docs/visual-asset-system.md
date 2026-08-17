@@ -38,8 +38,18 @@ Los temas disponibles son `mystery`, `vault`, `technology`, `coast` y
 | `behind` | Posición respecto a un vehículo | Relación visual directa |
 | `relations` | Izquierda, derecha o encima | Cuadrícula de objetos |
 
+Los retos de orden incluyen un bloque de dependencias. Cada regla explica qué
+paso solo puede ocurrir después de otro, para que el niño razone la secuencia
+sin tener que adivinar una costumbre del autor.
+
 El texto completo de las pistas se conserva en `aria-label`, aunque el visual
 sustituya las filas repetidas en pantalla.
+
+## Portadas de capítulo
+
+Cada capítulo compone una portada propia con el escenario de su tema, su emoji,
+número y título. La composición diferencia los capítulos sin crear un raster
+nuevo para cada uno.
 
 ## Personajes
 

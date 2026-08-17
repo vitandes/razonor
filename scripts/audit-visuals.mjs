@@ -13,7 +13,7 @@ function spatialType(reto) {
 }
 
 const chapters = CHAPTERS.filter((chapter) => chapter.id >= 5 && chapter.id <= 20);
-const counts = { pattern: 0, grid: 0, turn: 0, behind: 0, relations: 0 };
+const counts = { pattern: 0, grid: 0, turn: 0, behind: 0, relations: 0, order: 0 };
 const uncovered = [];
 
 for (const chapter of chapters) {
@@ -30,6 +30,12 @@ for (const chapter of chapters) {
           uncovered.push(`${caseData.id}/${reto.id}/${route}: personajes visuales repetidos`);
         }
         if (reto.mechanic === "patron" && reto.clues?.length) counts.pattern += 1;
+        if (reto.mechanic === "orden") {
+          counts.order += 1;
+          if (!reto.steps?.length || reto.steps.length < 3 || new Set(reto.steps).size !== reto.steps.length) {
+            uncovered.push(`${caseData.id}/${reto.id}/${route}: secuencia sin pasos claros y únicos`);
+          }
+        }
         if (reto.mechanic === "espacial" && reto.clues?.length) {
           const type = spatialType(reto);
           if (type) counts[type] += 1;

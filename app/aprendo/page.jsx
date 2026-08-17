@@ -257,7 +257,7 @@ function ChapterBlock({ chapter }) {
 
   return (
     <article className={`grid overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-card ${chapter.unlocked ? "md:grid-cols-[260px_1fr]" : "sm:grid-cols-[190px_1fr]"}`}>
-      <ChapterVisual artwork={artwork} emoji={chapter.emoji} alt={`Escena de ${chapter.title}`} compact={!chapter.unlocked} />
+      <ChapterVisual artwork={artwork} emoji={chapter.emoji} chapter={chapter.id} title={chapter.title} alt={`Escena de ${chapter.title}`} compact={!chapter.unlocked} />
       <div className="min-w-0">
         <div className="flex items-center gap-3 border-b border-ink/10 px-4 py-4 sm:px-5">
           <div className="min-w-0 flex-1"><p className={`text-xs font-bold uppercase tracking-wide ${chapter.unlocked ? "text-honey-deep" : "text-grape"}`}>{chapter.unlocked ? `Expediente ${chapter.id}` : "Expediente bloqueado"}</p><h3 className="font-display text-lg font-bold leading-tight text-ink">Capítulo {chapter.id} · {chapter.title}</h3><p className="mt-1 text-xs text-muted">{chapter.unlocked ? `${chapter.done}/${chapter.total} casos resueltos` : "Completa el capítulo anterior para desbloquear"}</p></div>
@@ -273,11 +273,16 @@ function ChapterBlock({ chapter }) {
   );
 }
 
-function ChapterVisual({ artwork, emoji, alt, compact = false }) {
+function ChapterVisual({ artwork, emoji, chapter, title, alt, compact = false }) {
   return (
     <div className={`relative min-h-40 overflow-hidden bg-gradient-to-br from-night to-grape ${compact ? "sm:min-h-full" : "md:min-h-full"}`}>
       {artwork ? <Image src={artwork} alt={alt} fill sizes="(max-width: 768px) 100vw, 260px" className="object-cover" /> : <span className="absolute inset-0 grid place-items-center text-7xl opacity-80" aria-hidden="true">{emoji}</span>}
-      <div className="absolute inset-0 bg-gradient-to-t from-night/35 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-night via-night/20 to-transparent" />
+      <span className="absolute -right-3 -top-5 text-8xl opacity-25 drop-shadow-lg" aria-hidden="true">{emoji}</span>
+      <div className="absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-2xl bg-night/78 p-2.5 text-white shadow-card ring-1 ring-white/15 backdrop-blur-sm">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-honey text-xl shadow-sm" aria-hidden="true">{emoji}</span>
+        <span className="min-w-0"><span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-honey">Capítulo {chapter}</span><span className="block font-display text-sm font-bold leading-tight">{title}</span></span>
+      </div>
     </div>
   );
 }

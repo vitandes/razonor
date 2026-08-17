@@ -826,13 +826,14 @@ export default function CaseSession({ caseData }) {
                   ? <GeneratedChallengeVisual reto={reto} />
                   : <EvidenceList clues={reto.clues} tone={tone} caseData={caseData} />
               )}
+              {isOrder && <OrderGuide steps={reto.steps} />}
 
               <div className="mt-5 rounded-[1.25rem] bg-night p-4 text-white shadow-card">
                 <p className="text-xs font-semibold uppercase text-honey">
-                  Pregunta clave
+                  {isOrder ? "Tu misión" : "Pregunta clave"}
                 </p>
                 <p className="mt-1 font-display text-xl font-bold leading-snug">
-                  {reto.question}
+                  {isOrder ? "Ordena los pasos respetando las reglas." : reto.question}
                 </p>
               </div>
 
@@ -1269,6 +1270,30 @@ function OrderBoard({ steps, selected, pool, solved, caseData, onPick }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function OrderGuide({ steps = [] }) {
+  const rules = steps.slice(0, -1).map((step, index) => ({ before: step, after: steps[index + 1] }));
+  const displayRules = rules.length === 3 ? [rules[1], rules[2], rules[0]] : rules;
+  return (
+    <section className="mt-4 rounded-[1.25rem] border border-grape/15 bg-grape-soft p-4 text-ink">
+      <div className="flex items-start gap-3">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-grape font-display text-lg font-bold text-white" aria-hidden="true">1→2</span>
+        <div>
+          <p className="font-display font-bold">Reglas para encontrar el orden</p>
+          <p className="mt-1 text-sm leading-relaxed text-ink/70">No tienes que adivinar. Cada regla explica qué paso necesita que otro ocurra primero.</p>
+        </div>
+      </div>
+      <ul className="mt-3 space-y-2">
+        {displayRules.map((rule) => (
+          <li key={`${rule.before}-${rule.after}`} className="flex items-start gap-3 rounded-2xl bg-white px-3 py-2.5 text-sm leading-relaxed shadow-sm ring-1 ring-ink/5">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-honey-soft font-display text-sm font-bold text-honey-deep" aria-hidden="true">↳</span>
+            <span><strong>“{rule.after}”</strong> ocurre después de <strong>“{rule.before}”</strong>.</span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
