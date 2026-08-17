@@ -1017,21 +1017,45 @@ function MechanicMark({ caseData, mechanic, tone, size = "md" }) {
 
 function EvidenceList({ clues, tone, caseData }) {
   const assets = assetFor(caseData);
-  const renderedVisuals = new Set();
+  const selfContainedAssets = new Set(
+    [
+      assets.visualEvidence?.sequence,
+      assets.visualEvidence?.numbers,
+      assets.visualEvidence?.numbersDouble,
+      assets.visualEvidence?.grid,
+      assets.visualEvidence?.route,
+    ].filter(Boolean),
+  );
+  const completeVisuals = [
+    ...new Set(
+      clues
+        .map((clue) => clueAssetFor(caseData, clue))
+        .filter((image) => image && selfContainedAssets.has(image)),
+    ),
+  ];
+
+  // Una secuencia, cuadrícula o ruta ilustrada sustituye al conjunto completo
+  // de símbolos. No dejamos filas huérfanas debajo de la imagen.
+  if (completeVisuals.length > 0) {
+    return (
+      <ul className="grid gap-2.5">
+        {completeVisuals.map((image) => (
+          <li key={image} className="rounded-[1rem] bg-cream p-4 ring-1 ring-ink/5">
+            <img
+              src={image}
+              alt={`Pista visual: ${clues.join(" ")}`}
+              className="mx-auto h-24 w-full object-contain drop-shadow-sm sm:h-28"
+            />
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
   return (
     <ul className="grid gap-2.5">
       {clues.map((clue, index) => {
         const image = clueAssetFor(caseData, clue);
-        const isSelfContainedVisual = image && [assets.visualEvidence?.sequence, assets.visualEvidence?.numbers, assets.visualEvidence?.numbersDouble, assets.visualEvidence?.grid, assets.visualEvidence?.route].includes(image);
-        if (isSelfContainedVisual) {
-          if (renderedVisuals.has(image)) return null;
-          renderedVisuals.add(image);
-          return (
-            <li key={clue} className="rounded-[1rem] bg-cream p-4 ring-1 ring-ink/5">
-              <img src={image} alt={`Pista visual: ${clue}`} className="mx-auto h-24 w-full object-contain drop-shadow-sm sm:h-28" />
-            </li>
-          );
-        }
         return (
           <li
             key={clue}
