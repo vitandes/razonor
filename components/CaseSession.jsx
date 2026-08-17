@@ -9,7 +9,7 @@ import {
   resolveReto,
   MECHANIC_LABEL,
   chapterCaseCount,
-  SKILLS,
+  PRODUCT_SKILLS,
 } from "@/lib/world";
 import { rankTitle } from "@/lib/leveling";
 import { CountUp, Confetti, Glow, StaggerTitle } from "@/components/fx";
@@ -106,6 +106,12 @@ const MECHANIC_TONE = {
     chip: "bg-grape-soft text-grape",
     accent: "bg-grape",
   },
+  espacial: {
+    icon: "🧭",
+    ring: "ring-coral/25",
+    chip: "bg-coral-soft text-coral",
+    accent: "bg-coral",
+  },
 };
 
 function shuffle(arr) {
@@ -149,6 +155,10 @@ function normalizeAssetKey(value) {
 
 function mechanicAssetFor(caseData, mechanic) {
   return assetFor(caseData).mechanics?.[mechanic] || null;
+}
+
+function productSkillFor(skillId) {
+  return Object.values(PRODUCT_SKILLS).find((skill) => skill.source.includes(skillId));
 }
 
 function optionAssetFor(caseData, option) {
@@ -362,7 +372,7 @@ export default function CaseSession({ caseData }) {
           <section className="mt-5 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="text-white">
               <span className="inline-flex items-center rounded-full bg-white/12 px-3 py-1 text-xs font-semibold uppercase text-white/75 ring-1 ring-white/15">
-                Expediente · Capítulo {caseData.chapter}
+                Desafío Razonor · Capítulo {caseData.chapter}
               </span>
               <h1 className="mt-4 font-display text-4xl font-bold leading-tight sm:text-5xl">
                 {caseData.title}
@@ -370,6 +380,15 @@ export default function CaseSession({ caseData }) {
               <p className="mt-3 max-w-xl text-lg leading-relaxed text-white/78">
                 {caseData.brief}
               </p>
+              {caseData.focus?.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {caseData.focus.map((item) => (
+                    <span key={item} className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-white/80 ring-1 ring-white/15">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              )}
               <Bubble caseData={caseData} dark>{caseData.brief}</Bubble>
               <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {assetFor(caseData).evidence.map((item, i) => (
@@ -491,7 +510,7 @@ export default function CaseSession({ caseData }) {
   }
 
   const tone = MECHANIC_TONE[reto.mechanic] || MECHANIC_TONE.deduccion;
-  const skill = SKILLS[reto.skill];
+  const skill = productSkillFor(reto.skill);
 
   return (
     <CaseBackdrop caseData={caseData}>

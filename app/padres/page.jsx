@@ -10,9 +10,9 @@ import ProfileSwitcher from "@/components/ProfileSwitcher";
 import WeeklyWrapped from "@/components/WeeklyWrapped";
 import { CountUp } from "@/components/fx";
 import {
-  SKILLS,
-  skillPercents,
-  summarizeSkills,
+  PRODUCT_SKILLS,
+  productSkillPercents,
+  summarizeProductSkills,
   retosSolvedTotal,
   casesCompletedCount,
   chaptersCompletedCount,
@@ -21,7 +21,7 @@ import { useProgress, weeklyMinutes, isSubscribed } from "@/lib/progress";
 import { playerLevelFromXp, rankTitle } from "@/lib/leveling";
 
 const BAR = { teal: "bg-teal", grape: "bg-grape", coral: "bg-coral", honey: "bg-honey" };
-const SKILL_IDS = Object.keys(SKILLS);
+const SKILL_IDS = Object.keys(PRODUCT_SKILLS);
 
 export default function ParentReport() {
   const p = useProgress();
@@ -39,7 +39,7 @@ export default function ParentReport() {
   }, [p.serverLoaded, p.subscription, p.onboarding?.done, router]);
 
   // Derivados
-  const percents = skillPercents(p.skills);
+  const percents = productSkillPercents(p.skills);
   const { values, labels } = weeklyMinutes(p.minutes);
   const totalMin = values.reduce((a, b) => a + b, 0);
   const maxMin = Math.max(...values, 1);
@@ -142,7 +142,7 @@ export default function ParentReport() {
           {/* recomendación en lenguaje claro */}
           <div className="border-t border-ink/5 px-6 py-6 sm:px-8">
             <p className="font-display text-lg font-semibold leading-snug text-ink">
-              {summarizeSkills(percents, p.name)}
+              {summarizeProductSkills(percents, p.name)}
             </p>
           </div>
 
@@ -152,7 +152,7 @@ export default function ParentReport() {
               Fortalezas por habilidad
             </h2>
             {SKILL_IDS.map((id) => {
-              const info = SKILLS[id];
+              const info = PRODUCT_SKILLS[id];
               const val = percents[id];
               return (
                 <div key={id}>

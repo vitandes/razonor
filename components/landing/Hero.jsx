@@ -1,4 +1,3 @@
-import { Stars } from "@/components/landing/bits";
 import AccessButtons from "@/components/landing/AccessButtons";
 import HeroReto from "@/components/landing/HeroReto";
 import HeroFx from "@/components/landing/HeroFx";
@@ -63,9 +62,8 @@ export default function Hero({ market = "co" }) {
             className="mt-7 flex animate-slidein items-center justify-center gap-2 md:justify-start"
             style={{ animationDelay: "480ms" }}
           >
-            <Stars value={5} />
             <span className="text-sm text-white/60">
-              Descubre sus fortalezas y qué necesita reforzar
+              ✓ Descubre sus fortalezas y qué necesita reforzar
             </span>
           </div>
         </div>

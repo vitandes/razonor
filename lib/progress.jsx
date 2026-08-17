@@ -40,6 +40,7 @@ const SKILL_IDS = [
   "computacional",
   "matematico",
   "criterio",
+  "espacial",
 ];
 const emptySkills = () =>
   SKILL_IDS.reduce((o, id) => ((o[id] = { correct: 0, total: 0 }), o), {});

@@ -19,7 +19,7 @@ export default function SiteHeader() {
             Precios
           </a>
           <a href="#opiniones" className="transition hover:text-white">
-            Opiniones
+            Progreso
           </a>
         </nav>
 

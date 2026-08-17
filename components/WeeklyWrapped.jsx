@@ -13,7 +13,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Detective from "@/components/Detective";
 import { LogoWordmark } from "@/components/Logo";
-import { SKILLS } from "@/lib/world";
+import { PRODUCT_SKILLS } from "@/lib/world";
 import {
   CountUp,
   Confetti,
@@ -241,12 +241,12 @@ export default function WeeklyWrapped({ open, onClose, data }) {
             <p className="font-display text-lg font-semibold text-white/85">El superpoder de {name}</p>
             <div className="my-4 animate-shine text-8xl">{SKILL_EMOJI[best.id]}</div>
             <h2 className="font-display text-4xl font-bold leading-tight">
-              {SKILLS[best.id].name}
+              {PRODUCT_SKILLS[best.id].name}
             </h2>
             <div className="mt-3 font-display text-6xl font-bold">
               <CountUp to={best.value} />%
             </div>
-            <p className="mt-4 text-white/85">{SKILLS[best.id].desc}</p>
+            <p className="mt-4 text-white/85">{PRODUCT_SKILLS[best.id].desc}</p>
           </div>
         )}
 
