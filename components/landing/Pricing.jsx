@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useAuth } from "@clerk/nextjs";
 import { usePricing, USD_PRICES } from "@/lib/pricing";
+import { useProgress } from "@/lib/progress";
 import { HAS_TRIAL, TRIAL_LABEL, CTA_PLAN } from "@/lib/trial";
 import PriceBlock from "@/components/PriceBlock";
 import Reveal from "@/components/landing/Reveal";
@@ -46,9 +46,9 @@ const BILLINGS = [
 export default function Pricing() {
   const [planType, setPlanType] = useState("individual");
   const { currency, localPrice, localFromUsd } = usePricing();
-  const { isSignedIn } = useAuth();
-  // sin sesión -> registro (prueba gratis); con sesión -> página de planes
-  const ctaHref = isSignedIn ? "/planes" : "/sign-up";
+  const progress = useProgress();
+  // Toda compra pasa primero por la configuración que completa el padre.
+  const ctaHref = progress.onboarding?.done ? "/planes" : "/onboarding";
   const plan = PLANS[planType];
 
   return (

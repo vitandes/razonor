@@ -12,11 +12,11 @@ export default function FinalCta({ market = "co" }) {
             🔍
           </div>
           <h2 className="mx-auto mt-5 max-w-2xl font-display text-3xl font-bold leading-tight text-white sm:text-4xl">
-            Descubre cómo piensa tu hijo y qué necesita reforzar
+            Prepara hoy una ruta de aprendizaje para tu hijo
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-white/70">
-            El diagnóstico inicial convierte sus respuestas en un plan de 15
-            minutos al día para matemáticas, lógica y resolución de problemas.
+            Tú nos cuentas su edad, objetivos e intereses. Razonor prepara el
+            punto de partida y se adapta cuando tu hijo comienza a practicar.
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-3">
@@ -24,7 +24,7 @@ export default function FinalCta({ market = "co" }) {
           </div>
 
           <p className="mt-6 text-sm text-white/60">
-            Diagnóstico inicial · Plan personalizado · Progreso visible para padres
+            Sin prueba inicial · Configuración para padres · Cancela cuando quieras
           </p>
         </div>
         </Reveal>

@@ -366,9 +366,9 @@ export function ProgressProvider({ children }) {
     if (userRef.current === userId) return;
     userRef.current = userId;
 
-    // Si el padre hizo onboarding y diagnóstico antes de registrarse, mueve
-    // ese progreso invitado a su cuenta de Clerk. Así el funnel puede pedir el
-    // correo después de entregar valor sin perder la personalización.
+    // Si el padre hizo el onboarding antes de registrarse, mueve esa
+    // configuración invitada a su cuenta de Clerk. Así el funnel puede pedir el
+    // correo al final sin perder la personalización.
     if (userId) {
       try {
         const userKey = storageKey(userId);

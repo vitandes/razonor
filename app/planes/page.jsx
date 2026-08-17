@@ -63,9 +63,10 @@ export default function Planes() {
   });
   const { currency, localPrice, localFromUsd } = usePricing();
   const router = useRouter();
-  const { hydrated, subscription, name } = useProgress();
+  const { hydrated, subscription, name, onboarding } = useProgress();
   const subscribed = hydrated && isSubscribed(subscription);
   const kid = hydrated && name ? name : null;
+  const dailyMinutes = onboarding?.dailyMinutes || 15;
   const plan = PLANS[planType];
 
   // Checkout INTERNACIONAL: Lemon Squeezy en dólares (USD). El acceso lo
@@ -161,7 +162,7 @@ export default function Planes() {
           <Link href="/" className="flex items-center">
             <LogoWordmark size={36} />
           </Link>
-          <Link href="/padres" className="text-sm font-medium text-muted hover:text-ink">
+          <Link href={subscribed ? "/padres" : "/onboarding"} className="text-sm font-medium text-muted hover:text-ink">
             ← Volver
           </Link>
         </header>
@@ -201,7 +202,7 @@ export default function Planes() {
             </p>
           )}
           <p className="mx-auto mt-3 max-w-md text-muted">
-            15 minutos al día para mejorar matemáticas, lógica y resolución de
+            {dailyMinutes} minutos al día para mejorar matemáticas, lógica y resolución de
             problemas. Cancela cuando quieras.
           </p>
 

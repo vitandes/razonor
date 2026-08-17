@@ -20,7 +20,7 @@ export function Stars({ value = 5, className = "" }) {
 }
 
 // CTA primario único de toda la página. El texto por defecto cambia solo según
-// haya prueba gratis o no (lib/trial). Lleva al registro -> onboarding -> planes.
+// haya prueba gratis o no (lib/trial). Lleva al onboarding parental -> registro -> planes.
 // variant: "honey" (botón miel, por defecto) o "ink" (botón oscuro, para
 // usar sobre fondos miel donde el botón miel no contrastaría).
 export function TrialButton({

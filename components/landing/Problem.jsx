@@ -37,8 +37,8 @@ export default function Problem({ market = "co" }) {
             No se trata de hacer más ejercicios
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted">
-            Se trata de entender cómo piensa tu hijo y darle el desafío correcto
-            para que aprenda a razonar, elegir estrategias y explicar sus respuestas.
+            Se trata de darle desafíos adecuados y dejar que la plataforma aprenda
+            de su progreso para fortalecer cómo razona, elige estrategias y explica.
           </p>
         </Reveal>
 

@@ -24,7 +24,11 @@ const FAQS_US = [
 const FAQS = [
   {
     q: "¿Para qué edades es Razonor?",
-    a: "Para niños de 7 a 12 años. Un test inicial de 5 retos — que para tu hijo es solo un juego — lo ubica en su ruta: 7–9 o 10–12 años.",
+    a: "Para niños de 6 a 12 años. Tú indicas su edad durante la configuración y Razonor elige una ruta inicial adecuada; después ajusta los desafíos según su progreso.",
+  },
+  {
+    q: "¿Mi hijo debe estar conmigo para empezar?",
+    a: "No. El onboarding lo completas tú con su edad, objetivos, intereses y tiempo disponible. Puedes crear la cuenta y elegir la suscripción ahora; tu hijo empieza los casos cuando estén listos.",
   },
   {
     q: "¿Mi hijo necesita saber leer ya?",

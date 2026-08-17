@@ -63,7 +63,7 @@ export default function Hero({ market = "co" }) {
             style={{ animationDelay: "480ms" }}
           >
             <span className="text-sm text-white/60">
-              ✓ Descubre sus fortalezas y qué necesita reforzar
+              ✓ Configura su ruta ahora; tu hijo puede empezar después
             </span>
           </div>
         </div>

@@ -19,12 +19,14 @@ export default function AccessButtons({
   const subscribed = progress.hydrated && isSubscribed(progress.subscription);
   const memberHref = subscribed
     ? "/aprendo"
-    : progress.diagnostic?.completed
-      ? "/resultados"
-      : progress.onboarding?.done
-        ? "/diagnostico"
-        : "/onboarding";
-  const memberLabel = subscribed ? "Entrar a la app" : "Continuar evaluación";
+    : progress.onboarding?.done
+      ? "/planes"
+      : "/onboarding";
+  const memberLabel = subscribed
+    ? "Entrar a la app"
+    : progress.onboarding?.done
+      ? "Elegir plan"
+      : "Configurar su plan";
   // ---------- HEADER ----------
   if (context === "header") {
     return (
@@ -70,14 +72,16 @@ export default function AccessButtons({
             href={memberHref}
             className="inline-flex items-center justify-center rounded-full bg-honey px-7 py-3.5 font-display text-base font-bold text-night shadow-card transition hover:-translate-y-0.5 hover:bg-honey-deep hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey"
           >
-            {subscribed ? "Entrar como estudiante" : "Continuar evaluación"}
+            {subscribed ? "Entrar como estudiante" : memberLabel}
           </Link>
-          <Link
-            href={subscribed ? "/padres" : "/resultados"}
-            className={`inline-flex items-center justify-center rounded-full px-7 py-3.5 font-display text-base font-bold transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey ${parentCls}`}
-          >
-            {subscribed ? "Entrar como padre" : "Ver resultados"}
-          </Link>
+          {subscribed && (
+            <Link
+              href="/padres"
+              className={`inline-flex items-center justify-center rounded-full px-7 py-3.5 font-display text-base font-bold transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey ${parentCls}`}
+            >
+              Entrar como padre
+            </Link>
+          )}
         </div>
       </Show>
     </>

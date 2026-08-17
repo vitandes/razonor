@@ -13,7 +13,7 @@ export default function SignUpPage() {
           Crea tu cuenta de papá o mamá
         </h1>
         <p className="mb-6 mt-1 text-center text-muted">
-          Guarda el perfil y el plan personalizado de tu hijo.
+          Guarda la configuración que preparaste y continúa a elegir el plan.
         </p>
         <SignUp signInUrl="/sign-in" fallbackRedirectUrl="/planes" />
       </div>

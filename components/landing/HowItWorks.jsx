@@ -2,14 +2,14 @@ import Reveal from "@/components/landing/Reveal";
 
 const STEPS = [
   {
-    emoji: "🧭",
-    title: "Descubrimos cómo piensa",
-    desc: "Un diagnóstico breve mide matemáticas, lógica, resolución de problemas y razonamiento espacial sin sentirse como un examen.",
+    emoji: "👨‍👩‍👧",
+    title: "Tú nos cuentas sobre él",
+    desc: "Respondes sobre su edad, lo que quieres fortalecer, sus intereses y una rutina posible. Tu hijo no tiene que estar presente.",
   },
   {
     emoji: "🔍",
-    title: "Creamos su plan",
-    desc: "Razonor identifica sus fortalezas y oportunidades para elegir actividades acordes a su edad y punto de partida.",
+    title: "Preparamos su ruta inicial",
+    desc: "Elegimos actividades acordes a su edad y a la prioridad que marcaste, sin exigir una evaluación antes de suscribirte.",
   },
   {
     emoji: "🗺️",
@@ -32,10 +32,10 @@ export default function HowItWorks() {
             Cómo funciona
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
-            Un plan que empieza por conocerlo
+            Tú configuras el inicio. Razonor se adapta después
           </h2>
           <p className="mt-4 text-lg text-muted">
-            Primero descubrimos su nivel. Después adaptamos cada sesión.
+            Puedes completar todo y elegir el plan aunque tu hijo no esté contigo.
           </p>
         </Reveal>
 
