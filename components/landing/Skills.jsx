@@ -21,14 +21,14 @@ const SKILLS = [
   {
     emoji: "🔎",
     name: "Resolución de problemas",
-    dot: "bg-coral",
+    dot: "bg-honey",
     parent: "¿Sabe convertir la información en una estrategia?",
     desc: "Interpretar datos, elegir operaciones, descartar información y resolver problemas de varios pasos.",
   },
   {
     emoji: "🧭",
     name: "Razonamiento espacial",
-    dot: "bg-honey",
+    dot: "bg-coral",
     parent: "¿Puede imaginar giros, posiciones y relaciones visuales?",
     desc: "Figuras, orientación, rotaciones y composición espacial para comprender el mundo visualmente.",
   },

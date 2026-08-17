@@ -11,13 +11,13 @@ const DEMO = {
   racha: 12,
   capitulos: "4 de 10",
   habilidades: [
-    { name: "Deducción", val: 86, bar: "bg-teal" },
-    { name: "Patrones", val: 74, bar: "bg-grape" },
-    { name: "Comprensión de lectura", val: 68, bar: "bg-coral" },
-    { name: "Ingenio matemático", val: 52, bar: "bg-honey" },
+    { name: "Matemáticas", val: 72, bar: "bg-teal" },
+    { name: "Lógica", val: 86, bar: "bg-grape" },
+    { name: "Resolución de problemas", val: 68, bar: "bg-honey" },
+    { name: "Razonamiento espacial", val: 61, bar: "bg-coral" },
   ],
   recomendacion:
-    "Martina deduce como una detective experta 🕵️. Los retos con números le cuestan un poco más: esta semana el caso le pondrá acertijos matemáticos más cortos para ganar confianza.",
+    "Martina muestra una fortaleza en lógica 🧩. Esta semana practicará recorridos y giros visuales para fortalecer su razonamiento espacial.",
 };
 
 export default function ReportPreview() {

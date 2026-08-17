@@ -70,12 +70,13 @@ export default function ResultsPage() {
           <div className="p-7 sm:p-9">
             <p className="font-display text-sm font-bold uppercase tracking-wide text-teal">Plan creado</p>
             <h2 className="mt-2 font-display text-3xl font-bold text-ink">Hemos creado un plan para {name}</h2>
-            <p className="mt-3 max-w-2xl text-lg text-muted">Sesiones cortas que combinan matemáticas, lógica y resolución de problemas, con dificultad ajustada a este perfil.</p>
+            <p className="mt-3 max-w-2xl text-lg text-muted">Sesiones cortas que combinan las cuatro habilidades centrales, con dificultad ajustada a este perfil.</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <PlanChip icon="⏱️" text={`${minutes} minutos al día`} />
               <PlanChip icon="🧮" text="Matemáticas" />
               <PlanChip icon="🧠" text="Lógica" />
-              <PlanChip icon="🔎" text="Problemas" />
+              <PlanChip icon="🔎" text="Resolución de problemas" />
+              <PlanChip icon="🧭" text="Razonamiento espacial" />
             </div>
           </div>
           <div className="border-t border-ink/5 bg-cloud p-7 text-center lg:h-full lg:w-80 lg:border-l lg:border-t-0 lg:p-9">
