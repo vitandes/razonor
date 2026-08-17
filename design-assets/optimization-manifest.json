@@ -387,6 +387,31 @@
       "quality": 75,
       "bytes": 27666,
       "outputHash": "42bdd6c4a0a21fc25d7f0a994dba214cd0e986d506615ee421622dd059a46fef"
+    },
+    "public/assets/worlds/world-2/optimized/hero-earth-cosmos.webp": {
+      "quality": 75,
+      "bytes": 88742,
+      "outputHash": "56e2ec65491526c63b6b9dafe8d0c70dff13c17b50ac644c1dfd32f0b8c1ddfb"
+    },
+    "public/assets/worlds/world-2/optimized/hero-future-explorer.webp": {
+      "quality": 75,
+      "bytes": 93512,
+      "outputHash": "0b7faeeb112b563cfc97a605e2b86dcb8e84d0bed8b70a83d8a27e9daff2c36a"
+    },
+    "public/assets/worlds/world-2/optimized/hero-life-lab.webp": {
+      "quality": 75,
+      "bytes": 105652,
+      "outputHash": "de0c4e474f53ad0fab626dc6d267dd7bf99f1f827ad6a700e630af249f284140"
+    },
+    "public/assets/worlds/world-2/optimized/hero-natural-history.webp": {
+      "quality": 75,
+      "bytes": 163334,
+      "outputHash": "9d471abd8416a4fda857b9dc03b46f93d0170889522b2be6e5d82ddc5276704b"
+    },
+    "public/assets/worlds/world-2/optimized/hero-physics-workshop.webp": {
+      "quality": 75,
+      "bytes": 81326,
+      "outputHash": "bad3e558c5e64ae5d58498b3ab251967ccff3af3f29b12287acbf6ee0d144590"
     }
   }
 }
