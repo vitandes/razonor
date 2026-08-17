@@ -15,6 +15,41 @@ import { rankTitle } from "@/lib/leveling";
 import { CountUp, Confetti, Glow, StaggerTitle } from "@/components/fx";
 
 const C1_ASSET_BASE = "/assets/cases/c1-noche/raw";
+const C2_ASSET_BASE = "/assets/cases/c2-robot/raw";
+
+const C2_SHARED_ASSETS = {
+  location: "Museo Razonor · Ala tecnológica",
+  hero: `${C2_ASSET_BASE}/hero-robot-museum.png`,
+  mascot: {
+    happy: `${C2_ASSET_BASE}/character-razobot-neutral.png`,
+    think: `${C2_ASSET_BASE}/character-razobot-warning.png`,
+    celebrate: `${C2_ASSET_BASE}/character-razobot-celebrating.png`,
+  },
+  aiSpeaker: `${C2_ASSET_BASE}/character-razobot-warning.png`,
+  evidence: [
+    { label: "Terminal de análisis", image: `${C2_ASSET_BASE}/evidence-analysis-terminal.png` },
+    { label: "Puerta de seguridad", image: `${C2_ASSET_BASE}/evidence-security-door.png` },
+    { label: "Reloj imposible", image: `${C2_ASSET_BASE}/evidence-impossible-clock.png` },
+    { label: "Congelador", image: `${C2_ASSET_BASE}/evidence-freezer.png` },
+  ],
+  visualEvidence: {
+    terminal: `${C2_ASSET_BASE}/evidence-analysis-terminal.png`,
+    door: `${C2_ASSET_BASE}/evidence-security-door.png`,
+    clock: `${C2_ASSET_BASE}/evidence-impossible-clock.png`,
+    freezer: `${C2_ASSET_BASE}/evidence-freezer.png`,
+    redCap: `${C2_ASSET_BASE}/evidence-red-cap.png`,
+    sequence: `${C2_ASSET_BASE}/sequence-squares-circle.png`,
+    lumi: `${C2_ASSET_BASE}/character-lumi-thinking.png`,
+  },
+  mechanics: {
+    ia: `${C2_ASSET_BASE}/mechanic-ai-verification.png`,
+    error: `${C2_ASSET_BASE}/mechanic-ai-verification.png`,
+    matematico: `${C2_ASSET_BASE}/mechanic-math-check.png`,
+    espacial: `${C2_ASSET_BASE}/mechanic-spatial.png`,
+    patron: `${C2_ASSET_BASE}/sequence-squares-circle.png`,
+  },
+  palette: "from-[#101A38] via-[#123B57] to-[#091326]",
+};
 
 const CASE_ASSETS = {
   "c1-noche": {
@@ -60,6 +95,17 @@ const CASE_ASSETS = {
       { label: "Foto oculta" },
     ],
     palette: "from-[#141B36] via-[#47346D] to-[#0E1530]",
+  },
+  "c2-nocreas": C2_SHARED_ASSETS,
+  "c2-pensar": {
+    ...C2_SHARED_ASSETS,
+    location: "Laboratorio de Razobot",
+    evidence: [
+      { label: "Gorra roja", image: `${C2_ASSET_BASE}/evidence-red-cap.png` },
+      { label: "Congelador", image: `${C2_ASSET_BASE}/evidence-freezer.png` },
+      { label: "Secuencia visual", image: `${C2_ASSET_BASE}/sequence-squares-circle.png` },
+      { label: "Terminal de análisis", image: `${C2_ASSET_BASE}/evidence-analysis-terminal.png` },
+    ],
   },
 };
 
@@ -162,11 +208,17 @@ function productSkillFor(skillId) {
 }
 
 function optionAssetFor(caseData, option) {
-  const suspects = assetFor(caseData).suspects || {};
+  const assets = assetFor(caseData);
+  const suspects = assets.suspects || {};
   const key = normalizeAssetKey(option);
   if (key.includes("rosa")) return suspects.rosa;
   if (key.includes("beto")) return suspects.beto;
   if (key.includes("cata")) return suspects.cata;
+  if (key.includes("lumi")) return assets.visualEvidence?.lumi || null;
+  if (key.includes("razobot") || key.includes("maquina")) return assets.aiSpeaker || null;
+  if (key.includes("25:00")) return assets.visualEvidence?.clock || null;
+  if (key.includes("congelador") || key.includes("helado")) return assets.visualEvidence?.freezer || null;
+  if (key.includes("gorra roja")) return assets.visualEvidence?.redCap || null;
   return null;
 }
 
@@ -185,7 +237,12 @@ function clueAssetFor(caseData, clue) {
   if (key.includes("reporte") || key.includes("guardia")) return assets.visualEvidence?.report || null;
   if (key.includes("ventana") || key.includes("techo")) return assets.visualEvidence?.roofWindow || null;
   if (key.includes("diamante")) return assets.visualEvidence?.diamond || null;
-  if (key.includes("puerta")) return assets.visualEvidence?.backDoor || null;
+  if (key.includes("puerta")) return assets.visualEvidence?.backDoor || assets.visualEvidence?.door || null;
+  if (key.includes("25:00") || key.includes("reloj")) return assets.visualEvidence?.clock || null;
+  if (key.includes("congelador") || key.includes("helado") || key.includes("frio")) return assets.visualEvidence?.freezer || null;
+  if (key.includes("gorra roja")) return assets.visualEvidence?.redCap || null;
+  if (key.includes("■") || key.includes("●") || key.includes("cuadrado")) return assets.visualEvidence?.sequence || null;
+  if (key.includes("razobot")) return assets.aiSpeaker || null;
   return null;
 }
 
@@ -197,7 +254,10 @@ function stepAssetFor(caseData, step) {
     return assets.evidence?.find((item) => normalizeAssetKey(evidenceLabel(item)).includes("alarma") || normalizeAssetKey(evidenceLabel(item)).includes("codigo"))?.image || null;
   }
   if (key.includes("diamante") || key.includes("vitrina")) return assets.visualEvidence?.diamond || assets.evidence?.[0]?.image || null;
-  if (key.includes("puerta")) return assets.visualEvidence?.backDoor || null;
+  if (key.includes("puerta")) return assets.visualEvidence?.backDoor || assets.visualEvidence?.door || null;
+  if (key.includes("pistas") || key.includes("inventos")) return assets.visualEvidence?.terminal || null;
+  if (key.includes("escondite")) return assets.visualEvidence?.freezer || null;
+  if (key.includes("atrapar")) return assets.visualEvidence?.door || null;
   return null;
 }
 
@@ -552,7 +612,7 @@ export default function CaseSession({ caseData }) {
             </div>
 
             <div className="px-5 py-5 sm:px-7 sm:py-6">
-              {reto.aiSays && <AiCard text={reto.aiSays} />}
+              {reto.aiSays && <AiCard text={reto.aiSays} caseData={caseData} />}
               {reto.clues && <EvidenceList clues={reto.clues} tone={tone} caseData={caseData} />}
 
               <div className="mt-5 rounded-[1.25rem] bg-night p-4 text-white shadow-card">
@@ -827,11 +887,12 @@ function ProgressRail({ total, current }) {
   );
 }
 
-function AiCard({ text }) {
+function AiCard({ text, caseData }) {
+  const speaker = assetFor(caseData).aiSpeaker;
   return (
     <div className="mb-4 flex items-start gap-3 rounded-[1.25rem] border-2 border-grape/20 bg-grape-soft p-4">
-      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-grape text-xl text-white" aria-hidden="true">
-        🤖
+      <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-white text-xl text-white shadow-card" aria-hidden="true">
+        {speaker ? <img src={speaker} alt="" className="h-14 w-14 object-contain" /> : "🤖"}
       </span>
       <p className="text-sm leading-relaxed text-ink">
         <span className="font-bold">Razobot dice:</span> “{text}”
@@ -857,10 +918,20 @@ function MechanicMark({ caseData, mechanic, tone, size = "md" }) {
 }
 
 function EvidenceList({ clues, tone, caseData }) {
+  const assets = assetFor(caseData);
   return (
     <ul className="grid gap-2.5">
       {clues.map((clue, index) => {
         const image = clueAssetFor(caseData, clue);
+        const isSequence = image && image === assets.visualEvidence?.sequence;
+        if (isSequence) {
+          return (
+            <li key={clue} className="rounded-[1rem] bg-cream p-4 ring-1 ring-ink/5">
+              <img src={image} alt="Secuencia de cuadrados y círculos" className="mx-auto h-20 w-full object-contain drop-shadow-sm" />
+              <p className="mt-2 text-center text-sm font-semibold tracking-wider text-ink">{clue}</p>
+            </li>
+          );
+        }
         return (
           <li
             key={clue}
