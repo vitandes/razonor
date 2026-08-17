@@ -32,11 +32,11 @@ const FAQS = [
   },
   {
     q: "¿Mi hijo necesita saber leer ya?",
-    a: "Sí, conviene una lectura básica: los casos se leen para resolverse. Justo por eso cada misterio entrena comprensión de lectura sin que el niño lo note.",
+    a: "Sí, conviene una lectura básica: los casos se leen para resolverse. Los textos son breves y claros, porque el objetivo es comprender el problema, identificar los datos y elegir una estrategia.",
   },
   {
-    q: "¿Razonor enseña IA o programación?",
-    a: "Enseña sus fundamentos, no un lenguaje de código ni una aplicación específica. Los niños practican cómo dividir problemas, detectar patrones, ordenar instrucciones, encontrar errores, hacer buenas preguntas y verificar respuestas. Esa base les permite aprender programación y usar la IA con más criterio después.",
+    q: "¿También lo prepara para programación y tecnología?",
+    a: "Sí, como consecuencia de aprender a pensar mejor. Razonor no enseña un lenguaje de código ni una aplicación específica: fortalece matemáticas, lógica, resolución de problemas y razonamiento espacial, una base útil para aprender tecnología después.",
   },
   {
     q: "¿No es una pantalla más?",

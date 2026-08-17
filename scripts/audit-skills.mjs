@@ -6,6 +6,7 @@ import {
   productSkillsForCase,
   resolveReto,
 } from "../lib/world.js";
+import { AI_CONTEXT_CHAPTERS } from "../lib/curriculum.js";
 
 const errors = [];
 const skillIds = Object.keys(PRODUCT_SKILLS);
@@ -37,6 +38,10 @@ for (const chapter of CHAPTERS) {
         chapterSkills.add(skillId);
       }
       mechanicCounts[reto.mechanic] = (mechanicCounts[reto.mechanic] || 0) + 1;
+      if (!AI_CONTEXT_CHAPTERS.has(Number(chapter.id))) {
+        check(reto.mechanic !== "ia", `${reto.id}: IA fuera de un capítulo tecnológico.`);
+        check(!reto.aiSays, `${reto.id}: conserva una tarjeta de IA fuera de un capítulo tecnológico.`);
+      }
 
       for (const route of ["7-9", "10-12"]) {
         const resolved = resolveReto(reto, route);
@@ -48,6 +53,10 @@ for (const chapter of CHAPTERS) {
           check((resolved.steps || []).length >= 2, `${reto.id}/${route}: faltan pasos.`);
         } else {
           check((resolved.options || []).length >= 3, `${reto.id}/${route}: faltan opciones.`);
+          check(
+            new Set(resolved.options || []).size === (resolved.options || []).length,
+            `${reto.id}/${route}: hay opciones repetidas.`,
+          );
           check(
             (resolved.options || []).includes(resolved.answer),
             `${reto.id}/${route}: la respuesta no aparece en las opciones.`,
@@ -80,7 +89,7 @@ for (const [skillId, count] of Object.entries(skillCounts)) {
 
 check(CASES.length === 130, `Se esperaban 130 casos y hay ${CASES.length}.`);
 check(totalRetos === 650, `Se esperaban 650 retos y hay ${totalRetos}.`);
-check(mechanicCounts.ia >= 150, "Se perdieron demasiados retos de criterio con IA.");
+check(mechanicCounts.ia >= 25 && mechanicCounts.ia <= 40, `Los retos explícitos de IA deben quedar entre 25 y 40; hay ${mechanicCounts.ia || 0}.`);
 check(mechanicCounts.orden >= 65, "Debe quedar al menos un reto de instrucciones por capítulo en promedio.");
 
 console.log("Auditoría curricular de Razonor");

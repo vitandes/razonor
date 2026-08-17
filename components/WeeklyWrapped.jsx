@@ -105,12 +105,10 @@ export default function WeeklyWrapped({ open, onClose, data }) {
   };
 
   const SKILL_EMOJI = {
-    deduccion: "🕵️",
-    patrones: "🧩",
-    comprension: "📖",
-    computacional: "🪜",
-    matematico: "➗",
-    criterio: "🤖",
+    math: "🧮",
+    logic: "🧩",
+    problemSolving: "🔎",
+    spatialReasoning: "🧭",
   };
 
   return (

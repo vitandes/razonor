@@ -14,7 +14,7 @@ const GOALS = [
   { id: "understanding", emoji: "💡", label: "Comprender, no solo memorizar" },
   { id: "focus", emoji: "🎯", label: "Mejorar su atención y constancia" },
   { id: "logic", emoji: "🧠", label: "Fortalecer su lógica y criterio" },
-  { id: "ahead", emoji: "🚀", label: "Prepararse para IA y programación" },
+  { id: "ahead", emoji: "🚀", label: "Construir bases para aprender tecnología" },
 ];
 const FEELINGS = [
   { id: "loves", emoji: "😍", label: "Las disfruta y busca nuevos retos" },

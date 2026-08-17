@@ -14,7 +14,7 @@ import FinalCta from "@/components/landing/FinalCta";
 import SiteFooter from "@/components/landing/SiteFooter";
 
 // El home habla distinto según el mercado:
-//   - "co" (Colombia/LatAm): rendimiento escolar + preparación para la IA.
+//   - "co" (Colombia/LatAm): matemáticas y habilidades para resolver problemas.
 //   - "us" (latinos en EE.UU.): lo mismo + retos pensados en español (el idioma
 //     de la familia). Se detecta por geo en el server (sin parpadeo);
 //     ?mkt=us|co fuerza la variante para pruebas.

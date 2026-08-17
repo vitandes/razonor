@@ -16,10 +16,11 @@ export default function Differentiator() {
             Aprende a pensar resolviendo, no memorizando
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-white/70">
-            Tu hijo no ve una clase de programación ni un tutorial sobre una
-            herramienta de IA. Ve un caso que solo él puede resolver. Para
-            avanzar tiene que leer, conectar pistas, ordenar ideas y defender
-            por qué su respuesta tiene sentido.
+            Tu hijo no ve una lista interminable de operaciones ni una clase
+            para memorizar procedimientos. Ve un caso que solo él puede
+            resolver. Para avanzar tiene que entender el problema, conectar
+            pistas, elegir una estrategia y explicar por qué su respuesta tiene
+            sentido.
           </p>
         </Reveal>
 
@@ -63,7 +64,7 @@ export default function Differentiator() {
                 <Check>Una historia que pide el siguiente capítulo.</Check>
                 <Check>Escrito en español, pensado en español.</Check>
                 <Check>Panel de padres con progreso y recomendaciones.</Check>
-                <Check>Fundamentos para la IA y la programación, no trucos de una herramienta.</Check>
+                <Check>Matemáticas, lógica, resolución de problemas y razonamiento espacial.</Check>
               </ul>
             </div>
           </Reveal>

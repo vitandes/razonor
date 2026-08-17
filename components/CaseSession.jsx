@@ -301,10 +301,10 @@ const MECHANIC_TONE = {
     accent: "bg-coral",
   },
   comprension: {
-    icon: "📖",
-    ring: "ring-coral/25",
-    chip: "bg-coral-soft text-coral",
-    accent: "bg-coral",
+    icon: "🔎",
+    ring: "ring-honey/30",
+    chip: "bg-honey-soft text-honey-deep",
+    accent: "bg-honey",
   },
   orden: {
     icon: "🧠",
