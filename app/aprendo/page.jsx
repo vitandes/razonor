@@ -17,16 +17,18 @@ import {
   chaptersCompletedCount,
 } from "@/lib/world";
 import { playerLevelFromXp, rankTitle } from "@/lib/leveling";
+import { reusableAssetsForCase } from "@/lib/visualCatalog";
 
 const CHAPTER_ART = {
-  1: "/assets/cases/c1-noche/raw/hero-museum-night.png",
-  2: "/assets/cases/c2-robot/raw/hero-robot-museum.png",
+  1: "/assets/cases/c1-noche/optimized/hero-museum-night.webp",
+  2: "/assets/cases/c2-robot/optimized/hero-robot-museum.webp",
   3: "/assets/cases/c3-faro/optimized/hero-coded-lighthouse.webp",
   4: "/assets/cases/c4-train/optimized/hero-midnight-train.webp",
 };
 
 function artworkForCase(caseData) {
-  return CHAPTER_ART[caseData?.chapter] || null;
+  if (!caseData?.chapter) return null;
+  return CHAPTER_ART[caseData.chapter] || reusableAssetsForCase(caseData).hero;
 }
 
 export default function KidHome() {
@@ -254,7 +256,7 @@ function WorldBlock({ world }) {
 }
 
 function ChapterBlock({ chapter }) {
-  const artwork = CHAPTER_ART[chapter.id];
+  const artwork = artworkForCase({ chapter: chapter.id });
 
   if (!chapter.unlocked) {
     return (

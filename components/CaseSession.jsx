@@ -13,42 +13,44 @@ import {
 } from "@/lib/world";
 import { rankTitle } from "@/lib/leveling";
 import { CountUp, Confetti, Glow, StaggerTitle } from "@/components/fx";
+import { GeneratedChallengeVisual, generatedVisualType } from "@/components/case-visuals/GeneratedChallengeVisual";
+import { reusableAssetsForCase, sharedCharacterForGroup } from "@/lib/visualCatalog";
 
-const C1_ASSET_BASE = "/assets/cases/c1-noche/raw";
+const C1_ASSET_BASE = "/assets/cases/c1-noche/optimized";
 const C1_CIPHER_ASSET_BASE = "/assets/cases/c1-cifrado/optimized";
-const C2_ASSET_BASE = "/assets/cases/c2-robot/raw";
+const C2_ASSET_BASE = "/assets/cases/c2-robot/optimized";
 const C3_ASSET_BASE = "/assets/cases/c3-faro/optimized";
 const C4_ASSET_BASE = "/assets/cases/c4-train/optimized";
 
 const C2_SHARED_ASSETS = {
   location: "Museo Razonor · Ala tecnológica",
-  hero: `${C2_ASSET_BASE}/hero-robot-museum.png`,
+  hero: `${C2_ASSET_BASE}/hero-robot-museum.webp`,
   mascot: {
-    happy: `${C2_ASSET_BASE}/character-razobot-neutral.png`,
-    think: `${C2_ASSET_BASE}/character-razobot-warning.png`,
-    celebrate: `${C2_ASSET_BASE}/character-razobot-celebrating.png`,
+    happy: `${C2_ASSET_BASE}/character-razobot-neutral.webp`,
+    think: `${C2_ASSET_BASE}/character-razobot-warning.webp`,
+    celebrate: `${C2_ASSET_BASE}/character-razobot-celebrating.webp`,
   },
-  aiSpeaker: `${C2_ASSET_BASE}/character-razobot-warning.png`,
+  aiSpeaker: `${C2_ASSET_BASE}/character-razobot-warning.webp`,
   evidence: [
-    { label: "Terminal de análisis", image: `${C2_ASSET_BASE}/evidence-analysis-terminal.png` },
-    { label: "Puerta de seguridad", image: `${C2_ASSET_BASE}/evidence-security-door.png` },
-    { label: "Reloj imposible", image: `${C2_ASSET_BASE}/evidence-impossible-clock.png` },
-    { label: "Congelador", image: `${C2_ASSET_BASE}/evidence-freezer.png` },
+    { label: "Terminal de análisis", image: `${C2_ASSET_BASE}/evidence-analysis-terminal.webp` },
+    { label: "Puerta de seguridad", image: `${C2_ASSET_BASE}/evidence-security-door.webp` },
+    { label: "Reloj imposible", image: `${C2_ASSET_BASE}/evidence-impossible-clock.webp` },
+    { label: "Congelador", image: `${C2_ASSET_BASE}/evidence-freezer.webp` },
   ],
   visualEvidence: {
-    terminal: `${C2_ASSET_BASE}/evidence-analysis-terminal.png`,
-    door: `${C2_ASSET_BASE}/evidence-security-door.png`,
-    clock: `${C2_ASSET_BASE}/evidence-impossible-clock.png`,
-    freezer: `${C2_ASSET_BASE}/evidence-freezer.png`,
-    redCap: `${C2_ASSET_BASE}/evidence-red-cap.png`,
-    sequence: `${C2_ASSET_BASE}/sequence-squares-circle.png`,
+    terminal: `${C2_ASSET_BASE}/evidence-analysis-terminal.webp`,
+    door: `${C2_ASSET_BASE}/evidence-security-door.webp`,
+    clock: `${C2_ASSET_BASE}/evidence-impossible-clock.webp`,
+    freezer: `${C2_ASSET_BASE}/evidence-freezer.webp`,
+    redCap: `${C2_ASSET_BASE}/evidence-red-cap.webp`,
+    sequence: `${C2_ASSET_BASE}/sequence-squares-circle.webp`,
   },
   mechanics: {
-    ia: `${C2_ASSET_BASE}/mechanic-ai-verification.png`,
-    error: `${C2_ASSET_BASE}/mechanic-ai-verification.png`,
-    matematico: `${C2_ASSET_BASE}/mechanic-math-check.png`,
-    espacial: `${C2_ASSET_BASE}/mechanic-spatial.png`,
-    patron: `${C2_ASSET_BASE}/sequence-squares-circle.png`,
+    ia: `${C2_ASSET_BASE}/mechanic-ai-verification.webp`,
+    error: `${C2_ASSET_BASE}/mechanic-ai-verification.webp`,
+    matematico: `${C2_ASSET_BASE}/mechanic-math-check.webp`,
+    espacial: `${C2_ASSET_BASE}/mechanic-spatial.webp`,
+    patron: `${C2_ASSET_BASE}/sequence-squares-circle.webp`,
   },
   palette: "from-[#101A38] via-[#123B57] to-[#091326]",
 };
@@ -57,46 +59,46 @@ const C4_SHARED_ASSETS = {
   location: "Tren de medianoche · Estación del reloj",
   hero: `${C4_ASSET_BASE}/hero-midnight-train.webp`,
   mascot: {
-    happy: `${C1_ASSET_BASE}/razo-happy.png`,
-    think: `${C1_ASSET_BASE}/razo-thinking.png`,
-    celebrate: `${C1_ASSET_BASE}/razo-celebrating.png`,
+    happy: `${C1_ASSET_BASE}/razo-happy.webp`,
+    think: `${C1_ASSET_BASE}/razo-thinking.webp`,
+    celebrate: `${C1_ASSET_BASE}/razo-celebrating.webp`,
   },
-  aiSpeaker: `${C2_ASSET_BASE}/character-razobot-warning.png`,
+  aiSpeaker: `${C2_ASSET_BASE}/character-razobot-warning.webp`,
   palette: "from-[#0B1533] via-[#183B52] to-[#241947]",
 };
 
 const CASE_ASSETS = {
   "c1-noche": {
     location: "Museo Razonor",
-    hero: `${C1_ASSET_BASE}/hero-museum-night.png`,
+    hero: `${C1_ASSET_BASE}/hero-museum-night.webp`,
     mascot: {
-      happy: `${C1_ASSET_BASE}/razo-happy.png`,
-      think: `${C1_ASSET_BASE}/razo-thinking.png`,
-      celebrate: `${C1_ASSET_BASE}/razo-celebrating.png`,
+      happy: `${C1_ASSET_BASE}/razo-happy.webp`,
+      think: `${C1_ASSET_BASE}/razo-thinking.webp`,
+      celebrate: `${C1_ASSET_BASE}/razo-celebrating.webp`,
     },
     evidence: [
-      { label: "Vitrina vacía", image: `${C1_ASSET_BASE}/evidence-empty-display-case.png` },
-      { label: "Linterna", image: `${C1_ASSET_BASE}/evidence-flashlight.png` },
-      { label: "Cámara 03", image: `${C1_ASSET_BASE}/evidence-security-camera.png` },
-      { label: "Código de alarma", image: `${C1_ASSET_BASE}/evidence-alarm-keypad.png` },
+      { label: "Vitrina vacía", image: `${C1_ASSET_BASE}/evidence-empty-display-case.webp` },
+      { label: "Linterna", image: `${C1_ASSET_BASE}/evidence-flashlight.webp` },
+      { label: "Cámara 03", image: `${C1_ASSET_BASE}/evidence-security-camera.webp` },
+      { label: "Código de alarma", image: `${C1_ASSET_BASE}/evidence-alarm-keypad.webp` },
     ],
     visualEvidence: {
-      diamond: `${C1_ASSET_BASE}/evidence-diamond.png`,
-      report: `${C1_ASSET_BASE}/evidence-guard-report.png`,
-      roofWindow: `${C1_ASSET_BASE}/evidence-roof-window.png`,
-      backDoor: `${C1_ASSET_BASE}/evidence-back-door.png`,
+      diamond: `${C1_ASSET_BASE}/evidence-diamond.webp`,
+      report: `${C1_ASSET_BASE}/evidence-guard-report.webp`,
+      roofWindow: `${C1_ASSET_BASE}/evidence-roof-window.webp`,
+      backDoor: `${C1_ASSET_BASE}/evidence-back-door.webp`,
     },
     suspects: {
-      rosa: `${C1_ASSET_BASE}/suspect-rosa.png`,
-      beto: `${C1_ASSET_BASE}/suspect-beto.png`,
-      cata: `${C1_ASSET_BASE}/suspect-cata.png`,
+      rosa: `${C1_ASSET_BASE}/suspect-rosa.webp`,
+      beto: `${C1_ASSET_BASE}/suspect-beto.webp`,
+      cata: `${C1_ASSET_BASE}/suspect-cata.webp`,
     },
     mechanics: {
-      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.png`,
-      error: `${C1_ASSET_BASE}/mechanic-error.png`,
-      patron: `${C1_ASSET_BASE}/mechanic-pattern.png`,
-      matematico: `${C1_ASSET_BASE}/mechanic-math.png`,
-      orden: `${C1_ASSET_BASE}/mechanic-order.png`,
+      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.webp`,
+      error: `${C1_ASSET_BASE}/mechanic-error.webp`,
+      patron: `${C1_ASSET_BASE}/mechanic-pattern.webp`,
+      matematico: `${C1_ASSET_BASE}/mechanic-math.webp`,
+      orden: `${C1_ASSET_BASE}/mechanic-order.webp`,
     },
     palette: "from-[#141B36] via-[#2C2258] to-[#0E1530]",
   },
@@ -104,9 +106,9 @@ const CASE_ASSETS = {
     location: "Bóveda secreta",
     hero: `${C1_CIPHER_ASSET_BASE}/hero-secret-vault.webp`,
     mascot: {
-      happy: `${C1_ASSET_BASE}/razo-happy.png`,
-      think: `${C1_ASSET_BASE}/razo-thinking.png`,
-      celebrate: `${C1_ASSET_BASE}/razo-celebrating.png`,
+      happy: `${C1_ASSET_BASE}/razo-happy.webp`,
+      think: `${C1_ASSET_BASE}/razo-thinking.webp`,
+      celebrate: `${C1_ASSET_BASE}/razo-celebrating.webp`,
     },
     evidence: [
       { label: "Nota cifrada", image: `${C1_CIPHER_ASSET_BASE}/evidence-encrypted-note.webp` },
@@ -129,10 +131,10 @@ const CASE_ASSETS = {
       womanRedCap: `${C1_CIPHER_ASSET_BASE}/suspect-woman-red-cap-glasses.webp`,
     },
     mechanics: {
-      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.png`,
-      error: `${C1_ASSET_BASE}/mechanic-error.png`,
+      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.webp`,
+      error: `${C1_ASSET_BASE}/mechanic-error.webp`,
       patron: `${C1_CIPHER_ASSET_BASE}/sequence-triangles-circles.webp`,
-      matematico: `${C1_ASSET_BASE}/mechanic-math.png`,
+      matematico: `${C1_ASSET_BASE}/mechanic-math.webp`,
       espacial: `${C1_CIPHER_ASSET_BASE}/grid-golden-key.webp`,
     },
     palette: "from-[#141B36] via-[#47346D] to-[#0E1530]",
@@ -142,21 +144,21 @@ const CASE_ASSETS = {
     ...C2_SHARED_ASSETS,
     location: "Laboratorio de Razobot",
     evidence: [
-      { label: "Gorra roja", image: `${C2_ASSET_BASE}/evidence-red-cap.png` },
-      { label: "Congelador", image: `${C2_ASSET_BASE}/evidence-freezer.png` },
-      { label: "Secuencia visual", image: `${C2_ASSET_BASE}/sequence-squares-circle.png` },
-      { label: "Terminal de análisis", image: `${C2_ASSET_BASE}/evidence-analysis-terminal.png` },
+      { label: "Gorra roja", image: `${C2_ASSET_BASE}/evidence-red-cap.webp` },
+      { label: "Congelador", image: `${C2_ASSET_BASE}/evidence-freezer.webp` },
+      { label: "Secuencia visual", image: `${C2_ASSET_BASE}/sequence-squares-circle.webp` },
+      { label: "Terminal de análisis", image: `${C2_ASSET_BASE}/evidence-analysis-terminal.webp` },
     ],
   },
   "c3-luces": {
     location: "Faro de las señales",
     hero: `${C3_ASSET_BASE}/hero-coded-lighthouse.webp`,
     mascot: {
-      happy: `${C1_ASSET_BASE}/razo-happy.png`,
-      think: `${C1_ASSET_BASE}/razo-thinking.png`,
-      celebrate: `${C1_ASSET_BASE}/razo-celebrating.png`,
+      happy: `${C1_ASSET_BASE}/razo-happy.webp`,
+      think: `${C1_ASSET_BASE}/razo-thinking.webp`,
+      celebrate: `${C1_ASSET_BASE}/razo-celebrating.webp`,
     },
-    aiSpeaker: `${C2_ASSET_BASE}/character-razobot-warning.png`,
+    aiSpeaker: `${C2_ASSET_BASE}/character-razobot-warning.webp`,
     evidence: [
       { label: "Señal luminosa", image: `${C3_ASSET_BASE}/evidence-signal-panel.webp` },
       { label: "Panel del faro", image: `${C3_ASSET_BASE}/route-lighthouse-panel.webp` },
@@ -175,11 +177,11 @@ const CASE_ASSETS = {
       pol: `${C3_ASSET_BASE}/sailor-pol.webp`,
     },
     mechanics: {
-      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.png`,
+      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.webp`,
       patron: `${C3_ASSET_BASE}/sequence-lighthouse-flashes.webp`,
-      matematico: `${C1_ASSET_BASE}/mechanic-math.png`,
+      matematico: `${C1_ASSET_BASE}/mechanic-math.webp`,
       espacial: `${C3_ASSET_BASE}/route-lighthouse-panel.webp`,
-      ia: `${C2_ASSET_BASE}/mechanic-ai-verification.png`,
+      ia: `${C2_ASSET_BASE}/mechanic-ai-verification.webp`,
     },
     palette: "from-[#101A38] via-[#12445B] to-[#081629]",
   },
@@ -187,9 +189,9 @@ const CASE_ASSETS = {
     location: "Sala de radio del faro",
     hero: `${C3_ASSET_BASE}/hero-coded-lighthouse.webp`,
     mascot: {
-      happy: `${C1_ASSET_BASE}/razo-happy.png`,
-      think: `${C1_ASSET_BASE}/razo-thinking.png`,
-      celebrate: `${C1_ASSET_BASE}/razo-celebrating.png`,
+      happy: `${C1_ASSET_BASE}/razo-happy.webp`,
+      think: `${C1_ASSET_BASE}/razo-thinking.webp`,
+      celebrate: `${C1_ASSET_BASE}/razo-celebrating.webp`,
     },
     evidence: [
       { label: "Libreta morse", image: `${C3_ASSET_BASE}/evidence-morse-notebook.webp` },
@@ -209,8 +211,8 @@ const CASE_ASSETS = {
       telegraphist: `${C3_ASSET_BASE}/accomplice-telegraphist.webp`,
     },
     mechanics: {
-      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.png`,
-      error: `${C1_ASSET_BASE}/mechanic-error.png`,
+      deduccion: `${C1_ASSET_BASE}/mechanic-deduction.webp`,
+      error: `${C1_ASSET_BASE}/mechanic-error.webp`,
       patron: `${C3_ASSET_BASE}/sequence-morse-dots-dashes.webp`,
       comprension: `${C3_ASSET_BASE}/evidence-beach-sunset.webp`,
       orden: `${C3_ASSET_BASE}/evidence-morse-notebook.webp`,
@@ -340,18 +342,7 @@ function shuffle(arr) {
 }
 
 function assetFor(caseData) {
-  return (
-    CASE_ASSETS[caseData.id] || {
-      location: `Capítulo ${caseData.chapter}`,
-      evidence: [
-        { label: "Pista clave" },
-        { label: "Mapa" },
-        { label: "Nota" },
-        { label: "Señal" },
-      ],
-      palette: "from-[#141B36] via-[#33235D] to-[#0E1530]",
-    }
-  );
+  return CASE_ASSETS[caseData.id] || reusableAssetsForCase(caseData);
 }
 
 function evidenceLabel(item) {
@@ -377,7 +368,7 @@ function productSkillFor(skillId) {
   return Object.values(PRODUCT_SKILLS).find((skill) => skill.source.includes(skillId));
 }
 
-function optionAssetFor(caseData, option) {
+function optionAssetFor(caseData, option, clues = []) {
   const assets = assetFor(caseData);
   const suspects = assets.suspects || {};
   const key = normalizeAssetKey(option);
@@ -405,10 +396,14 @@ function optionAssetFor(caseData, option) {
   if (key.includes("gorra roja")) return assets.visualEvidence?.redCap || assets.visualEvidence?.photo || null;
   if (key.includes("3 → 6") || key.includes("3 -> 6")) return assets.visualEvidence?.numbersDouble || null;
   if (key.includes("2 → 4") || key.includes("2 -> 4")) return assets.visualEvidence?.numbers || null;
+  const speakers = clues
+    .filter((clue) => /^[^:]{1,24}:\s*[“"]/u.test(String(clue)))
+    .map((clue) => normalizeAssetKey(String(clue).split(":")[0]));
+  if (speakers.includes(key)) return sharedCharacterForGroup(option, speakers);
   return null;
 }
 
-function clueAssetFor(caseData, clue) {
+function clueAssetFor(caseData, clue, siblingClues = []) {
   const assets = assetFor(caseData);
   const key = normalizeAssetKey(clue);
   const speaker = normalizeAssetKey(String(clue).split(":")[0]);
@@ -446,6 +441,12 @@ function clueAssetFor(caseData, clue) {
   if (key.includes("sin gafas") || key.includes("mas alto")) return assets.visualEvidence?.photo || null;
   if (key.includes("razobot")) return assets.aiSpeaker || null;
   if (key.includes("grabacion") || key.includes("camara")) return assets.visualEvidence?.camera || null;
+  if (/^[^:]{1,24}:\s*[“"]/u.test(String(clue))) {
+    const speakers = siblingClues
+      .filter((item) => /^[^:]{1,24}:\s*[“"]/u.test(String(item)))
+      .map((item) => String(item).split(":")[0]);
+    return sharedCharacterForGroup(clue, speakers);
+  }
   return null;
 }
 
@@ -820,7 +821,11 @@ export default function CaseSession({ caseData }) {
 
             <div className="px-5 py-5 sm:px-7 sm:py-6">
               {reto.aiSays && <AiCard text={reto.aiSays} caseData={caseData} />}
-              {reto.clues && <EvidenceList clues={reto.clues} tone={tone} caseData={caseData} />}
+              {reto.clues && (
+                generatedVisualType(reto)
+                  ? <GeneratedChallengeVisual reto={reto} />
+                  : <EvidenceList clues={reto.clues} tone={tone} caseData={caseData} />
+              )}
 
               <div className="mt-5 rounded-[1.25rem] bg-night p-4 text-white shadow-card">
                 <p className="text-xs font-semibold uppercase text-honey">
@@ -845,6 +850,7 @@ export default function CaseSession({ caseData }) {
                         isAnswer={isAnswer}
                         isWrongPick={isWrongPick}
                         caseData={caseData}
+                        clues={reto.clues}
                         onClick={() => choose(opt)}
                       />
                     );
@@ -1118,7 +1124,7 @@ function EvidenceList({ clues, tone, caseData }) {
   const completeVisuals = [
     ...new Set(
       clues
-        .map((clue) => clueAssetFor(caseData, clue))
+        .map((clue) => clueAssetFor(caseData, clue, clues))
         .filter((image) => image && selfContainedAssets.has(image)),
     ),
   ];
@@ -1144,7 +1150,7 @@ function EvidenceList({ clues, tone, caseData }) {
   return (
     <ul className="grid gap-2.5">
       {clues.map((clue, index) => {
-        const image = clueAssetFor(caseData, clue);
+        const image = clueAssetFor(caseData, clue, clues);
         return (
           <li
             key={clue}
@@ -1165,9 +1171,9 @@ function EvidenceList({ clues, tone, caseData }) {
   );
 }
 
-function OptionButton({ option, index, solved, isAnswer, isWrongPick, caseData, onClick }) {
+function OptionButton({ option, index, solved, isAnswer, isWrongPick, caseData, clues, onClick }) {
   const marker = String.fromCharCode(65 + index);
-  const image = optionAssetFor(caseData, option);
+  const image = optionAssetFor(caseData, option, clues);
 
   return (
     <button

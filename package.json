@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "audit:skills": "node --no-warnings scripts/audit-skills.mjs"
+    "audit:skills": "node --no-warnings scripts/audit-skills.mjs",
+    "audit:visuals": "node --no-warnings scripts/audit-visuals.mjs"
   },
   "dependencies": {
     "@clerk/localizations": "^4.9.3",
