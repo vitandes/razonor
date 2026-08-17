@@ -232,10 +232,7 @@ function MiniStat({ emoji, value, label }) {
 }
 
 function WorldBlock({ world }) {
-  const currentIndex = world.chapters.findIndex((chapter) => chapter.unlocked && !chapter.chapterDone);
-  const relevant = world.chapters.filter((chapter, index) => chapter.done > 0 || index === currentIndex);
-  const preview = currentIndex >= 0 ? world.chapters[currentIndex + 1] : null;
-  const chapters = preview && !relevant.some((chapter) => chapter.id === preview.id) ? [...relevant, preview] : relevant;
+  const chapters = world.chapters;
 
   return (
     <div>
@@ -258,25 +255,14 @@ function WorldBlock({ world }) {
 function ChapterBlock({ chapter }) {
   const artwork = artworkForCase({ chapter: chapter.id });
 
-  if (!chapter.unlocked) {
-    return (
-      <article className="grid overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-card sm:grid-cols-[190px_1fr]">
-        <ChapterVisual artwork={artwork} emoji={chapter.emoji} alt={`Escena de ${chapter.title}`} compact />
-        <div className="flex items-center gap-3 p-5">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-cloud text-lg" aria-hidden="true">🔒</span>
-          <div><p className="text-xs font-bold uppercase tracking-wide text-grape">Siguiente colección</p><h3 className="font-display text-lg font-bold text-ink">Capítulo {chapter.id} · {chapter.title}</h3><p className="mt-1 text-sm text-muted">Completa el capítulo actual para desbloquear.</p></div>
-        </div>
-      </article>
-    );
-  }
-
   return (
-    <article className="grid overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-card md:grid-cols-[260px_1fr]">
-      <ChapterVisual artwork={artwork} emoji={chapter.emoji} alt={`Escena de ${chapter.title}`} />
+    <article className={`grid overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-card ${chapter.unlocked ? "md:grid-cols-[260px_1fr]" : "sm:grid-cols-[190px_1fr]"}`}>
+      <ChapterVisual artwork={artwork} emoji={chapter.emoji} alt={`Escena de ${chapter.title}`} compact={!chapter.unlocked} />
       <div className="min-w-0">
         <div className="flex items-center gap-3 border-b border-ink/10 px-4 py-4 sm:px-5">
-          <div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase tracking-wide text-honey-deep">Expediente {chapter.id}</p><h3 className="font-display text-lg font-bold leading-tight text-ink">Capítulo {chapter.id} · {chapter.title}</h3><p className="mt-1 text-xs text-muted">{chapter.done}/{chapter.total} casos resueltos</p></div>
+          <div className="min-w-0 flex-1"><p className={`text-xs font-bold uppercase tracking-wide ${chapter.unlocked ? "text-honey-deep" : "text-grape"}`}>{chapter.unlocked ? `Expediente ${chapter.id}` : "Expediente bloqueado"}</p><h3 className="font-display text-lg font-bold leading-tight text-ink">Capítulo {chapter.id} · {chapter.title}</h3><p className="mt-1 text-xs text-muted">{chapter.unlocked ? `${chapter.done}/${chapter.total} casos resueltos` : "Completa el capítulo anterior para desbloquear"}</p></div>
           {chapter.medal && <span className="rounded-full bg-honey-soft px-3 py-1 text-xs font-bold text-honey-deep">🏅 Medalla</span>}
+          {!chapter.unlocked && <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-cloud" aria-label="Capítulo bloqueado">🔒</span>}
         </div>
 
         <ol className="divide-y divide-ink/10 px-3 sm:px-4">
