@@ -930,7 +930,6 @@ function MiniMetric({ label, value }) {
 }
 
 function RetoVisual({ reto, caseData, tone }) {
-  const assets = assetFor(caseData);
   const mechanicImage = mechanicAssetFor(caseData, reto.mechanic);
 
   return (
@@ -951,38 +950,19 @@ function RetoVisual({ reto, caseData, tone }) {
           </p>
         </div>
       </div>
-      <div className="relative mt-5 grid grid-cols-3 gap-2">
-        {assets.evidence.slice(0, 3).map((item) => {
-          const label = evidenceLabel(item);
-          const image = evidenceImage(item);
-          return (
-          <div key={label} className="rounded-2xl bg-cream p-3 text-center ring-1 ring-ink/5">
-            {image ? (
-              <img
-                src={image}
-                alt=""
-                className="mx-auto h-14 w-full object-contain drop-shadow-[0_8px_12px_rgba(0,0,0,0.14)]"
-                aria-hidden="true"
-              />
-            ) : (
-              <p className="text-2xl">{itemIcon(label)}</p>
-            )}
-            <p className="mt-1 text-[11px] font-semibold leading-tight text-muted">{label}</p>
-          </div>
-          );
-        })}
-      </div>
     </div>
   );
 }
 
+// Fallback para expedientes que todavía no tienen ilustraciones propias.
+// En cuanto existe un asset, EvidenceToken muestra la imagen y omite el emoji.
 function itemIcon(item) {
   const text = normalizeAssetKey(evidenceLabel(item));
-  if (text.includes("camara") || text.includes("cámara")) return "📹";
-  if (text.includes("codigo") || text.includes("código")) return "🔐";
+  if (text.includes("camara")) return "📹";
+  if (text.includes("codigo")) return "🔐";
   if (text.includes("linterna")) return "🔦";
   if (text.includes("llave")) return "🗝️";
-  if (text.includes("caja") || text.includes("boveda") || text.includes("bóveda")) return "🔒";
+  if (text.includes("caja") || text.includes("boveda")) return "🔒";
   if (text.includes("nota")) return "📝";
   if (text.includes("foto")) return "📸";
   return "🗂️";
@@ -1037,16 +1017,18 @@ function MechanicMark({ caseData, mechanic, tone, size = "md" }) {
 
 function EvidenceList({ clues, tone, caseData }) {
   const assets = assetFor(caseData);
+  const renderedVisuals = new Set();
   return (
     <ul className="grid gap-2.5">
       {clues.map((clue, index) => {
         const image = clueAssetFor(caseData, clue);
-        const isWideEvidence = image && [assets.visualEvidence?.sequence, assets.visualEvidence?.numbers, assets.visualEvidence?.numbersDouble, assets.visualEvidence?.grid, assets.visualEvidence?.route].includes(image);
-        if (isWideEvidence) {
+        const isSelfContainedVisual = image && [assets.visualEvidence?.sequence, assets.visualEvidence?.numbers, assets.visualEvidence?.numbersDouble, assets.visualEvidence?.grid, assets.visualEvidence?.route].includes(image);
+        if (isSelfContainedVisual) {
+          if (renderedVisuals.has(image)) return null;
+          renderedVisuals.add(image);
           return (
             <li key={clue} className="rounded-[1rem] bg-cream p-4 ring-1 ring-ink/5">
-              <img src={image} alt="Pista visual del reto" className="mx-auto h-24 w-full object-contain drop-shadow-sm sm:h-28" />
-              <p className="mt-2 text-center text-sm font-semibold tracking-wider text-ink">{clue}</p>
+              <img src={image} alt={`Pista visual: ${clue}`} className="mx-auto h-24 w-full object-contain drop-shadow-sm sm:h-28" />
             </li>
           );
         }
