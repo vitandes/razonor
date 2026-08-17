@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
@@ -76,7 +77,13 @@ export default function ParentReport() {
           <Link href="/" className="flex items-center">
             <LogoWordmark size={34} />
           </Link>
-          <UserButton />
+          <div className="flex items-center gap-2">
+            <span className="hidden text-xs font-semibold text-muted sm:block">Área de padres</span>
+            <span className="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-teal-soft ring-2 ring-white shadow-card">
+              <Image src="/assets/ui/avatars/optimized/avatar-parent-guide.webp" alt="Guía del área de padres" width={40} height={40} className="h-full w-full object-contain" />
+            </span>
+            <UserButton />
+          </div>
         </header>
 
         <ProfileSwitcher label="Panel de:" />
@@ -115,7 +122,7 @@ export default function ParentReport() {
         {/* tarjeta-panel (diseñada para captura de pantalla) */}
         <section className="mt-5 overflow-hidden rounded-4xl bg-white shadow-soft">
           <div className="border-b border-ink/5 px-6 py-5 sm:px-8">
-            <p className="text-sm text-muted">Panel de padres · esta semana</p>
+            <p className="flex items-center gap-2 text-sm text-muted"><span className="h-2 w-2 rounded-full bg-teal" />Panel de padres · esta semana</p>
             <h1 className="font-display text-2xl font-bold text-ink">
               {name} · {retos} {retos === 1 ? "reto resuelto" : "retos resueltos"}
             </h1>

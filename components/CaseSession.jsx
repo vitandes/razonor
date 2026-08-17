@@ -18,6 +18,7 @@ const C1_ASSET_BASE = "/assets/cases/c1-noche/raw";
 const C1_CIPHER_ASSET_BASE = "/assets/cases/c1-cifrado/optimized";
 const C2_ASSET_BASE = "/assets/cases/c2-robot/raw";
 const C3_ASSET_BASE = "/assets/cases/c3-faro/optimized";
+const C4_ASSET_BASE = "/assets/cases/c4-train/optimized";
 
 const C2_SHARED_ASSETS = {
   location: "Museo Razonor · Ala tecnológica",
@@ -50,6 +51,18 @@ const C2_SHARED_ASSETS = {
     patron: `${C2_ASSET_BASE}/sequence-squares-circle.png`,
   },
   palette: "from-[#101A38] via-[#123B57] to-[#091326]",
+};
+
+const C4_SHARED_ASSETS = {
+  location: "Tren de medianoche · Estación del reloj",
+  hero: `${C4_ASSET_BASE}/hero-midnight-train.webp`,
+  mascot: {
+    happy: `${C1_ASSET_BASE}/razo-happy.png`,
+    think: `${C1_ASSET_BASE}/razo-thinking.png`,
+    celebrate: `${C1_ASSET_BASE}/razo-celebrating.png`,
+  },
+  aiSpeaker: `${C2_ASSET_BASE}/character-razobot-warning.png`,
+  palette: "from-[#0B1533] via-[#183B52] to-[#241947]",
 };
 
 const CASE_ASSETS = {
@@ -204,6 +217,66 @@ const CASE_ASSETS = {
     },
     palette: "from-[#101A38] via-[#244A61] to-[#081629]",
   },
+  "c4-boleto": {
+    ...C4_SHARED_ASSETS,
+    evidence: [
+      { label: "Boleto sospechoso", image: `${C4_ASSET_BASE}/evidence-suspicious-ticket.webp` },
+      { label: "Abrigo negro", image: `${C4_ASSET_BASE}/evidence-black-coat.webp` },
+      { label: "Cámara de estación", image: `${C4_ASSET_BASE}/evidence-station-camera.webp` },
+      { label: "Tren de medianoche", image: `${C4_ASSET_BASE}/evidence-locked-wagon.webp` },
+    ],
+    visualEvidence: {
+      ticket: `${C4_ASSET_BASE}/evidence-suspicious-ticket.webp`,
+      coat: `${C4_ASSET_BASE}/evidence-black-coat.webp`,
+      camera: `${C4_ASSET_BASE}/evidence-station-camera.webp`,
+      wagon: `${C4_ASSET_BASE}/evidence-locked-wagon.webp`,
+      sequence: `${C4_ASSET_BASE}/sequence-ticket-numbers.webp`,
+      cargo: `${C4_ASSET_BASE}/evidence-cargo-crates.webp`,
+    },
+    suspects: {
+      ana: `${C4_ASSET_BASE}/passenger-ana.webp`,
+      ben: `${C4_ASSET_BASE}/passenger-ben.webp`,
+      coa: `${C4_ASSET_BASE}/passenger-coa.webp`,
+    },
+    mechanics: {
+      matematico: `${C4_ASSET_BASE}/evidence-cargo-crates.webp`,
+      comprension: `${C4_ASSET_BASE}/evidence-suspicious-ticket.webp`,
+      deduccion: `${C4_ASSET_BASE}/evidence-black-coat.webp`,
+      patron: `${C4_ASSET_BASE}/sequence-ticket-numbers.webp`,
+      ia: `${C4_ASSET_BASE}/evidence-station-camera.webp`,
+    },
+  },
+  "c4-vagon": {
+    ...C4_SHARED_ASSETS,
+    location: "Último vagón · Tren de medianoche",
+    evidence: [
+      { label: "Vagón cerrado", image: `${C4_ASSET_BASE}/evidence-locked-wagon.webp` },
+      { label: "Llave maestra", image: `${C4_ASSET_BASE}/evidence-master-key.webp` },
+      { label: "Guantes grises", image: `${C4_ASSET_BASE}/evidence-gray-gloves.webp` },
+      { label: "Carga del vagón", image: `${C4_ASSET_BASE}/evidence-cargo-crates.webp` },
+    ],
+    visualEvidence: {
+      wagon: `${C4_ASSET_BASE}/evidence-locked-wagon.webp`,
+      key: `${C4_ASSET_BASE}/evidence-master-key.webp`,
+      gloves: `${C4_ASSET_BASE}/evidence-gray-gloves.webp`,
+      cargo: `${C4_ASSET_BASE}/evidence-cargo-crates.webp`,
+      route: `${C4_ASSET_BASE}/diagram-map-lamp-key.webp`,
+      sequence: `${C4_ASSET_BASE}/sequence-master-key-teeth.webp`,
+    },
+    suspects: {
+      guardBlackNight: `${C4_ASSET_BASE}/guard-black-gloves-night-far.webp`,
+      guardGrayNight: `${C4_ASSET_BASE}/guard-gray-gloves-night-near.webp`,
+      guardGrayDay: `${C4_ASSET_BASE}/guard-gray-gloves-day-near.webp`,
+    },
+    mechanics: {
+      espacial: `${C4_ASSET_BASE}/diagram-map-lamp-key.webp`,
+      error: `${C4_ASSET_BASE}/evidence-locked-wagon.webp`,
+      orden: `${C4_ASSET_BASE}/evidence-master-key.webp`,
+      patron: `${C4_ASSET_BASE}/sequence-master-key-teeth.webp`,
+      deduccion: `${C4_ASSET_BASE}/evidence-gray-gloves.webp`,
+      matematico: `${C4_ASSET_BASE}/evidence-cargo-crates.webp`,
+    },
+  },
 };
 
 const MECHANIC_TONE = {
@@ -314,6 +387,12 @@ function optionAssetFor(caseData, option) {
   if (key === "sam") return suspects.sam;
   if (key === "lia") return suspects.lia;
   if (key === "pol") return suspects.pol;
+  if (key === "ana") return suspects.ana;
+  if (key === "ben") return suspects.ben;
+  if (key === "coa") return suspects.coa;
+  if (key.includes("guantes negros") && key.includes("noche") && key.includes("lejos")) return suspects.guardBlackNight;
+  if (key.includes("guantes grises") && key.includes("noche") && key.includes("cerca")) return suspects.guardGrayNight;
+  if (key.includes("guantes grises") && key.includes("dia") && key.includes("cerca")) return suspects.guardGrayDay;
   if (key.includes("anciana") && key.includes("radioaficionada")) return suspects.radioElder;
   if (key.includes("joven") && key.includes("marinero")) return suspects.youngSailor;
   if (key.includes("telegrafista")) return suspects.telegraphist;
@@ -337,6 +416,9 @@ function clueAssetFor(caseData, clue) {
   if (speaker === "sam") return assets.suspects?.sam || null;
   if (speaker === "lia") return assets.suspects?.lia || null;
   if (speaker === "pol") return assets.suspects?.pol || null;
+  if (speaker === "ana") return assets.suspects?.ana || null;
+  if (speaker === "ben") return assets.suspects?.ben || null;
+  if (speaker === "coa") return assets.suspects?.coa || null;
 
   if (speaker.includes("rosa")) return assets.suspects?.rosa || null;
   if (speaker.includes("beto")) return assets.suspects?.beto || null;
@@ -348,16 +430,22 @@ function clueAssetFor(caseData, clue) {
   if (key.includes("reporte") || key.includes("guardia")) return assets.visualEvidence?.report || null;
   if (key.includes("ventana") || key.includes("techo")) return assets.visualEvidence?.roofWindow || null;
   if (key.includes("diamante")) return assets.visualEvidence?.diamond || null;
-  if (key.includes("puerta")) return assets.visualEvidence?.backDoor || assets.visualEvidence?.door || null;
+  if (key.includes("puerta")) return assets.visualEvidence?.backDoor || assets.visualEvidence?.door || assets.visualEvidence?.wagon || null;
   if (key.includes("25:00") || key.includes("reloj")) return assets.visualEvidence?.clock || null;
   if (key.includes("congelador") || key.includes("helado") || key.includes("frio")) return assets.visualEvidence?.freezer || null;
   if (key.includes("gorra roja")) return assets.visualEvidence?.redCap || null;
+  if (key.includes("5 → 10") || key.includes("5 -> 10")) return assets.visualEvidence?.sequence || null;
+  if (key.includes("▂") || key.includes("▄")) return assets.visualEvidence?.sequence || null;
+  if ((key.includes("mapa") && key.includes("lampara")) || (key.includes("llave") && key.includes("encima") && key.includes("mapa"))) return assets.visualEvidence?.route || null;
+  if (key.includes("reloj gigante") || key.includes("cruzar el rio") || key.includes("estacion siguiente")) return assets.visualEvidence?.ticket || null;
+  if (key.includes("guantes grises") || key.includes("turno") || key.includes("estacion final")) return assets.visualEvidence?.gloves || null;
   if (key.includes("▲") || key.includes("■") || key.includes("●") || key.includes("💡") || key.includes("•") || key.includes("cuadrado")) return assets.visualEvidence?.sequence || null;
   if (key.includes("🔑") || (key.includes("escalera") && key.includes("panel"))) return assets.visualEvidence?.grid || assets.visualEvidence?.route || null;
   if (key.includes("norte") || key.includes("izquierda")) return assets.visualEvidence?.route || null;
   if (key.includes("agua se junta") || key.includes("sol ya no") || key.includes("ultimo dia")) return assets.visualEvidence?.beach || null;
   if (key.includes("sin gafas") || key.includes("mas alto")) return assets.visualEvidence?.photo || null;
   if (key.includes("razobot")) return assets.aiSpeaker || null;
+  if (key.includes("grabacion") || key.includes("camara")) return assets.visualEvidence?.camera || null;
   return null;
 }
 
@@ -369,11 +457,14 @@ function stepAssetFor(caseData, step) {
     return assets.evidence?.find((item) => normalizeAssetKey(evidenceLabel(item)).includes("alarma") || normalizeAssetKey(evidenceLabel(item)).includes("codigo"))?.image || null;
   }
   if (key.includes("diamante") || key.includes("vitrina")) return assets.visualEvidence?.diamond || assets.evidence?.[0]?.image || null;
-  if (key.includes("puerta")) return assets.visualEvidence?.backDoor || assets.visualEvidence?.door || null;
+  if (key.includes("puerta")) return assets.visualEvidence?.backDoor || assets.visualEvidence?.door || assets.visualEvidence?.wagon || null;
   if (key.includes("pistas") || key.includes("inventos")) return assets.visualEvidence?.terminal || null;
   if (key.includes("escondite")) return assets.visualEvidence?.freezer || null;
   if (key.includes("atrapar")) return assets.visualEvidence?.door || null;
   if (key.includes("simbolo") || key.includes("reemplazar") || key.includes("mensaje completo")) return assets.visualEvidence?.morse || assets.visualEvidence?.notebook || null;
+  if (key.includes("permiso")) return assets.visualEvidence?.key || null;
+  if (key.includes("detener el tren") || key.includes("abrir la puerta")) return assets.visualEvidence?.wagon || null;
+  if (key.includes("llave maestra")) return assets.visualEvidence?.key || null;
   return null;
 }
 

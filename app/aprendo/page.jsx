@@ -22,6 +22,7 @@ const CHAPTER_ART = {
   1: "/assets/cases/c1-noche/raw/hero-museum-night.png",
   2: "/assets/cases/c2-robot/raw/hero-robot-museum.png",
   3: "/assets/cases/c3-faro/optimized/hero-coded-lighthouse.webp",
+  4: "/assets/cases/c4-train/optimized/hero-midnight-train.webp",
 };
 
 function artworkForCase(caseData) {
@@ -112,9 +113,14 @@ export default function KidHome() {
                 Cambiar detective
               </button>
             )}
-            <Detective size={38} className="rounded-full bg-honey-soft p-1" />
-            <Link href="/padres" className="rounded-full border border-ink/10 bg-white px-3 py-2 text-xs font-semibold text-ink shadow-card transition hover:border-honey sm:px-4 sm:text-sm">
-              Para papás <span aria-hidden="true">→</span>
+            <span className="relative grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full bg-honey-soft ring-2 ring-white shadow-card" title={`Perfil de ${p.name || "detective"}`}>
+              <Image src="/assets/ui/avatars/optimized/avatar-child-detective.webp" alt="Perfil del niño detective" width={44} height={44} className="h-full w-full object-contain" />
+            </span>
+            <Link href="/padres" className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white py-1.5 pl-1.5 pr-3 text-xs font-semibold text-ink shadow-card transition hover:border-honey sm:pr-4 sm:text-sm">
+              <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-teal-soft">
+                <Image src="/assets/ui/avatars/optimized/avatar-parent-guide.webp" alt="" width={32} height={32} className="h-full w-full object-contain" aria-hidden="true" />
+              </span>
+              <span>Para papás</span> <span aria-hidden="true">→</span>
             </Link>
           </div>
         </header>
