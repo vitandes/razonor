@@ -1,7 +1,7 @@
 // Checkout INTERNACIONAL (Lemon Squeezy, en USD) para usuarios fuera de
 // Colombia. Colombia sigue con Mercado Pago (COP) en /api/mp/subscribe.
 //
-//   POST /api/ls/checkout { plan: "individual"|"familiar", billing: "monthly"|"semestral" }
+//   POST /api/ls/checkout { plan: "individual", billing: "monthly"|"semestral" }
 //   -> { url }  (checkout hosteado de Lemon Squeezy)
 //
 // Sin las env de LS responde 503. El acceso lo activa SOLO el webhook de LS.
@@ -33,7 +33,10 @@ export async function POST(req) {
   } catch {
     body = {};
   }
-  const plan = body?.plan === "familiar" ? "familiar" : "individual";
+  if (body?.plan && body.plan !== "individual") {
+    return Response.json({ error: "plan_unavailable" }, { status: 400 });
+  }
+  const plan = "individual";
   const billing = body?.billing === "semestral" ? "semestral" : "monthly";
   const variantId = getLsVariant(plan, billing);
   if (!variantId) return Response.json({ error: "no_variant" }, { status: 503 });

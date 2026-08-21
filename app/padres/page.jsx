@@ -1,248 +1,276 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
 import { LogoWordmark } from "@/components/Logo";
-import Detective from "@/components/Detective";
 import ProfileSwitcher from "@/components/ProfileSwitcher";
-import WeeklyWrapped from "@/components/WeeklyWrapped";
-import { CountUp } from "@/components/fx";
+import { useProgress, isSubscribed } from "@/lib/progress";
+import { DIAGNOSTIC_VERSION, lowestSkill } from "@/lib/diagnostic";
 import {
-  PRODUCT_SKILLS,
-  productSkillPercents,
-  summarizeProductSkills,
-  retosSolvedTotal,
-  casesCompletedCount,
-  chaptersCompletedCount,
-} from "@/lib/world";
-import { useProgress, weeklyMinutes, isSubscribed } from "@/lib/progress";
-import { playerLevelFromXp, rankTitle } from "@/lib/leveling";
-
-const BAR = { teal: "bg-teal", grape: "bg-grape", coral: "bg-coral", honey: "bg-honey" };
-const SKILL_IDS = Object.keys(PRODUCT_SKILLS);
+  CATEGORY_BY_ID,
+  MATH_CATEGORIES,
+  MATH_SKILLS,
+  SKILL_BY_ID,
+  initialPlanFromDiagnostic,
+  skillStatus,
+} from "@/lib/mathCatalog";
 
 export default function ParentReport() {
-  const p = useProgress();
+  const progress = useProgress();
   const router = useRouter();
 
   useEffect(() => {
-    if (p.serverLoaded) {
-      if (isSubscribed(p.subscription)) return;
-      if (!p.onboarding?.done) {
-        router.replace("/onboarding");
-      } else {
-        router.replace("/planes");
-      }
-    }
-  }, [p.serverLoaded, p.subscription, p.onboarding?.done, router]);
+    if (!progress.serverLoaded) return;
+    if (isSubscribed(progress.subscription)) return;
+    router.replace("/planes");
+  }, [progress.serverLoaded, progress.subscription, router]);
 
-  // Derivados
-  const percents = productSkillPercents(p.skills);
-  const { values, labels } = weeklyMinutes(p.minutes);
-  const totalMin = values.reduce((a, b) => a + b, 0);
-  const maxMin = Math.max(...values, 1);
-  const retos = retosSolvedTotal(p);
-  const casesDone = casesCompletedCount(p);
-  const chaptersDone = chaptersCompletedCount(p);
-  const player = playerLevelFromXp(p.xp);
-  const rank = rankTitle(player.level);
-  const name = p.name || "Tu hijo";
-  const hasActivity = casesDone > 0 || totalMin > 0;
-
-  const [wrappedOpen, setWrappedOpen] = useState(false);
-
-  if (!p.hydrated) {
-    return (
-      <main className="grid min-h-screen place-items-center bg-cloud">
-        <Detective size={72} className="animate-floaty" />
-      </main>
-    );
+  if (!progress.hydrated || !progress.serverLoaded || !isSubscribed(progress.subscription)) {
+    return <Loading />;
   }
 
-  if (!p.serverLoaded || !isSubscribed(p.subscription)) {
-    return (
-      <main className="grid min-h-screen place-items-center bg-cloud">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-ink/10 border-t-grape" />
-      </main>
-    );
-  }
+  const hasDiagnostic =
+    progress.diagnostic?.completed && progress.diagnostic?.version === DIAGNOSTIC_VERSION;
+  const mastery = progress.mathV1?.mastery || {};
+  const sessions = progress.mathV1?.sessions || [];
+  const plan = hasDiagnostic
+    ? initialPlanFromDiagnostic(progress.diagnostic, mastery)
+    : [];
+  const name = progress.name || "El estudiante";
+  const weekly = sessionStats(sessions);
+  const chartValues = weekly.values;
+  const labels = weekly.labels;
+  const maxMinutes = Math.max(...chartValues, 1);
+  const observed = Object.values(progress.diagnostic?.scores || {});
+  const diagnosticAverage = observed.length
+    ? Math.round(observed.reduce((sum, value) => sum + Number(value || 0), 0) / observed.length)
+    : null;
+  const practiced = Object.values(mastery);
+  const currentAverage = practiced.length
+    ? Math.round(practiced.reduce((sum, item) => sum + Number(item.mastery || 0), 0) / practiced.length)
+    : diagnosticAverage;
+  const opportunityId = plan[0]?.skill?.id || (hasDiagnostic ? lowestSkill(progress.diagnostic.scores) : null);
+  const opportunity = SKILL_BY_ID[opportunityId];
 
   return (
-    <main className="min-h-screen bg-cloud pb-16">
-      <div className="mx-auto max-w-2xl px-5 pt-6">
-        <header className="flex items-center justify-between">
-          <Link href="/" className="flex items-center">
-            <LogoWordmark size={34} />
-          </Link>
+    <main className="min-h-screen bg-[#f8f5ee] pb-20">
+      <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6 sm:pt-6">
+        <header className="flex items-center justify-between gap-3">
+          <Link href="/"><LogoWordmark size={34} /></Link>
           <div className="flex items-center gap-2">
-            <span className="hidden text-xs font-semibold text-muted sm:block">Área de padres</span>
-            <span className="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-teal-soft ring-2 ring-white shadow-card">
-              <Image src="/assets/ui/avatars/optimized/avatar-parent-guide.webp" alt="Guía del área de padres" width={40} height={40} className="h-full w-full object-contain" />
+            <span className="hidden rounded-full bg-white px-4 py-2 text-sm font-bold text-muted shadow-card sm:block">
+              Panel para padres
             </span>
+            <Link href="/aprendo" className="rounded-full bg-night px-4 py-2.5 text-sm font-bold text-white">
+              Ir a aprender
+            </Link>
             <UserButton />
           </div>
         </header>
 
-        <ProfileSwitcher label="Panel de:" />
+        {progress.isFamiliar && <ProfileSwitcher label="Viendo el progreso de:" />}
 
-        {!hasActivity && (
-          <div className="mt-5 rounded-4xl border border-honey/30 bg-honey-soft px-6 py-5 text-center text-sm text-ink">
-            Aún no hay actividad. Cuando {name} resuelva su primer caso, aquí verás
-            su progreso real por habilidad.
-          </div>
-        )}
-
-        {hasActivity && (
-          <button
-            onClick={() => setWrappedOpen(true)}
-            className="group relative mt-5 block w-full overflow-hidden rounded-4xl bg-gradient-to-r from-grape via-coral to-honey p-[2px] shadow-soft transition hover:scale-[1.01]"
-          >
-            <span className="flex items-center justify-between gap-3 rounded-[calc(1.25rem-2px)] bg-night px-6 py-4 text-left">
-              <span className="flex items-center gap-3">
-                <Detective size={40} className="shrink-0 transition group-hover:rotate-6" />
-                <span>
-                  <span className="block font-display text-lg font-semibold text-white">
-                    ✨ Ver la semana de {name}
-                  </span>
-                  <span className="block text-sm text-white/60">
-                    Su resumen animado · 30 segundos
-                  </span>
-                </span>
-              </span>
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/15 text-white transition group-hover:translate-x-1">
-                →
-              </span>
-            </span>
-          </button>
-        )}
-
-        {/* tarjeta-panel (diseñada para captura de pantalla) */}
-        <section className="mt-5 overflow-hidden rounded-4xl bg-white shadow-soft">
-          <div className="border-b border-ink/5 px-6 py-5 sm:px-8">
-            <p className="flex items-center gap-2 text-sm text-muted"><span className="h-2 w-2 rounded-full bg-teal" />Panel de padres · esta semana</p>
-            <h1 className="font-display text-2xl font-bold text-ink">
-              {name} · {retos} {retos === 1 ? "reto resuelto" : "retos resueltos"}
-            </h1>
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-grape-soft px-3 py-1 text-sm font-semibold text-grape">
-                {rank.emoji} {rank.name}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-honey-soft px-3 py-1 text-sm font-semibold text-honey-deep">
-                🏅 {chaptersDone} {chaptersDone === 1 ? "capítulo" : "capítulos"}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-coral-soft px-3 py-1 text-sm font-semibold text-coral">
-                🔥 {p.streak} {p.streak === 1 ? "día" : "días"} de racha
-              </span>
+        <section className="relative mt-6 overflow-hidden rounded-[2rem] bg-night p-6 text-white shadow-soft sm:p-9">
+          <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full border-[42px] border-grape/20" />
+          <div className="absolute -bottom-16 right-48 h-36 w-36 rounded-full bg-honey/10 blur-2xl" />
+          <div className="relative grid items-end gap-8 lg:grid-cols-[1fr_auto]">
+            <div>
+              <p className="text-sm font-extrabold uppercase tracking-[0.16em] text-honey">Progreso matemático</p>
+              <h1 className="mt-2 max-w-3xl font-display text-3xl font-bold leading-tight sm:text-5xl">
+                Entiende qué domina {name} y qué necesita trabajar ahora
+              </h1>
+              <p className="mt-4 max-w-2xl leading-relaxed text-white/70">
+                El plan combina el diagnóstico con evidencia de cada práctica. No etiqueta al estudiante: muestra qué fundamento conviene fortalecer y por qué.
+              </p>
             </div>
-          </div>
-
-          {/* stats rápidas */}
-          <div className="grid grid-cols-3 gap-3 px-6 py-6 sm:px-8">
-            <BigStat value={retos} label="retos resueltos" />
-            <BigStat value={casesDone} label="casos cerrados" />
-            <BigStat value={p.streak} label="racha (días)" />
-          </div>
-
-          {/* recomendación en lenguaje claro */}
-          <div className="border-t border-ink/5 px-6 py-6 sm:px-8">
-            <p className="font-display text-lg font-semibold leading-snug text-ink">
-              {summarizeProductSkills(percents, p.name)}
-            </p>
-          </div>
-
-          {/* habilidades */}
-          <div className="space-y-5 border-t border-ink/5 px-6 py-7 sm:px-8">
-            <h2 className="font-display text-base font-semibold text-ink">
-              Fortalezas por habilidad
-            </h2>
-            {SKILL_IDS.map((id) => {
-              const info = PRODUCT_SKILLS[id];
-              const val = percents[id];
-              return (
-                <div key={id}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className={`h-2.5 w-2.5 rounded-full ${BAR[info.color]}`} />
-                      <span className="font-semibold text-ink">{info.name}</span>
-                    </div>
-                    <span className="font-display font-semibold text-ink">{val}%</span>
-                  </div>
-                  <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-cloud">
-                    <div
-                      className={`h-full rounded-full ${BAR[info.color]} transition-all`}
-                      style={{ width: `${val}%` }}
-                    />
-                  </div>
-                  <p className="mt-1.5 text-sm text-muted">{info.desc}</p>
-                </div>
-              );
-            })}
-
-          </div>
-
-          {/* actividad semanal */}
-          <div className="border-t border-ink/5 px-6 py-7 sm:px-8">
-            <div className="flex items-end justify-between">
-              <h2 className="font-display text-lg font-semibold text-ink">
-                Actividad esta semana
-              </h2>
-              <span className="text-sm text-muted">
-                {totalMin} min · {p.streak} días seguidos 🔥
-              </span>
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              <HeroStat value={currentAverage == null ? "—" : currentAverage} label="dominio" suffix={currentAverage == null ? "" : "/100"} />
+              <HeroStat value={weekly.count} label="sesiones" />
+              <HeroStat value={progress.streak || 0} label="racha" suffix=" días" />
             </div>
-            <div className="mt-4 flex items-end justify-between gap-2">
-              {values.map((m, i) => (
-                <div key={i} className="flex flex-1 flex-col items-center gap-2">
-                  <div className="flex h-24 w-full items-end">
-                    <div
-                      className="w-full rounded-t-lg bg-honey"
-                      style={{ height: `${Math.max((m / maxMin) * 100, m > 0 ? 8 : 3)}%` }}
-                      title={`${m} min`}
-                    />
-                  </div>
-                  <span className="text-xs text-muted">{labels[i]}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-cream px-6 py-4 text-center text-sm text-muted sm:px-8">
-            Con Razonor · {p.xp.toLocaleString("es-CO")} ⭐ en total
           </div>
         </section>
-      </div>
 
-      <WeeklyWrapped
-        open={wrappedOpen}
-        onClose={() => setWrappedOpen(false)}
-        data={{
-          name: p.name || null,
-          retos,
-          casesDone,
-          totalMin,
-          weekValues: values,
-          weekLabels: labels,
-          streak: p.streak,
-          percents,
-          playerLevel: player.level,
-          rank,
-          xp: p.xp,
-        }}
-      />
+        {!hasDiagnostic ? (
+          <section className="mt-6 rounded-[2rem] border-2 border-dashed border-ink/10 bg-white p-7 text-center shadow-card sm:p-10">
+            <span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-honey-soft font-display text-2xl font-bold text-honey-deep">01</span>
+            <h2 className="mt-5 font-display text-2xl font-bold text-ink">Falta el punto de partida</h2>
+            <p className="mx-auto mt-2 max-w-xl text-muted">Cuando complete el diagnóstico adaptativo, aquí aparecerán sus fortalezas, prioridades y ruta por habilidades.</p>
+            <Link href="/diagnostico?start=1" className="mt-6 inline-flex rounded-full bg-honey px-6 py-3 font-bold text-night">Empezar diagnóstico</Link>
+          </section>
+        ) : (
+          <>
+            <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+              <section className="rounded-[2rem] bg-white p-5 shadow-card sm:p-7">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-extrabold uppercase tracking-[0.15em] text-teal">Mapa de fundamentos</p>
+                    <h2 className="mt-1 font-display text-2xl font-bold text-ink">Seis áreas matemáticas</h2>
+                    <p className="mt-2 text-sm text-muted">La barra cambia con nueva evidencia; no depende solo del primer diagnóstico.</p>
+                  </div>
+                  <span className="rounded-full bg-cream px-3 py-1.5 text-xs font-bold text-muted">30 habilidades conectadas</span>
+                </div>
+                <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                  {MATH_CATEGORIES.map((category) => (
+                    <CategoryProgress
+                      key={category.id}
+                      category={category}
+                      diagnostic={progress.diagnostic}
+                      mastery={mastery}
+                    />
+                  ))}
+                </div>
+              </section>
+
+              <aside className="space-y-5 lg:sticky lg:top-5">
+                <section className="overflow-hidden rounded-[2rem] bg-honey-soft p-6">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-12 w-12 place-items-center rounded-2xl bg-night font-display text-xl font-bold text-honey">
+                      {opportunity ? CATEGORY_BY_ID[opportunity.category]?.symbol : "?"}
+                    </span>
+                    <div>
+                      <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-honey-deep">Prioridad actual</p>
+                      <h2 className="font-display text-xl font-bold text-ink">{opportunity?.title || "Por definir"}</h2>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm leading-relaxed text-ink/75">
+                    Aparece primero porque su dominio estimado es bajo y otras habilidades dependen de esta base.
+                  </p>
+                  <Link href="/aprendo" className="mt-5 inline-flex w-full justify-center rounded-2xl bg-night px-5 py-3 font-bold text-white">Ver su plan</Link>
+                </section>
+
+                <section className="rounded-[2rem] bg-white p-6 shadow-card">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-grape">Cómo leer el reporte</p>
+                  <div className="mt-4 space-y-3 text-sm text-muted">
+                    <Legend color="bg-teal" label="Dominada: 85 o más" />
+                    <Legend color="bg-honey" label="Casi dominada: 70–84" />
+                    <Legend color="bg-grape" label="En aprendizaje: 40–69" />
+                    <Legend color="bg-coral" label="Por fortalecer: menos de 40" />
+                  </div>
+                  <p className="mt-4 border-t border-ink/5 pt-4 text-xs leading-relaxed text-muted">La confianza indica cuánta evidencia tenemos. Un puntaje con poca evidencia puede cambiar rápido.</p>
+                </section>
+              </aside>
+            </div>
+
+            <section className="mt-6 rounded-[2rem] bg-white p-5 shadow-card sm:p-7">
+              <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
+                <div>
+                  <p className="text-sm font-extrabold uppercase tracking-[0.15em] text-grape">Próximas prioridades</p>
+                  <h2 className="mt-1 font-display text-2xl font-bold text-ink">La ruta recomendada</h2>
+                  <ol className="mt-5 space-y-3">
+                    {plan.slice(0, 4).map((item, index) => (
+                      <PlanItem key={item.skill.id} item={item} index={index} />
+                    ))}
+                  </ol>
+                </div>
+                <div>
+                  <div className="flex items-end justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-extrabold uppercase tracking-[0.15em] text-teal">Actividad</p>
+                      <h2 className="mt-1 font-display text-2xl font-bold text-ink">Últimos 7 días</h2>
+                    </div>
+                    <p className="text-sm font-bold text-muted">{weekly.minutes} min · {weekly.correct}/{weekly.total} respuestas</p>
+                  </div>
+                  <div className="mt-6 flex h-40 items-end justify-between gap-2 rounded-3xl bg-cream px-4 pt-5">
+                    {chartValues.map((minutes, index) => (
+                      <div key={`${labels[index]}-${index}`} className="flex h-full flex-1 flex-col items-center justify-end gap-2">
+                        <span className="text-[10px] font-bold text-muted">{minutes ? `${minutes}m` : ""}</span>
+                        <div className="w-full max-w-10 rounded-t-xl bg-gradient-to-t from-grape to-teal" style={{ height: `${Math.max(minutes ? 12 : 3, (minutes / maxMinutes) * 100)}%` }} />
+                        <span className="pb-3 text-xs font-bold text-muted">{labels[index]}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+      </div>
     </main>
   );
 }
 
-function BigStat({ value, label }) {
+function sessionStats(sessions) {
+  const limit = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const recent = sessions.filter((session) => new Date(session.completedAt).getTime() >= limit);
+  const byDay = new Map();
+  for (const session of recent) {
+    const key = new Date(session.completedAt).toDateString();
+    byDay.set(key, (byDay.get(key) || 0) + Number(session.minutes || 0));
+  }
+  const values = [];
+  const labels = [];
+  for (let offset = 6; offset >= 0; offset--) {
+    const date = new Date();
+    date.setDate(date.getDate() - offset);
+    values.push(byDay.get(date.toDateString()) || 0);
+    labels.push(["D", "L", "M", "M", "J", "V", "S"][date.getDay()]);
+  }
+  return {
+    count: recent.length,
+    minutes: recent.reduce((sum, session) => sum + Number(session.minutes || 0), 0),
+    correct: recent.reduce((sum, session) => sum + Number(session.correct || 0), 0),
+    total: recent.reduce((sum, session) => sum + Number(session.total || 0), 0),
+    values,
+    labels,
+  };
+}
+
+function categoryScore(categoryId, diagnostic, mastery) {
+  const values = MATH_SKILLS.filter((skill) => skill.category === categoryId)
+    .map((skill) => mastery[skill.id]?.mastery ?? diagnostic?.scores?.[skill.id])
+    .filter(Number.isFinite);
+  return values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) : null;
+}
+
+function categoryConfidence(categoryId, diagnostic, mastery) {
+  const values = MATH_SKILLS.filter((skill) => skill.category === categoryId)
+    .map((skill) => mastery[skill.id]?.confidence ?? diagnostic?.confidence?.[skill.id])
+    .filter(Number.isFinite);
+  return values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) : 0;
+}
+
+function CategoryProgress({ category, diagnostic, mastery }) {
+  const score = categoryScore(category.id, diagnostic, mastery);
+  const confidence = categoryConfidence(category.id, diagnostic, mastery);
+  const status = skillStatus(score || 0);
+  const color = { teal: "bg-teal", honey: "bg-honey", grape: "bg-grape", coral: "bg-coral" }[status.color];
   return (
-    <div className="rounded-3xl bg-cloud px-3 py-4 text-center">
-      <div className="font-display text-2xl font-bold text-ink">
-        <CountUp to={value} duration={1000} />
+    <article className="rounded-3xl border border-ink/10 bg-cream p-5">
+      <div className="flex items-start gap-3">
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-night font-display text-xl font-bold text-honey">{category.symbol}</span>
+        <div className="min-w-0 flex-1">
+          <h3 className="font-display font-bold leading-tight text-ink">{category.title}</h3>
+          <p className="mt-1 text-xs font-bold text-muted">{status.label} · evidencia {confidence}/100</p>
+        </div>
+        <strong className="font-display text-2xl text-ink">{score ?? "—"}</strong>
       </div>
-      <div className="mt-0.5 text-xs text-muted">{label}</div>
-    </div>
+      <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-white"><div className={`h-full rounded-full ${color}`} style={{ width: `${score || 0}%` }} /></div>
+    </article>
   );
+}
+
+function PlanItem({ item, index }) {
+  const category = CATEGORY_BY_ID[item.skill.category];
+  return (
+    <li className={`flex items-center gap-3 rounded-2xl border p-4 ${index === 0 ? "border-honey bg-honey-soft" : "border-ink/10 bg-cream"}`}>
+      <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl font-display font-bold ${index === 0 ? "bg-night text-honey" : "bg-white text-grape"}`}>{category.symbol}</span>
+      <div className="min-w-0 flex-1"><p className="font-bold leading-tight text-ink">{item.skill.title}</p><p className="mt-1 text-xs text-muted">Dominio {item.mastery}/100 · evidencia {item.confidence}/100</p></div>
+      <span className="text-xs font-extrabold text-muted">0{index + 1}</span>
+    </li>
+  );
+}
+
+function HeroStat({ value, label, suffix = "" }) {
+  return <div className="min-w-20 rounded-2xl bg-white/10 px-3 py-4 text-center sm:min-w-24"><strong className="block font-display text-2xl text-white">{value}<span className="text-xs text-white/50">{suffix}</span></strong><span className="mt-1 block text-[10px] font-bold uppercase tracking-wide text-white/55">{label}</span></div>;
+}
+
+function Legend({ color, label }) {
+  return <div className="flex items-center gap-2"><span className={`h-2.5 w-2.5 rounded-full ${color}`} /><span>{label}</span></div>;
+}
+
+function Loading() {
+  return <main className="grid min-h-screen place-items-center bg-[#f8f5ee]"><div className="h-10 w-10 animate-spin rounded-full border-4 border-ink/10 border-t-honey" /></main>;
 }

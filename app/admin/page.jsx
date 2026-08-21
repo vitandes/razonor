@@ -10,8 +10,8 @@ export const revalidate = 0;
 
 // Ingreso mensual normalizado por plan + periodo (semestral = total / 6).
 const MONTHLY_REV = {
-  individual: { monthly: 49900, semestral: Math.round(149500 / 6) },
-  familiar: { monthly: 69900, semestral: Math.round(199500 / 6) },
+  individual: { monthly: 29900, semestral: Math.round(119900 / 6) },
+  familiar: { monthly: 69900, semestral: Math.round(199900 / 6) },
 };
 const cop = (n) => "$" + Math.round(n).toLocaleString("es-CO");
 

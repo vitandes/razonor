@@ -4,66 +4,23 @@ import { useState } from "react";
 import { HAS_TRIAL, TRIAL_LABEL } from "@/lib/trial";
 import Reveal from "@/components/landing/Reveal";
 
-// Dudas propias de familias latinas en EE.UU. (van de primeras: la objeción
-// que más frena es el idioma y la escuela en inglés).
 const FAQS_US = [
-  {
-    q: "Mi hijo entiende español pero contesta en inglés, ¿le sirve?",
-    a: "Es el caso más común y justo para eso funciona. Los retos se leen en español claro y se resuelven tocando y eligiendo: tu hijo entrena la lógica mientras mantiene vivo el idioma, sin sentir que está en clase de español.",
-  },
-  {
-    q: "¿Si lo usa en español se atrasa con la escuela en inglés?",
-    a: "Al contrario. La lógica, los patrones y la comprensión se transfieren entre idiomas: un niño que razona y entiende mejor en español también lo hace mejor en inglés. Y de paso conserva el idioma de la familia.",
-  },
-  {
-    q: "¿Qué español usan los retos?",
-    a: "Español neutro y claro, pensado y escrito en español — no traducido de otro idioma.",
-  },
+  { q: "¿Puede usarlo si estudia matemáticas en inglés?", a: "Sí. Los conceptos matemáticos se mantienen y Razonor usa español latinoamericano neutral. La notación, las operaciones y los diagramas no dependen del idioma escolar." },
+  { q: "¿Qué español utiliza?", a: "Español latinoamericano claro y neutral. Evitamos regionalismos que cambien el significado de un problema." },
 ];
 
 const FAQS = [
-  {
-    q: "¿Para qué edades es Razonor?",
-    a: "Para niños de 6 a 12 años. Tú indicas su edad durante la configuración y Razonor elige una ruta inicial adecuada; después ajusta los desafíos según su progreso.",
-  },
-  {
-    q: "¿Mi hijo debe estar conmigo para empezar?",
-    a: "No. El onboarding lo completas tú con su edad, objetivos, intereses y tiempo disponible. Puedes crear la cuenta y elegir la suscripción ahora; tu hijo empieza los casos cuando estén listos.",
-  },
-  {
-    q: "¿Mi hijo necesita saber leer ya?",
-    a: "Sí, conviene una lectura básica: los casos se leen para resolverse. Los textos son breves y claros, porque el objetivo es comprender el problema, identificar los datos y elegir una estrategia.",
-  },
-  {
-    q: "¿También lo prepara para programación y tecnología?",
-    a: "Sí, como consecuencia de aprender a pensar mejor. Razonor no enseña un lenguaje de código ni una aplicación específica: fortalece matemáticas, lógica, resolución de problemas y razonamiento espacial, una base útil para aprender tecnología después.",
-  },
-  {
-    q: "¿No es una pantalla más?",
-    a: "Es el mismo celular haciendo algo distinto: 15 minutos al día, sin publicidad, sin compras dentro del juego, sin videos infinitos y sin chats con desconocidos.",
-  },
-  {
-    q: "¿Cómo veo el progreso de mi hijo?",
-    a: "En tu panel de padres: retos resueltos, racha, capítulos completados, fortalezas y debilidades por habilidad, y una recomendación en lenguaje claro. Hasta 3 hijos por cuenta.",
-  },
-  {
-    q: "¿Con qué puedo pagar?",
-    a: "Con tarjeta de crédito o débito. En Colombia el cobro es en pesos a través de Mercado Pago; fuera de Colombia, con tarjeta en dólares.",
-  },
-  {
-    q: "¿Puedo cancelar cuando quiera?",
-    a: HAS_TRIAL
-      ? `Cuando quieras, sin permanencia y sin llamadas. Empiezas con ${TRIAL_LABEL} gratis: si cancelas antes de que termine la prueba, no se te cobra nada.`
-      : "Cuando quieras, sin permanencia y sin llamadas. Cancelas desde tu cuenta y no se renueva el siguiente periodo.",
-  },
-  {
-    q: "¿En qué dispositivos funciona?",
-    a: "En el celular, la tablet y el computador, desde el navegador. No hay que instalar nada de las tiendas de apps.",
-  },
-  {
-    q: "¿Cuánto tiempo al día necesita?",
-    a: "Cada caso dura 3–5 minutos; con 15 minutos al día es suficiente. La constancia importa más que las sesiones largas, y las rachas ayudan a sostener el hábito.",
-  },
+  { q: "¿Para qué edades es Razonor?", a: "Para estudiantes de 10 a 18 años. La primera versión enseña fundamentos frecuentes de 10 a 14 y detecta vacíos de esas bases en estudiantes mayores." },
+  { q: "¿Qué mide el diagnóstico?", a: "Observa nodos importantes de números, fracciones, proporciones, álgebra, geometría y datos. No pretende certificar las 30 habilidades en 15 preguntas: entrega una estimación inicial y sigue comprobándola durante las sesiones." },
+  { q: "¿El diagnóstico debe responderlo el estudiante?", a: "Sí. Si no está contigo, puedes completar el onboarding, crear la cuenta y elegir el plan ahora. El diagnóstico quedará pendiente hasta que el estudiante pueda responderlo; nunca estimamos su nivel con percepciones del adulto." },
+  { q: "¿Por qué algunas habilidades aparecen antes que otras?", a: "Porque están conectadas por prerrequisitos. Si una dificultad con porcentajes empieza en fracciones o proporciones, el plan fortalece primero esa base." },
+  { q: "¿Qué significa dominio y confianza?", a: "Dominio es la estimación de cuánto comprende una habilidad. Confianza indica cuánta evidencia respalda esa estimación. Un solo acierto puede subir el dominio, pero mantiene baja la confianza." },
+  { q: "¿La inteligencia artificial decide las respuestas?", a: "No. Las preguntas, respuestas y validaciones matemáticas son deterministas. La IA puede ayudar a variar una presentación revisada, pero no calcula ni califica." },
+  { q: "¿Cuánto tiempo necesita al día?", a: "Entre 10 y 15 minutos. Cada sesión combina una explicación breve, práctica, razonamiento y repaso." },
+  { q: "¿Con qué puedo pagar?", a: "En Colombia, con Mercado Pago en pesos colombianos. Fuera de Colombia, el cobro se procesa en dólares mediante Lemon Squeezy." },
+  { q: "¿Cuáles son los precios?", a: "El plan individual cuesta $29.900 COP mensual o $119.900 COP semestral en Colombia. Internacionalmente cuesta USD 9,99 mensual o USD 39,99 semestral." },
+  { q: "¿Puedo cancelar la renovación?", a: HAS_TRIAL ? `Sí. Si hay una prueba activa de ${TRIAL_LABEL}, puedes cancelarla antes del primer cobro. Después, puedes evitar la renovación del siguiente periodo desde tu cuenta.` : "Sí. Puedes cancelar la renovación del siguiente periodo desde tu cuenta." },
+  { q: "¿En qué dispositivos funciona?", a: "En celular, tableta y computador desde el navegador, con un diseño adaptable a cada tamaño." },
 ];
 
 export default function Faq({ market = "co" }) {
@@ -74,44 +31,21 @@ export default function Faq({ market = "co" }) {
     <section className="bg-cloud">
       <div className="mx-auto max-w-3xl px-5 py-16 sm:py-20">
         <Reveal className="text-center">
-          <p className="font-display text-sm font-semibold uppercase tracking-wide text-grape">
-            Preguntas frecuentes
-          </p>
-          <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
-            Resolvemos tus dudas
-          </h2>
+          <p className="font-display text-sm font-semibold uppercase tracking-wide text-grape">Preguntas frecuentes</p>
+          <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">Lo importante antes de empezar</h2>
         </Reveal>
-
         <ul className="mt-10 space-y-3">
-          {faqs.map((item, i) => {
-            const isOpen = open === i;
+          {faqs.map((item, index) => {
+            const isOpen = open === index;
             return (
-              <Reveal key={item.q} delay={Math.min(i, 4) * 70}>
-              <li className="rounded-4xl bg-white shadow-card">
-                <button
-                  type="button"
-                  onClick={() => setOpen(isOpen ? -1 : i)}
-                  aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey-deep"
-                >
-                  <span className="font-display text-lg font-semibold text-ink">
-                    {item.q}
-                  </span>
-                  <span
-                    className={`shrink-0 text-2xl text-honey-deep transition-transform ${
-                      isOpen ? "rotate-45" : ""
-                    }`}
-                    aria-hidden="true"
-                  >
-                    +
-                  </span>
-                </button>
-                {isOpen && (
-                  <p className="animate-pop px-6 pb-5 leading-relaxed text-muted">
-                    {item.a}
-                  </p>
-                )}
-              </li>
+              <Reveal key={item.q} delay={Math.min(index, 4) * 70}>
+                <li className="rounded-4xl bg-white shadow-card">
+                  <button type="button" onClick={() => setOpen(isOpen ? -1 : index)} aria-expanded={isOpen} className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey-deep">
+                    <span className="font-display text-lg font-semibold text-ink">{item.q}</span>
+                    <span className={`shrink-0 text-2xl text-honey-deep transition-transform ${isOpen ? "rotate-45" : ""}`} aria-hidden="true">+</span>
+                  </button>
+                  {isOpen && <p className="animate-pop px-6 pb-5 leading-relaxed text-muted">{item.a}</p>}
+                </li>
               </Reveal>
             );
           })}

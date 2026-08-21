@@ -20,9 +20,9 @@ const SIGNALS = [
     color: "bg-grape-soft text-grape",
   },
   {
-    icon: "📈",
+    icon: "30",
     title: "Avanza en habilidades concretas",
-    text: "El panel muestra matemáticas, lógica, resolución de problemas y razonamiento espacial por separado.",
+    text: "El panel muestra el fundamento exacto, su dominio, cuánta evidencia existe y qué prerrequisito lo bloquea.",
     color: "bg-coral-soft text-coral",
   },
 ];

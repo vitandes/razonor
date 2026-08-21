@@ -11,7 +11,7 @@ export default function Privacidad() {
     <LegalLayout
       title="Política de privacidad"
       intro="En Razonor cuidamos los datos de tu familia, en especial los de los niños. Esta página explica en lenguaje claro qué información usamos y para qué."
-      updated="18 de julio de 2026"
+      updated="21 de agosto de 2026"
     >
       <LegalSection heading="Quién es responsable de tus datos">
         <p>
@@ -29,15 +29,15 @@ export default function Privacidad() {
         <p>
           Del papá o la mamá: nombre, correo y los datos necesarios para tu
           cuenta y tu suscripción. Del niño: un nombre o apodo, la edad y su
-          actividad en la app (retos resueltos, respuestas y progreso por
-          habilidad). Pedimos lo mínimo para que Razonor funcione y para armar tu
-          panel de padres.
+          actividad en la app (respuestas del diagnóstico, sesiones y progreso
+          por habilidad). Pedimos lo mínimo para que Razonor funcione y para
+          armar el panel de progreso.
         </p>
       </LegalSection>
 
       <LegalSection heading="Para qué la usamos">
         <p>
-          Para ajustar los retos a la edad y al nivel del niño, medir su
+          Para adaptar la dificultad, recomendar una ruta matemática, medir el
           progreso, generar el panel de padres y mejorar el producto. No
           vendemos tus datos ni los de tu hijo, y no los usamos para publicidad
           de terceros.
@@ -59,9 +59,9 @@ export default function Privacidad() {
         <p>
           La cuenta la crea y la controla un adulto. Dentro de Razonor no hay
           publicidad, ni compras dentro de la app, ni chats con desconocidos ni
-          contenido generado por otros usuarios: el niño solo resuelve los retos
-          de la historia. La cuenta del niño está siempre bajo la supervisión
-          del papá o la mamá.
+          contenido generado por otros usuarios: el estudiante solo realiza el
+          diagnóstico y las actividades educativas de su plan. La cuenta del
+          menor está siempre bajo la supervisión de su padre, madre o acudiente.
         </p>
       </LegalSection>
 

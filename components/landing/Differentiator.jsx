@@ -13,32 +13,26 @@ export default function Differentiator() {
             Lo que hace distinto a Razonor
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
-            Aprende a pensar resolviendo, no memorizando
+            No se limita a decir “correcto” o “incorrecto”
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-white/70">
-            Tu hijo no ve una lista interminable de operaciones ni una clase
-            para memorizar procedimientos. Ve un caso que solo él puede
-            resolver. Para avanzar tiene que entender el problema, conectar
-            pistas, elegir una estrategia y explicar por qué su respuesta tiene
-            sentido.
+            Razonor conecta cada respuesta con una habilidad, una posible causa
+            del error y los prerrequisitos que conviene comprobar. Así transforma
+            práctica dispersa en una decisión clara sobre qué estudiar después.
           </p>
         </Reveal>
 
-        {/* Un reto visto por dentro, ligeramente girado como un expediente
-            sobre el escritorio del detective */}
         <Reveal className="mx-auto mt-12 max-w-xl">
-          <div className="-rotate-1 rounded-4xl bg-white p-5 shadow-soft transition duration-300 hover:rotate-0 sm:p-7">
-            <p className="text-sm font-medium text-muted">
-              Capítulo 3 · “El mensaje cifrado del museo”
-            </p>
+          <div className="rounded-4xl bg-white p-5 shadow-soft sm:p-7">
+            <p className="text-sm font-bold uppercase tracking-wide text-teal">Ejemplo de una decisión del plan</p>
             <p className="mt-3 rounded-2xl bg-cloud p-4 text-sm leading-relaxed text-ink">
-              “El guardia anotó los pasos del ladrón en desorden. Ordénalos para
-              descubrir por dónde escapó: <em>salió por la ventana · apagó la
-              cámara · entró a la sala · guardó la estatua</em>”
+              Un estudiante falla “20% de 80”. Antes de repetir porcentajes, Razonor
+              comprueba si entiende que 20% equivale a 20/100 y si puede conectar
+              fracción, decimal y porcentaje.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Tag>Lo que él siente: resolver un caso 🕵️</Tag>
-              <Tag>Lo que entrena: ordenar pasos = pensamiento computacional</Tag>
+              <Tag>Error visible: porcentaje</Tag>
+              <Tag>Posible raíz: equivalencia de representaciones</Tag>
             </div>
           </div>
         </Reveal>
@@ -51,9 +45,9 @@ export default function Differentiator() {
                 Apps de ejercicios y videos
               </p>
               <ul className="mt-4 space-y-2.5 text-sm text-white/60">
-                <Cross>Ejercicios sueltos que aburren a la semana.</Cross>
-                <Cross>Contenido traducido, pensado en otro idioma.</Cross>
-                <Cross>El papá no sabe qué está pasando ahí adentro.</Cross>
+                <Cross>Mismo orden para todos.</Cross>
+                <Cross>Porcentaje de aciertos sin nivel de confianza.</Cross>
+                <Cross>Más práctica del síntoma, no de la causa.</Cross>
               </ul>
             </div>
           </Reveal>
@@ -61,10 +55,10 @@ export default function Differentiator() {
             <div className="h-full rounded-4xl bg-honey p-6 shadow-glow">
               <p className="font-display text-lg font-semibold text-ink">Razonor</p>
               <ul className="mt-4 space-y-2.5 text-sm text-ink">
-                <Check>Una historia que pide el siguiente capítulo.</Check>
-                <Check>Escrito en español, pensado en español.</Check>
-                <Check>Panel de padres con progreso y recomendaciones.</Check>
-                <Check>Matemáticas, lógica, resolución de problemas y razonamiento espacial.</Check>
+                <Check>Diagnóstico que cambia según las respuestas.</Check>
+                <Check>Plan ordenado por prerrequisitos.</Check>
+                <Check>Dominio y confianza por separado.</Check>
+                <Check>Sesiones con explicación, práctica y repaso.</Check>
               </ul>
             </div>
           </Reveal>

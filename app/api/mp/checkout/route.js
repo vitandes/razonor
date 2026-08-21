@@ -34,7 +34,10 @@ export async function POST(req) {
   } catch {
     body = {};
   }
-  const plan = body?.plan === "familiar" ? "familiar" : "individual";
+  if (body?.plan && body.plan !== "individual") {
+    return Response.json({ error: "plan_unavailable" }, { status: 400 });
+  }
+  const plan = "individual";
   const billing = body?.billing === "semestral" ? "semestral" : "monthly";
   const details = getPlanDetails(plan, billing);
   // Device ID (antifraude de MP) para mejorar la aprobación.
@@ -105,7 +108,7 @@ export async function POST(req) {
             id: `${plan}-${billing}`,
             title: `Razonor ${details.label} (${billing === "semestral" ? "semestral" : "mensual"})`,
             description:
-              "Acceso a Razonor, retos de lógica y misterio para niños de 7 a 12 años.",
+              "Acceso a Razonor, diagnóstico matemático y plan personalizado.",
             category_id: "learnings",
             quantity: 1,
             unit_price: details.amount,

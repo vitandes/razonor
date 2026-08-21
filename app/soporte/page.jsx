@@ -4,7 +4,7 @@ import { HAS_TRIAL, TRIAL_LABEL } from "@/lib/trial";
 export const metadata = {
   title: "Soporte — Razonor",
   description:
-    "Ayuda con tu cuenta, tu suscripción de Mercado Pago y el uso de Razonor.",
+    "Ayuda con tu cuenta, tu diagnóstico matemático, tu plan y tu suscripción de Razonor.",
 };
 
 export default function Soporte() {
@@ -16,16 +16,16 @@ export default function Soporte() {
       <LegalSection heading="Empezar con Razonor">
         <p>
           {HAS_TRIAL
-            ? `Crea tu cuenta, agrega el perfil de tu hijo (nombre o apodo y edad) y elige un plan: la prueba gratis de ${TRIAL_LABEL} empieza al registrar tu medio de pago, y el primer cobro solo ocurre cuando termina.`
-            : "Crea tu cuenta, agrega el perfil de tu hijo (nombre o apodo y edad), elige un plan y empieza con el primer caso."}
+            ? `Completa el onboarding y crea tu cuenta. Puedes elegir el plan aunque el estudiante no esté contigo; el diagnóstico matemático se puede hacer después. La prueba gratis de ${TRIAL_LABEL} empieza al registrar tu medio de pago, y el primer cobro solo ocurre cuando termina.`
+            : "Completa el onboarding y crea tu cuenta. Puedes elegir el plan aunque el estudiante no esté contigo; cuando estén juntos, hará el diagnóstico para generar su ruta personalizada."}
         </p>
       </LegalSection>
 
       <LegalSection heading="Cómo veo el progreso de mi hijo">
         <p>
-          En tu panel de padres ves sus retos resueltos, su racha, los capítulos
-          completados, sus fortalezas y debilidades por habilidad, y una
-          recomendación en lenguaje claro.
+          En tu panel de padres ves el dominio y la evidencia por área, la
+          actividad reciente y el orden de habilidades recomendado. Las
+          estimaciones se actualizan con cada sesión.
         </p>
       </LegalSection>
 
@@ -38,12 +38,11 @@ export default function Soporte() {
         </p>
       </LegalSection>
 
-      <LegalSection heading="Cambiar de plan o de medio de pago">
+      <LegalSection heading="Cambiar el periodo o el medio de pago">
         <p>
-          Puedes pasar del plan Individual al Familiar (o al revés) cuando
-          quieras; el cambio aplica en tu siguiente renovación. El pago con
-          tarjeta se gestiona de forma segura dentro de Mercado Pago al momento
-          de suscribirte.
+          Puedes elegir facturación mensual o semestral. El cambio se aplica en
+          la siguiente renovación. El pago con tarjeta se gestiona de forma
+          segura con el proveedor de pagos disponible en tu país.
         </p>
       </LegalSection>
 

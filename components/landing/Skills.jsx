@@ -1,36 +1,47 @@
 import Reveal from "@/components/landing/Reveal";
 
-// Las habilidades que entrena Razonor (informe, sección 5: mecánicas de juego).
-// Reemplaza a la sección de "niveles de comprensión" del producto anterior.
-
 const SKILLS = [
   {
-    emoji: "🧮",
-    name: "Matemáticas",
+    emoji: "N₁",
+    name: "Números y operaciones",
     dot: "bg-teal",
-    parent: "¿Entiende los números o solo repite el procedimiento?",
-    desc: "Conceptos, operaciones y sentido numérico aplicados a situaciones que exigen comprender el porqué.",
+    parent: "6 habilidades",
+    desc: "Valor posicional, naturales, decimales, enteros y orden de operaciones.",
   },
   {
-    emoji: "🧩",
-    name: "Lógica",
+    emoji: "½",
+    name: "Fracciones",
     dot: "bg-grape",
-    parent: "¿Puede detectar la regla y explicar su estrategia?",
-    desc: "Patrones, secuencias, relaciones, clasificación, analogías y deducciones.",
+    parent: "6 habilidades",
+    desc: "Significado, equivalencia, comparación, operaciones y conversión a decimales.",
   },
   {
-    emoji: "🔎",
-    name: "Resolución de problemas",
+    emoji: "%",
+    name: "Razones y porcentajes",
     dot: "bg-honey",
-    parent: "¿Sabe convertir la información en una estrategia?",
-    desc: "Interpretar datos, elegir operaciones, descartar información y resolver problemas de varios pasos.",
+    parent: "5 habilidades",
+    desc: "Tasas, proporciones, representaciones y aplicaciones de porcentajes.",
   },
   {
-    emoji: "🧭",
-    name: "Razonamiento espacial",
+    emoji: "x",
+    name: "Álgebra",
     dot: "bg-coral",
-    parent: "¿Puede imaginar giros, posiciones y relaciones visuales?",
-    desc: "Figuras, orientación, rotaciones y composición espacial para comprender el mundo visualmente.",
+    parent: "7 habilidades",
+    desc: "Expresiones, ecuaciones, desigualdades y relaciones lineales.",
+  },
+  {
+    emoji: "△",
+    name: "Geometría y medición",
+    dot: "bg-teal",
+    parent: "3 habilidades",
+    desc: "Unidades, escala, área, volumen, ángulos y triángulos.",
+  },
+  {
+    emoji: "▥",
+    name: "Datos y probabilidad",
+    dot: "bg-grape",
+    parent: "3 habilidades",
+    desc: "Tablas, gráficas, centro, variabilidad y probabilidad básica.",
   },
 ];
 
@@ -40,24 +51,24 @@ export default function Skills() {
       <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
         <Reveal className="mx-auto max-w-2xl text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-wide text-grape">
-            Las cuatro habilidades centrales
+            El mapa curricular
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
-            Aprende a entender, razonar y resolver
+            30 habilidades conectadas por prerrequisitos
           </h2>
           <p className="mt-4 text-lg text-muted">
-            Cada sesión combina habilidades distintas según el perfil de tu hijo.
-            Los misterios y desafíos conservan la esencia especial de Razonor.
+            Cada resultado apunta a un fundamento específico. El razonamiento se
+            practica dentro de todas las áreas, no como una categoría separada.
           </p>
         </Reveal>
 
-        <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SKILLS.map((s, i) => (
             <Reveal key={s.name} delay={(i % 3) * 120}>
               <li className="group h-full rounded-4xl bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-soft">
                 <div className="flex items-center gap-2.5">
                   <span
-                    className="text-3xl transition group-hover:animate-wiggle"
+                    className="grid h-11 w-11 place-items-center rounded-xl bg-night font-display text-xl font-bold text-honey transition group-hover:-translate-y-1"
                     aria-hidden="true"
                   >
                     {s.emoji}

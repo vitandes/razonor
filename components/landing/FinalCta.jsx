@@ -8,15 +8,15 @@ export default function FinalCta({ market = "co" }) {
       <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
         <Reveal>
         <div className="night-sky relative overflow-hidden rounded-4xl px-6 py-12 text-center shadow-soft sm:px-10 sm:py-14">
-          <div className="animate-floaty text-6xl" aria-hidden="true">
-            🔍
+          <div className="mx-auto grid h-20 w-20 place-items-center rounded-3xl bg-white/10 font-display text-3xl font-bold text-honey" aria-hidden="true">
+            x
           </div>
           <h2 className="mx-auto mt-5 max-w-2xl font-display text-3xl font-bold leading-tight text-white sm:text-4xl">
-            Prepara hoy una ruta de aprendizaje para tu hijo
+            Encuentra qué base matemática conviene fortalecer primero
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-white/70">
-            Tú nos cuentas su edad, objetivos e intereses. Razonor prepara el
-            punto de partida y se adapta cuando tu hijo comienza a practicar.
+            Completa el onboarding ahora. Si el estudiante está contigo, recibirá
+            su primera oportunidad; si no, puedes dejar listo el acceso y hacer el diagnóstico después.
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-3">
@@ -24,7 +24,7 @@ export default function FinalCta({ market = "co" }) {
           </div>
 
           <p className="mt-6 text-sm text-white/60">
-            Sin prueba inicial · Configuración sencilla para padres
+            10 a 18 años · 15–18 preguntas · resultado inicial
           </p>
         </div>
         </Reveal>

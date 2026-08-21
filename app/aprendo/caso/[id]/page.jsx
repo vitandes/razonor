@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import CaseSession from "@/components/CaseSession";
+import SubscriptionGuard from "@/components/SubscriptionGuard";
 import { getCase, CASES } from "@/lib/world";
 
 export function generateStaticParams() {
@@ -10,8 +11,10 @@ export default function CasoPage({ params }) {
   const caseData = getCase(params.id);
   if (!caseData) notFound();
   return (
-    <main className="min-h-screen bg-cream">
-      <CaseSession caseData={caseData} />
-    </main>
+    <SubscriptionGuard>
+      <main className="min-h-screen bg-cream">
+        <CaseSession caseData={caseData} />
+      </main>
+    </SubscriptionGuard>
   );
 }

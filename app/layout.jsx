@@ -41,7 +41,7 @@ const body = Nunito({
 export const metadata = {
   title: "Razonor — Matemáticas que enseñan a pensar",
   description:
-    "15 minutos al día para mejorar matemáticas, lógica y resolución de problemas con un plan adaptado a tu hijo.",
+    "Descubre tu nivel matemático, identifica vacíos y sigue un plan personalizado para mejorar.",
 };
 
 // Marca de Razonor aplicada a los componentes de Clerk (login/registro).

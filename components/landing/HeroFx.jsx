@@ -2,8 +2,8 @@
 
 import { useRef } from "react";
 
-// Capa de ambiente del hero: una "linterna" ámbar que sigue el mouse,
-// estrellas que titilan y pistas flotando. Todo decorativo (pointer-events
+// Capa de ambiente del hero: un halo ámbar que sigue el mouse,
+// puntos que titilan y símbolos matemáticos flotando. Todo es decorativo
 // none) — el contenido real va encima con z-10.
 const STARS = [
   { top: "12%", left: "8%", d: "0s" },
@@ -19,16 +19,16 @@ const STARS = [
 ];
 
 const CLUES = [
-  { emoji: "🔍", top: "16%", left: "4%", cls: "animate-floaty text-3xl", d: "0s" },
-  { emoji: "❓", top: "70%", left: "10%", cls: "animate-floaty text-2xl", d: "1.1s" },
-  { emoji: "🧩", top: "24%", right: "6%", cls: "animate-floaty text-2xl", d: "0.6s" },
-  { emoji: "🗝️", bottom: "12%", right: "10%", cls: "animate-floaty text-3xl", d: "1.7s" },
+  { emoji: "½", top: "16%", left: "4%", cls: "animate-floaty font-display text-3xl", d: "0s" },
+  { emoji: "%", top: "70%", left: "10%", cls: "animate-floaty font-display text-2xl", d: "1.1s" },
+  { emoji: "x", top: "24%", right: "6%", cls: "animate-floaty font-display text-3xl", d: "0.6s" },
+  { emoji: "△", bottom: "12%", right: "10%", cls: "animate-floaty font-display text-3xl", d: "1.7s" },
 ];
 
 export default function HeroFx() {
   const ref = useRef(null);
 
-  // La linterna se mueve directo al DOM (sin estado) para que sea fluida.
+  // El halo se mueve directo al DOM (sin estado) para que sea fluido.
   function onMove(e) {
     const layer = ref.current;
     if (!layer) return;
@@ -44,7 +44,7 @@ export default function HeroFx() {
       onMouseMove={onMove}
       aria-hidden="true"
     >
-      {/* linterna */}
+      {/* halo */}
       <div ref={ref} className="pointer-events-none absolute inset-0" />
 
       {/* estrellas que titilan */}
@@ -56,7 +56,7 @@ export default function HeroFx() {
         />
       ))}
 
-      {/* pistas flotando */}
+      {/* símbolos matemáticos */}
       {CLUES.map((c, i) => (
         <span
           key={i}

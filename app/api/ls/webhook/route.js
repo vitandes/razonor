@@ -23,7 +23,7 @@ export const runtime = "nodejs";
 
 function checkSignature(rawBody, signature) {
   const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
-  if (!secret) return { ok: true, skipped: true };
+  if (!secret) return { ok: false, reason: "missing webhook secret" };
   if (!signature) return { ok: false, reason: "no x-signature" };
   const computed = crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
   try {
@@ -67,11 +67,16 @@ export async function POST(req) {
     return Response.json({ error: "not_configured" }, { status: 503 });
   }
 
-  const { data: existing } = await supabase
+  const { data: existing, error: existingError } = await supabase
     .from("profiles")
     .select("subscription_status, subscribed_at, email, fb_data, country")
     .eq("user_id", userId)
     .maybeSingle();
+
+  if (existingError) {
+    console.error("[ls/webhook] error leyendo perfil", existingError);
+    return Response.json({ error: "db" }, { status: 502 });
+  }
 
   const now = new Date().toISOString();
   const row = { user_id: userId, mp_preapproval_id: `ls_${subId}`, updated_at: now };

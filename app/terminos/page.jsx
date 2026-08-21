@@ -16,14 +16,15 @@ export default function Terminos() {
           ? "Estas son las reglas para usar Razonor. Al crear una cuenta o iniciar la prueba gratis, aceptas estos términos."
           : "Estas son las reglas para usar Razonor. Al crear una cuenta o suscribirte, aceptas estos términos."
       }
-      updated="18 de julio de 2026"
+      updated="21 de agosto de 2026"
     >
       <LegalSection heading="Qué es Razonor">
         <p>
-          Razonor es una aplicación de retos de lógica y razonamiento dentro de
-          historias de misterio, para niños de 7 a 12 años. Un adulto crea y
-          administra la cuenta, y es responsable del uso que el niño hace de la
-          app.
+          Razonor es una plataforma de aprendizaje matemático personalizado para
+          estudiantes de 10 a 18 años. Usa un diagnóstico adaptativo y práctica
+          breve para estimar el dominio de habilidades, detectar vacíos y
+          recomendar una ruta. Un adulto administra la cuenta cuando el
+          estudiante es menor de edad.
         </p>
       </LegalSection>
 
@@ -79,9 +80,10 @@ export default function Terminos() {
 
       <LegalSection heading="Uso correcto">
         <p>
-          Razonor es para uso personal y familiar. No puedes revender el acceso,
-          copiar el contenido de los retos o las historias, ni intentar dañar o
-          vulnerar el servicio.
+          Razonor es para uso personal. No puedes revender el acceso, copiar el
+          contenido educativo ni intentar dañar o vulnerar el servicio. Los
+          resultados son estimaciones educativas y no sustituyen una evaluación
+          profesional o escolar formal.
         </p>
       </LegalSection>
 

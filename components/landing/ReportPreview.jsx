@@ -1,23 +1,19 @@
 import Reveal from "@/components/landing/Reveal";
 
-// Mockup del panel de padres (informe, sección 5): retos resueltos, racha,
-// capítulos, fortalezas/debilidades por habilidad y una recomendación en
-// lenguaje claro. Datos de ejemplo autocontenidos.
-
 const DEMO = {
   name: "Martina",
-  age: 9,
-  retos: 148,
-  racha: 12,
-  capitulos: "4 de 10",
+  age: 13,
+  retos: 5,
+  racha: 4,
+  capitulos: "2 de 4",
   habilidades: [
-    { name: "Matemáticas", val: 72, bar: "bg-teal" },
-    { name: "Lógica", val: 86, bar: "bg-grape" },
-    { name: "Resolución de problemas", val: 68, bar: "bg-honey" },
-    { name: "Razonamiento espacial", val: 61, bar: "bg-coral" },
+    { name: "Operaciones con enteros", val: 82, bar: "bg-teal" },
+    { name: "Equivalencia de fracciones", val: 58, bar: "bg-grape" },
+    { name: "Relaciones proporcionales", val: 46, bar: "bg-honey" },
+    { name: "Ecuaciones de un paso", val: 71, bar: "bg-coral" },
   ],
   recomendacion:
-    "Martina muestra una fortaleza en lógica 🧩. Esta semana practicará recorridos y giros visuales para fortalecer su razonamiento espacial.",
+    "Martina trabajará equivalencia de fracciones antes de continuar con relaciones proporcionales. Esa base explica dos de sus errores recientes.",
 };
 
 export default function ReportPreview() {
@@ -27,15 +23,14 @@ export default function ReportPreview() {
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <Reveal>
             <p className="font-display text-sm font-semibold uppercase tracking-wide text-honey-deep">
-              El panel de padres
+              Progreso explicable
             </p>
             <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-ink sm:text-4xl">
-              Tú ves exactamente qué está entrenando y cómo va
+              Ves qué domina, qué falta comprobar y qué sigue
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted">
-              Mientras tu hijo resuelve el misterio, tu panel traduce el juego a
-              lo que te importa: qué habilidades domina, cuáles le cuestan y qué
-              va a trabajar después.
+              El panel no confunde actividad con aprendizaje. Separa dominio,
+              cantidad de evidencia, errores recurrentes y prioridad del plan.
             </p>
             <ul className="mt-6 space-y-3 text-ink">
               <li className="flex items-start gap-2">
@@ -48,7 +43,7 @@ export default function ReportPreview() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="mt-0.5 text-teal" aria-hidden="true">✓</span>
-                Hasta 3 hijos por cuenta, cada uno con su propio progreso.
+                Explicación de por qué una habilidad aparece antes que otra.
               </li>
             </ul>
           </Reveal>
@@ -64,9 +59,9 @@ export default function ReportPreview() {
             </div>
 
             <div className="grid grid-cols-3 gap-3 px-6 py-6">
-              <Stat value={DEMO.retos} label="retos resueltos" />
+              <Stat value={DEMO.retos} label="sesiones" />
               <Stat value={`${DEMO.racha} días`} label="racha 🔥" />
-              <Stat value={DEMO.capitulos} label="capítulos" />
+              <Stat value={DEMO.capitulos} label="prioridades revisadas" />
             </div>
 
             <div className="space-y-4 border-t border-ink/5 px-6 py-6">

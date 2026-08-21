@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base visual de JSXGraph. Se mantiene aquí porque el paquete no exporta su
+   CSS como subruta, aunque sí incluye la hoja dentro de la distribución. */
+.jxgbox {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  touch-action: none;
+}
+
+.jxgbox svg text {
+  cursor: default;
+  user-select: none;
+}
+
+.JXGtext {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  font-family: var(--font-body), sans-serif;
+}
+
+.JXGinfobox,
+.JXG_navigation {
+  display: none;
+}
+
 :root {
   color-scheme: light;
 }

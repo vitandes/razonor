@@ -34,7 +34,7 @@ function mapStatus(mpStatus) {
 
 function checkSignature(req, signatureId) {
   const secret = process.env.MP_WEBHOOK_SECRET;
-  if (!secret) return { ok: true, skipped: true };
+  if (!secret) return { ok: false, reason: "missing webhook secret" };
   const sig = req.headers.get("x-signature") || "";
   const requestId = req.headers.get("x-request-id") || "";
   const parts = Object.fromEntries(
@@ -46,7 +46,17 @@ function checkSignature(req, signatureId) {
   const idForManifest = String(signatureId || "").toLowerCase();
   const manifest = `id:${idForManifest};request-id:${requestId};ts:${ts};`;
   const computed = crypto.createHmac("sha256", secret).update(manifest).digest("hex");
-  return { ok: computed === received, computed, received, manifest };
+  try {
+    const computedBuffer = Buffer.from(computed, "hex");
+    const receivedBuffer = Buffer.from(received, "hex");
+    return {
+      ok:
+        computedBuffer.length === receivedBuffer.length &&
+        crypto.timingSafeEqual(computedBuffer, receivedBuffer),
+    };
+  } catch {
+    return { ok: false, reason: "bad signature format" };
+  }
 }
 
 // Envía la compra a Meta (CAPI) y TikTok (Events API). event_id estable = dedup.
@@ -74,11 +84,16 @@ async function handlePreapproval(dataId, supabase) {
   if (!userId) return Response.json({ ignored: "no_external_reference" });
   if (!mapped) return Response.json({ ignored: "status" });
 
-  const { data: existing } = await supabase
+  const { data: existing, error: existingError } = await supabase
     .from("profiles")
     .select("subscription_status, subscribed_at, canceled_at, email, fb_data, country")
     .eq("user_id", userId)
     .maybeSingle();
+
+  if (existingError) {
+    console.error("[mp/webhook] error leyendo perfil (preapproval)", existingError);
+    return Response.json({ error: "db" }, { status: 502 });
+  }
 
   // Un cancel/pause SOLO conserva el acceso hasta fin de periodo si el usuario
   // YA era suscriptor activo (pagó). Si nunca se activó (ej. abrió el checkout,
@@ -153,11 +168,16 @@ async function handlePayment(dataId, supabase) {
   const end = new Date();
   end.setMonth(end.getMonth() + months);
 
-  const { data: existing } = await supabase
+  const { data: existing, error: existingError } = await supabase
     .from("profiles")
     .select("subscribed_at, email, fb_data, country")
     .eq("user_id", userId)
     .maybeSingle();
+
+  if (existingError) {
+    console.error("[mp/webhook] error leyendo perfil (payment)", existingError);
+    return Response.json({ error: "db" }, { status: 502 });
+  }
 
   const row = {
     user_id: userId,
@@ -218,7 +238,10 @@ export async function POST(req) {
   }
 
   const sig = checkSignature(req, queryId || dataId);
-  if (!sig.ok) console.warn("[mp/webhook] FIRMA no coincide (se procesa igual)", sig.reason || "");
+  if (!sig.ok) {
+    console.warn("[mp/webhook] FIRMA no coincide -> rechazado", sig.reason || "");
+    return Response.json({ error: "bad_signature" }, { status: 401 });
+  }
 
   const supabase = getSupabaseAdmin();
   if (!supabase) {

@@ -1,6 +1,6 @@
 // Abre el checkout de suscripción de Mercado Pago para el usuario logueado.
 //
-//   POST /api/mp/subscribe { plan: "individual"|"familiar", billing: "monthly"|"annual" }
+//   POST /api/mp/subscribe { plan: "individual", billing: "monthly"|"semestral" }
 //   -> { init_point }  (URL del checkout de MP a la que redirigimos al usuario)
 //
 // Creamos la suscripción por API SIN plan asociado (auto_recurring en línea) y
@@ -42,7 +42,10 @@ export async function POST(req) {
   } catch {
     body = {};
   }
-  const plan = body?.plan === "familiar" ? "familiar" : "individual";
+  if (body?.plan && body.plan !== "individual") {
+    return Response.json({ error: "plan_unavailable" }, { status: 400 });
+  }
+  const plan = "individual";
   const billing = body?.billing === "semestral" ? "semestral" : "monthly";
   const details = getPlanDetails(plan, billing);
   // Device ID (antifraude de MP) para mejorar la aprobación.

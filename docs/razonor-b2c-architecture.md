@@ -1,5 +1,7 @@
 # Adaptación B2C de Razonor
 
+> **Documento de referencia del producto anterior.** La propuesta aún no implementada para el nuevo producto de diagnóstico y matemáticas personalizadas está en [`razonor-matematicas-personalizadas-arquitectura.md`](./razonor-matematicas-personalizadas-arquitectura.md). Se conserva este archivo para entender la infraestructura y la migración incremental.
+
 ## Auditoría de la base existente
 
 ### Lo que se conserva

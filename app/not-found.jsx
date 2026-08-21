@@ -7,9 +7,9 @@ export default function NotFound() {
       <div>
         <Logo size={110} className="mx-auto" />
         <h1 className="mt-4 font-display text-2xl font-semibold text-ink">
-          Caso sin resolver: esta página no existe
+          Esta página no existe
         </h1>
-        <p className="mt-2 text-muted">Pero hay muchos misterios esperándote.</p>
+        <p className="mt-2 text-muted">Volvamos a tu ruta de aprendizaje.</p>
         <Link
           href="/"
           className="mt-6 inline-block rounded-full bg-honey px-6 py-3 font-semibold text-ink transition hover:bg-honey-deep hover:text-white"

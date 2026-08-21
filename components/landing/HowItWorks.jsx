@@ -2,24 +2,24 @@ import Reveal from "@/components/landing/Reveal";
 
 const STEPS = [
   {
-    emoji: "👨‍👩‍👧",
-    title: "Tú nos cuentas sobre él",
-    desc: "Respondes sobre su edad, lo que quieres fortalecer, sus intereses y una rutina posible. Tu hijo no tiene que estar presente.",
+    emoji: "01",
+    title: "Configura el punto de partida",
+    desc: "Indica quién aprende, su edad, objetivo y cómo vive hoy las matemáticas.",
   },
   {
-    emoji: "🔍",
-    title: "Preparamos su ruta inicial",
-    desc: "Elegimos actividades acordes a su edad y a la prioridad que marcaste, sin exigir una evaluación antes de suscribirte.",
+    emoji: "02",
+    title: "Hazlo hoy o déjalo pendiente",
+    desc: "Si el estudiante está contigo, responde 15–18 preguntas. Si no, deja listo el acceso y completen el diagnóstico cuando estén juntos.",
   },
   {
-    emoji: "🗺️",
-    title: "Entrena 15 minutos",
-    desc: "Cada sesión mezcla matemáticas, lógica, problemas y un Desafío Razonor especial. La dificultad cambia con su desempeño.",
+    emoji: "03",
+    title: "Recibe una ruta ordenada",
+    desc: "Conoce una fortaleza, una oportunidad y la primera habilidad que conviene reparar antes de avanzar.",
   },
   {
-    emoji: "📈",
-    title: "Tú ves el progreso",
-    desc: "El panel traduce la práctica en avances por habilidad, tendencias y recomendaciones concretas para la siguiente semana.",
+    emoji: "04",
+    title: "Practica y comprueba",
+    desc: "Las sesiones diarias combinan explicación, aplicación, razonamiento y repaso; el plan cambia con nueva evidencia.",
   },
 ];
 
@@ -32,10 +32,10 @@ export default function HowItWorks() {
             Cómo funciona
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
-            Tú configuras el inicio. Razonor se adapta después
+            Del diagnóstico a una acción concreta
           </h2>
           <p className="mt-4 text-lg text-muted">
-            Puedes completar todo y elegir el plan aunque tu hijo no esté contigo.
+            No mostramos un nivel genérico: buscamos la causa y explicamos por qué se trabaja primero.
           </p>
         </Reveal>
 
@@ -56,7 +56,7 @@ export default function HowItWorks() {
                     {i + 1}
                   </span>
                   <span
-                    className="relative grid h-14 w-14 place-items-center rounded-2xl bg-night text-3xl shadow-card transition group-hover:rotate-6"
+                    className="relative grid h-14 w-14 place-items-center rounded-2xl bg-night font-display text-lg font-bold text-honey shadow-card transition group-hover:-translate-y-1"
                     aria-hidden="true"
                   >
                     {step.emoji}

@@ -10,48 +10,35 @@ import { HAS_TRIAL, TRIAL_LABEL, CTA_PLAN } from "@/lib/trial";
 import { trackMeta } from "@/lib/meta";
 import { trackTikTok } from "@/lib/tiktok";
 import PriceBlock from "@/components/PriceBlock";
+import { DIAGNOSTIC_VERSION } from "@/lib/diagnosticMeta";
 
-// El toggle elige el TIPO de plan; dentro de cada uno se muestran dos opciones
-// de cobro: Mensual y Semestral (cada 6 meses, con el mensaje de ahorro).
+// math_v1 ofrece un solo plan individual con dos periodos de cobro. La
+// infraestructura familiar se conserva únicamente para cuentas existentes.
 const PLANS = {
   individual: {
     id: "individual",
-    name: "Individual",
-    sub: "Para un niño o niña",
-    monthly: 49900,
-    semestral: 149900,
+    name: "Razonor",
+    sub: "Plan personalizado para un estudiante",
+    monthly: 29900,
+    semestral: 119900,
     perks: [
-      "Actividades adaptadas a su edad y nivel",
-      "Nuevos desafíos y sesiones personalizadas",
-      "Matemáticas, lógica y resolución de problemas",
-      "Panel de padres con progreso por habilidad",
-      "Dificultad que aumenta según su avance",
-      "Reportes de fortalezas y áreas por mejorar",
-    ],
-  },
-  familiar: {
-    id: "familiar",
-    name: "Familiar",
-    sub: "Hasta 3 hijos",
-    monthly: 69900,
-    semestral: 199900,
-    perks: [
-      "Todo lo del plan Individual",
-      "Hasta 3 perfiles de niños",
-      "Progreso separado por cada hijo",
+      "Diagnóstico de fortalezas y vacíos matemáticos",
+      "Plan ordenado por habilidades y prerrequisitos",
+      "Sesiones diarias adaptadas al progreso",
+      "Dominio y confianza visibles por habilidad",
+      "Repasos para consolidar lo aprendido",
+      "Seguimiento claro para estudiante y familia",
     ],
   },
 };
 
-// El mensual va destacado: su monto (49.900) aprueba mucho más fácil en
-// tarjetas débito que el semestral (149.900), que venía fallando por fondos.
+// El semestral se destaca por valor; el mensual queda como menor desembolso.
 const BILLINGS = [
-  { id: "monthly", label: "Mensual", period: "/mes", featured: true },
-  { id: "semestral", label: "Semestral", period: "/semestre" },
+  { id: "semestral", label: "Semestral", period: "/semestre", featured: true },
+  { id: "monthly", label: "Mensual", period: "/mes", featured: false },
 ];
 
 export default function Planes() {
-  const [planType, setPlanType] = useState("individual");
   const [loading, setLoading] = useState(null); // id del cobro en proceso
   const [error, setError] = useState(null);
   // Modal de confirmación de moneda (solo para usuarios de otros países).
@@ -63,11 +50,12 @@ export default function Planes() {
   });
   const { currency, localPrice, localFromUsd } = usePricing();
   const router = useRouter();
-  const { hydrated, subscription, name, onboarding } = useProgress();
+  const { hydrated, subscription, name, onboarding, diagnostic } = useProgress();
   const subscribed = hydrated && isSubscribed(subscription);
   const kid = hydrated && name ? name : null;
   const dailyMinutes = onboarding?.dailyMinutes || 15;
-  const plan = PLANS[planType];
+  const hasDiagnostic = diagnostic?.completed && diagnostic?.version === DIAGNOSTIC_VERSION;
+  const plan = PLANS.individual;
 
   // Checkout INTERNACIONAL: Lemon Squeezy en dólares (USD). El acceso lo
   // activa solo el webhook de LS.
@@ -188,11 +176,13 @@ export default function Planes() {
             </p>
           )}
           <h1 className="mt-1 font-display text-3xl font-semibold text-ink sm:text-4xl">
-            {kid
-              ? HAS_TRIAL
+            {hasDiagnostic
+              ? kid
                 ? `El plan de ${kid} está listo`
-                : `El plan de ${kid} está listo`
-              : "Su plan personalizado está listo"}
+                : "Su plan personalizado está listo"
+              : kid
+                ? `Deja listo el acceso de ${kid}`
+                : "Deja listo su acceso"}
           </h1>
           {HAS_TRIAL && (
             <p className="mt-4">
@@ -202,25 +192,17 @@ export default function Planes() {
             </p>
           )}
           <p className="mx-auto mt-3 max-w-md text-muted">
-            {dailyMinutes} minutos al día para mejorar matemáticas, lógica y resolución de
-            problemas. Cancela cuando quieras.
+            {hasDiagnostic
+              ? `${dailyMinutes} minutos al día para reparar vacíos, dominar fundamentos y avanzar con una ruta matemática clara.`
+              : `No necesitas tener al estudiante contigo para suscribirte. Cuando estén juntos, hará el diagnóstico y Razonor generará su ruta de ${dailyMinutes} minutos al día.`}
           </p>
-
-          {/* toggle: tipo de plan */}
-          <div className="mt-6 inline-flex items-center gap-1 rounded-full bg-white p-1 shadow-card">
-            {Object.values(PLANS).map((pl) => (
-              <button
-                key={pl.id}
-                onClick={() => setPlanType(pl.id)}
-                className={`rounded-full px-6 py-2 text-sm font-semibold transition ${
-                  planType === pl.id ? "bg-ink text-cream" : "text-muted"
-                }`}
-              >
-                {pl.name}
-              </button>
-            ))}
-          </div>
-          <p className="mt-2 text-sm text-muted">{plan.sub}</p>
+          {!hasDiagnostic && (
+            <div className="mx-auto mt-5 flex max-w-lg items-start gap-3 rounded-2xl bg-teal-soft px-4 py-3 text-left text-sm leading-relaxed text-teal">
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white font-bold">✓</span>
+              <p><strong>El diagnóstico queda pendiente.</strong> No inventaremos un nivel con respuestas del adulto; el estudiante lo completará al entrar a la app.</p>
+            </div>
+          )}
+          <p className="mt-3 text-sm font-semibold text-muted">{plan.sub}</p>
         </section>
 
         {/* dos opciones de cobro del plan elegido */}
@@ -228,7 +210,7 @@ export default function Planes() {
           {BILLINGS.map((b) => {
             const amount = b.id === "monthly" ? plan.monthly : plan.semestral;
             const perMonthEq = b.id === "semestral" ? Math.round(plan.semestral / 6) : null;
-            const savings = b.id === "semestral" ? "Ahorras 50%" : null;
+            const savings = b.id === "semestral" ? "Ahorras 33%" : null;
             return (
               <div
                 key={b.id}
@@ -238,7 +220,7 @@ export default function Planes() {
               >
                 {b.featured && (
                   <span className="absolute -top-3 left-6 rounded-full bg-honey px-3 py-1 text-xs font-semibold text-ink">
-                    Recomendado
+                    Mejor valor
                   </span>
                 )}
                 <h2 className="font-display text-xl font-semibold text-ink">{b.label}</h2>

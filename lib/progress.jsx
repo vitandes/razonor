@@ -80,6 +80,8 @@ const EMPTY_PROFILE = {
   streak: 0,
   lastActive: null, // "YYYY-MM-DD"
   onboarding: {
+    role: null,
+    studentPresentNow: null,
     age: null,
     ageBand: null,
     primaryGoal: null,
@@ -90,10 +92,18 @@ const EMPTY_PROFILE = {
     done: false,
   },
   diagnostic: {
+    version: null,
     completed: false,
     completedAt: null,
     scores: null,
+    confidence: null,
+    plan: [],
     answers: [],
+  },
+  mathV1: {
+    mastery: {},
+    sessions: [],
+    lastSessionAt: null,
   },
   // --- Razonor (retos de misterio) ---
   skills: emptySkills(), // por habilidad: { correct, total }
@@ -163,6 +173,12 @@ function mergeProfile(parsed, id) {
     comp: { ...EMPTY_PROFILE.comp, ...base.comp },
     onboarding: { ...EMPTY_PROFILE.onboarding, ...(base.onboarding || {}) },
     diagnostic: { ...EMPTY_PROFILE.diagnostic, ...(base.diagnostic || {}) },
+    mathV1: {
+      ...EMPTY_PROFILE.mathV1,
+      ...(base.mathV1 || {}),
+      mastery: base.mathV1?.mastery || {},
+      sessions: base.mathV1?.sessions || [],
+    },
     bands: base.bands || {},
     maxLevel: Math.max(1, base.maxLevel || 1),
     report: { ...EMPTY_PROFILE.report, ...(base.report || {}) },
@@ -226,6 +242,39 @@ function mergeAccount(parsed) {
     },
     activeProfileId: id,
     profiles: { [id]: profile },
+  };
+}
+
+function profileHasSetup(profile) {
+  return Boolean(
+    profile?.onboarding?.done ||
+    profile?.name ||
+    profile?.diagnostic?.completed ||
+    profile?.mathV1?.sessions?.length,
+  );
+}
+
+// En el primer login la nube puede contener una cuenta recién creada y vacía,
+// mientras el navegador ya tiene el onboarding que el padre completó como
+// invitado. Conservamos ese perfil local solo cuando el remoto todavía no tiene
+// información real; después de eso, la nube vuelve a ser la fuente principal.
+function mergeRemoteAccount(remoteState, localAccount) {
+  const remote = mergeAccount(remoteState);
+  const remoteProfile = remote.profiles[remote.activeProfileId];
+  const localProfile = localAccount?.profiles?.[localAccount.activeProfileId];
+  if (profileHasSetup(remoteProfile) || !profileHasSetup(localProfile)) return remote;
+
+  const remoteId = remote.activeProfileId;
+  return {
+    ...remote,
+    profiles: {
+      ...remote.profiles,
+      [remoteId]: {
+        ...mergeProfile(localProfile, remoteId),
+        id: remoteId,
+        isPrimary: true,
+      },
+    },
   };
 }
 
@@ -316,9 +365,8 @@ export function storiesReadThisWeek(stories) {
 // cancelAtPeriodEnd=true y conserva el acceso hasta current_period_end; pasada
 // esa fecha, deja de tener acceso (la suscripción no se renovó).
 export function isSubscribed(subscription) {
-  // Bypass SOLO para desarrollo local: permite entrar a /aprendo (y demás
-  // pantallas con paywall) sin pasar por Mercado Pago, para revisar la app.
-  // Se activa con NEXT_PUBLIC_DEV_UNLOCK=1 en .env.local y NUNCA en producción.
+  // Atajo explícito para revisar la experiencia en `next dev` sin modificar
+  // la suscripción real. En builds de producción esta variable se ignora.
   if (
     process.env.NODE_ENV !== "production" &&
     process.env.NEXT_PUBLIC_DEV_UNLOCK === "1"
@@ -350,7 +398,7 @@ export function reportStatus(report) {
 const ProgressContext = createContext(null);
 
 export function ProgressProvider({ children }) {
-  const { isLoaded, isSignedIn, userId } = useAuth();
+  const { isLoaded, isSignedIn, userId, getToken } = useAuth();
   const [account, setAccount] = useState(EMPTY_ACCOUNT);
   const [hydrated, setHydrated] = useState(false);
   const [serverLoaded, setServerLoaded] = useState(false);
@@ -393,25 +441,32 @@ export function ProgressProvider({ children }) {
       return;
     }
 
+    // El acceso de pago nunca se confía al cache del navegador. Mientras la
+    // API no confirme una suscripción activa, la cuenta queda sin acceso.
+    setAccount((prev) => ({
+      ...prev,
+      subscription: { ...EMPTY_ACCOUNT.subscription },
+    }));
+
     // 2) traer el estado autoritativo de la nube. La SUSCRIPCIÓN siempre manda
     //    desde el servidor (columnas), no la fija el cliente.
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch("/api/state", { cache: "no-store" });
+        const headers = await clerkSessionHeaders(getToken);
+        const res = await fetch("/api/state", { cache: "no-store", headers });
         if (!cancelled && res.ok) {
           const { state: serverState, subscription } = await res.json();
           setAccount((prev) => {
-            const base = serverState ? mergeAccount(serverState) : prev;
-            if (!subscription) return base;
+            const base = serverState ? mergeRemoteAccount(serverState, prev) : prev;
             return {
               ...base,
               subscription: {
-                status: subscription.status || "none",
-                plan: subscription.plan ?? null,
+                status: subscription?.status || "none",
+                plan: subscription?.plan ?? null,
                 since: base.subscription?.since ?? null,
-                cancelAtPeriodEnd: !!subscription.cancelAtPeriodEnd,
-                currentPeriodEnd: subscription.currentPeriodEnd ?? null,
+                cancelAtPeriodEnd: !!subscription?.cancelAtPeriodEnd,
+                currentPeriodEnd: subscription?.currentPeriodEnd ?? null,
               },
             };
           });
@@ -425,7 +480,7 @@ export function ProgressProvider({ children }) {
     return () => {
       cancelled = true;
     };
-  }, [isLoaded, isSignedIn, userId]);
+  }, [isLoaded, isSignedIn, userId, getToken]);
 
   // persistir en localStorage en cada cambio
   useEffect(() => {
@@ -437,14 +492,17 @@ export function ProgressProvider({ children }) {
     if (!serverLoaded || !isSignedIn) return;
     clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
-      fetch("/api/state", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: accountRef.current }),
-      }).catch(() => {});
+      (async () => {
+        const headers = await clerkSessionHeaders(getToken, { "Content-Type": "application/json" });
+        await fetch("/api/state", {
+          method: "PUT",
+          headers,
+          body: JSON.stringify({ data: accountRef.current }),
+        });
+      })().catch(() => {});
     }, 1500);
     return () => clearTimeout(saveTimer.current);
-  }, [account, serverLoaded, isSignedIn]);
+  }, [account, serverLoaded, isSignedIn, getToken]);
 
   const actions = useMemo(() => {
     // Modifica SOLO el perfil activo (el niño seleccionado).
@@ -477,6 +535,8 @@ export function ProgressProvider({ children }) {
 
       saveOnboarding({
         name,
+        role,
+        studentPresentNow,
         age,
         ageBand,
         primaryGoal,
@@ -490,10 +550,18 @@ export function ProgressProvider({ children }) {
           name: name ? name.trim().slice(0, 24) : s.name,
           onboarding: {
             ...s.onboarding,
+            role: role ?? s.onboarding.role,
+            studentPresentNow: studentPresentNow ?? s.onboarding.studentPresentNow,
             age: age ?? s.onboarding.age,
             ageBand:
               ageBand ??
-              (age ? (Number(age) <= 9 ? "7-9" : "10-12") : s.onboarding.ageBand),
+              (age
+                ? Number(age) <= 12
+                  ? "10-12"
+                  : Number(age) <= 15
+                    ? "13-15"
+                    : "16-18"
+                : s.onboarding.ageBand),
             primaryGoal: primaryGoal ?? s.onboarding.primaryGoal,
             mathFeeling: mathFeeling ?? s.onboarding.mathFeeling,
             dailyMinutes: dailyMinutes ?? s.onboarding.dailyMinutes ?? 15,
@@ -504,16 +572,61 @@ export function ProgressProvider({ children }) {
         }));
       },
 
-      saveDiagnostic({ scores, answers = [] }) {
+      saveDiagnostic({ version = null, scores, confidence = null, plan = [], answers = [] }) {
         updateActive((s) => ({
           ...s,
           diagnostic: {
+            version,
             completed: true,
             completedAt: new Date().toISOString(),
             scores,
+            confidence,
+            plan,
             answers,
           },
         }));
+      },
+
+      finishMathSession({ skillId, results = [], minutes = 0 }) {
+        if (!skillId || !results.length) return;
+        updateActive((s) => {
+          const previous = s.mathV1?.mastery?.[skillId];
+          const diagnosticScore = Number(s.diagnostic?.scores?.[skillId] ?? 50) / 100;
+          let positiveEvidence = Number(previous?.positiveEvidence ?? 1.5 + diagnosticScore * 2);
+          let negativeEvidence = Number(previous?.negativeEvidence ?? 1.5 + (1 - diagnosticScore) * 2);
+          let directEvidence = Number(previous?.directEvidence ?? 2);
+
+          for (const result of results) {
+            const weight = result.level === 3 ? 1.25 : result.level === 2 ? 1 : 0.8;
+            if (result.correct) positiveEvidence += weight;
+            else negativeEvidence += weight;
+            directEvidence += weight;
+          }
+
+          const mastery = Math.round((positiveEvidence / (positiveEvidence + negativeEvidence)) * 100);
+          const confidence = Math.round(100 * (1 - Math.exp(-directEvidence / 5)));
+          const completedAt = new Date().toISOString();
+          const session = {
+            id: `math_${Date.now()}`,
+            skillId,
+            correct: results.filter((result) => result.correct).length,
+            total: results.length,
+            minutes,
+            completedAt,
+          };
+
+          return {
+            ...touchStreak(s),
+            mathV1: {
+              mastery: {
+                ...(s.mathV1?.mastery || {}),
+                [skillId]: { positiveEvidence, negativeEvidence, directEvidence, mastery, confidence, lastPracticedAt: completedAt },
+              },
+              sessions: [...(s.mathV1?.sessions || []), session].slice(-100),
+              lastSessionAt: completedAt,
+            },
+          };
+        });
       },
 
       finishSession({
@@ -725,7 +838,8 @@ export function ProgressProvider({ children }) {
       // "trialing", "none", ...) o null si no se pudo consultar.
       async refreshSubscription() {
         try {
-          const res = await fetch("/api/state", { cache: "no-store" });
+          const headers = await clerkSessionHeaders(getToken);
+          const res = await fetch("/api/state", { cache: "no-store", headers });
           if (!res.ok) return null;
           const { subscription } = await res.json();
           if (!subscription) return null;
@@ -810,7 +924,7 @@ export function ProgressProvider({ children }) {
         });
       },
     };
-  }, []);
+  }, [getToken]);
 
   const value = useMemo(() => {
     const list = profileList(account);
@@ -834,6 +948,15 @@ export function ProgressProvider({ children }) {
   }, [account, hydrated, serverLoaded, actions]);
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
+}
+
+async function clerkSessionHeaders(getToken, base = {}) {
+  try {
+    const token = await getToken();
+    return token ? { ...base, Authorization: `Bearer ${token}` } : base;
+  } catch {
+    return base;
+  }
 }
 
 export function useProgress() {

@@ -14,7 +14,7 @@ export default function Hero({ market = "co" }) {
         <div className="text-center md:text-left">
           <div className="animate-slidein">
             <span className="inline-flex items-center gap-2 rounded-full border border-honey/30 bg-honey/10 px-3 py-1 text-sm font-semibold text-honey">
-              🧠 Entrenamiento personalizado · 6 a 12 años
+              Diagnóstico adaptativo · 10 a 18 años
             </span>
           </div>
 
@@ -22,9 +22,9 @@ export default function Hero({ market = "co" }) {
             className="mt-4 animate-slidein font-display text-4xl font-bold leading-tight text-white sm:text-5xl"
             style={{ animationDelay: "120ms" }}
           >
-            Matemáticas que{" "}
+            Descubre tu nivel real de{" "}
             <span className="relative whitespace-nowrap text-honey">
-              enseñan a pensar
+              matemáticas
               {/* subrayado a mano alzada */}
               <svg
                 viewBox="0 0 220 14"
@@ -47,8 +47,8 @@ export default function Hero({ market = "co" }) {
             className="mx-auto mt-5 max-w-xl animate-slidein text-lg leading-relaxed text-white/70 md:mx-0"
             style={{ animationDelay: "240ms" }}
           >
-            15 minutos al día para mejorar matemáticas, lógica y resolución de
-            problemas con un plan adaptado a tu hijo.
+            Identifica qué fundamentos están frenando tu avance y sigue un plan
+            personalizado para mejorarlos en el orden correcto.
           </p>
 
           <div
@@ -63,13 +63,12 @@ export default function Hero({ market = "co" }) {
             style={{ animationDelay: "480ms" }}
           >
             <span className="text-sm text-white/60">
-              ✓ Configura su ruta ahora; tu hijo puede empezar después
+              ✓ Puedes dejar listo el acceso aunque el estudiante no esté contigo
             </span>
           </div>
         </div>
 
-        {/* La demo ES el producto: un reto jugable en vez de una ilustración.
-            La tarjeta brilla como pista bajo la linterna. */}
+        {/* Vista previa del nuevo diagnóstico y su plan matemático. */}
         <div
           className="flex animate-slidein justify-center md:justify-end"
           style={{ animationDelay: "300ms" }}

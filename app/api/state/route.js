@@ -69,18 +69,16 @@ export async function PUT(req) {
     : null;
   const primaryName = primary?.name || state.name || null;
 
-  // La SUSCRIPCIÓN nunca se cambia desde el cliente: solo la fija el webhook de
-  // Mercado Pago (al pagar) o el dueño desde la base de datos. Aquí siempre
-  // conservamos lo que ya hay guardado, sin importar lo que mande el cliente.
-  // Así, devolverse del checkout sin pagar NO otorga acceso.
-  const { data: existingProfile } = await supabase
+  // La SUSCRIPCIÓN nunca se cambia desde esta ruta: solo la fijan los webhooks
+  // de pago. Omitir esas columnas en el upsert hace que Postgres conserve sus
+  // valores actuales y use sus defaults únicamente al crear un perfil nuevo.
+  const { data: existingProfile, error: profileError } = await supabase
     .from("profiles")
-    .select("subscription_status, subscription_plan, email")
+    .select("email")
     .eq("user_id", userId)
     .maybeSingle();
 
-  const newStatus = existingProfile?.subscription_status || "none";
-  const newPlan = existingProfile?.subscription_plan || null;
+  if (profileError) return Response.json({ error: "db" }, { status: 502 });
 
   // Correo de Clerk: solo lo pedimos la PRIMERA vez (si aún no está guardado),
   // para no llamar a Clerk en cada guardado.
@@ -99,8 +97,6 @@ export async function PUT(req) {
       email,
       name: primaryName,
       data: state,
-      subscription_status: newStatus,
-      subscription_plan: newPlan,
       updated_at: new Date().toISOString(),
     },
     { onConflict: "user_id" },
