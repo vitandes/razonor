@@ -1,8 +1,8 @@
 const SIGNALS = [
   { value: "15–18", label: "preguntas adaptativas" },
-  { value: "30", label: "habilidades fundamentales" },
-  { value: "10–15 min", label: "por sesión diaria" },
-  { value: "6", label: "áreas matemáticas" },
+  { value: "1", label: "prioridad inicial clara" },
+  { value: "10–15 min", label: "de práctica por sesión" },
+  { value: "30", label: "habilidades conectadas" },
 ];
 
 export default function TrustBar() {

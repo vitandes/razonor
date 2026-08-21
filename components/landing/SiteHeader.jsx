@@ -12,14 +12,14 @@ export default function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-7 text-sm font-semibold text-white/60 md:flex">
+          <a href="#resultado" className="transition hover:text-white">
+            Resultado
+          </a>
           <a href="#como-funciona" className="transition hover:text-white">
             Cómo funciona
           </a>
           <a href="#precios" className="transition hover:text-white">
             Precios
-          </a>
-          <a href="#opiniones" className="transition hover:text-white">
-            Progreso
           </a>
         </nav>
 

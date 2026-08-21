@@ -3,22 +3,21 @@ import Torn from "@/components/landing/Torn";
 
 export default function Differentiator() {
   return (
-    <section className="night-sky relative">
+    <section id="resultado" className="night-sky relative scroll-mt-20">
       {/* papel rasgado hacia las secciones vecinas (crema arriba, nube abajo) */}
       <Torn color="#F7F5F0" position="top" />
       <Torn color="#EDEFF6" />
       <div className="mx-auto max-w-6xl px-5 py-20 sm:py-24">
         <Reveal className="mx-auto max-w-2xl text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-wide text-honey">
-            Lo que hace distinto a Razonor
+            Del resultado a la decisión
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
-            No se limita a decir “correcto” o “incorrecto”
+            De un error visible a una decisión clara
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-white/70">
-            Razonor conecta cada respuesta con una habilidad, una posible causa
-            del error y los prerrequisitos que conviene comprobar. Así transforma
-            práctica dispersa en una decisión clara sobre qué estudiar después.
+            Razonor no se limita a marcar una respuesta. La conecta con una habilidad,
+            una posible causa y el fundamento que conviene comprobar antes de avanzar.
           </p>
         </Reveal>
 

@@ -29,12 +29,12 @@ export default function Home({ searchParams }) {
       <Hero market={market} />
       <TrustBar />
       <Problem market={market} />
-      <HowItWorks />
       <Differentiator />
-      <Skills />
+      <HowItWorks />
       <ReportPreview />
-      <Reviews />
       <Pricing />
+      <Skills />
+      <Reviews />
       <Faq market={market} />
       <FinalCta market={market} />
       <SiteFooter />

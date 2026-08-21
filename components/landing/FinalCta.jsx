@@ -12,11 +12,11 @@ export default function FinalCta({ market = "co" }) {
             x
           </div>
           <h2 className="mx-auto mt-5 max-w-2xl font-display text-3xl font-bold leading-tight text-white sm:text-4xl">
-            Encuentra qué base matemática conviene fortalecer primero
+            Deja de adivinar qué debería practicar
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-white/70">
-            Completa el onboarding ahora. Si el estudiante está contigo, recibirá
-            su primera oportunidad; si no, puedes dejar listo el acceso y hacer el diagnóstico después.
+            Deja listo el acceso hoy. Cuando estén juntos, el diagnóstico mostrará
+            qué fundamento conviene reforzar y por qué debe empezar allí.
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-3">
@@ -24,7 +24,7 @@ export default function FinalCta({ market = "co" }) {
           </div>
 
           <p className="mt-6 text-sm text-white/60">
-            10 a 18 años · 15–18 preguntas · resultado inicial
+            Puedes comenzar ahora aunque tu hijo no esté contigo.
           </p>
         </div>
         </Reveal>

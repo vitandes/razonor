@@ -14,7 +14,7 @@ export default function Hero({ market = "co" }) {
         <div className="text-center md:text-left">
           <div className="animate-slidein">
             <span className="inline-flex items-center gap-2 rounded-full border border-honey/30 bg-honey/10 px-3 py-1 text-sm font-semibold text-honey">
-              Diagnóstico adaptativo · 10 a 18 años
+              Ruta matemática personalizada · 10 a 18 años
             </span>
           </div>
 
@@ -22,9 +22,9 @@ export default function Hero({ market = "co" }) {
             className="mt-4 animate-slidein font-display text-4xl font-bold leading-tight text-white sm:text-5xl"
             style={{ animationDelay: "120ms" }}
           >
-            Descubre tu nivel real de{" "}
+            Descubre qué base matemática está frenando a{" "}
             <span className="relative whitespace-nowrap text-honey">
-              matemáticas
+              tu hijo
               {/* subrayado a mano alzada */}
               <svg
                 viewBox="0 0 220 14"
@@ -47,8 +47,8 @@ export default function Hero({ market = "co" }) {
             className="mx-auto mt-5 max-w-xl animate-slidein text-lg leading-relaxed text-white/70 md:mx-0"
             style={{ animationDelay: "240ms" }}
           >
-            Identifica qué fundamentos están frenando tu avance y sigue un plan
-            personalizado para mejorarlos en el orden correcto.
+            Razonor identifica el fundamento que necesita reforzar y organiza una
+            ruta personalizada para que avance sin practicar a ciegas.
           </p>
 
           <div
@@ -63,7 +63,7 @@ export default function Hero({ market = "co" }) {
             style={{ animationDelay: "480ms" }}
           >
             <span className="text-sm text-white/60">
-              ✓ Puedes dejar listo el acceso aunque el estudiante no esté contigo
+              ✓ Puedes dejar listo el acceso hoy; el diagnóstico se hace cuando estén juntos
             </span>
           </div>
         </div>

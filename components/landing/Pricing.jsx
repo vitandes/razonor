@@ -36,15 +36,15 @@ export default function Pricing() {
       <div className="mx-auto max-w-3xl px-5 py-16 sm:py-20">
         <Reveal className="text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-wide text-teal">
-            Un solo plan, dos formas de pago
+            Un plan individual, dos formas de pago
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-ink sm:text-4xl">
-            Una ruta clara para mejorar matemáticas
+            Elige cómo acompañar su progreso
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-lg text-muted">
             {HAS_TRIAL
               ? `Empieza con ${TRIAL_LABEL} gratis y conserva el progreso del diagnóstico.`
-              : "Incluye diagnóstico, plan personalizado, práctica y seguimiento."}
+              : "Ambas opciones incluyen diagnóstico, ruta personalizada, práctica y seguimiento."}
           </p>
           <p className="mt-3 text-sm font-semibold text-muted">{PLAN.sub}</p>
         </Reveal>
@@ -99,7 +99,7 @@ export default function Pricing() {
                         : "border border-ink/15 text-ink hover:border-ink/30"
                     }`}
                   >
-                    {CTA_PLAN}
+                    {HAS_TRIAL ? CTA_PLAN : `Elegir plan ${billing.label.toLowerCase()}`}
                   </Link>
                 </div>
               </Reveal>
