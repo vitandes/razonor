@@ -34,11 +34,12 @@ export default function AccessButtons({
         <Show when="signed-out">
           <Link
             href="/sign-in"
-            className={`hidden text-sm font-semibold transition sm:block ${
+            className={`whitespace-nowrap text-sm font-semibold transition ${
               dark ? "text-white/60 hover:text-white" : "text-muted hover:text-ink"
             }`}
           >
-            Iniciar sesión
+            <span className="sm:hidden">Ingresar</span>
+            <span className="hidden sm:inline">Iniciar sesión</span>
           </Link>
           <TrialButton size="sm" analyticsContext="header">{trialLabel}</TrialButton>
         </Show>
