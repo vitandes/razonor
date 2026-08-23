@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogoWordmark } from "@/components/Logo";
@@ -13,6 +13,7 @@ import {
   nextDiagnosticQuestion,
   scoreDiagnostic,
 } from "@/lib/diagnostic";
+import { trackProductEvent } from "@/lib/analytics";
 
 export default function DiagnosticPage() {
   const router = useRouter();
@@ -23,6 +24,17 @@ export default function DiagnosticPage() {
   const [answers, setAnswers] = useState([]);
   const [current, setCurrent] = useState(() => directStart ? nextDiagnosticQuestion([]) : null);
   const [selected, setSelected] = useState(null);
+  const startedAt = useRef(Date.now());
+
+  useEffect(() => {
+    if (!directStart) return;
+    startedAt.current = Date.now();
+    trackProductEvent(
+      "diagnostic_started",
+      { entry: "direct" },
+      { once: "session", onceKey: "diagnostic_started", metaEvent: "DiagnosticStarted" },
+    );
+  }, [directStart]);
 
   if (!progress.hydrated) return <Loading />;
   if ((!age || age < 10 || age > 18) && !directStart) {
@@ -42,6 +54,12 @@ export default function DiagnosticPage() {
     setSelected(null);
     setCurrent(nextDiagnosticQuestion([]));
     setStarted(true);
+    startedAt.current = Date.now();
+    trackProductEvent(
+      "diagnostic_started",
+      { entry: "intro" },
+      { once: "session", onceKey: "diagnostic_started", metaEvent: "DiagnosticStarted" },
+    );
   }
 
   function choose(option) {
@@ -77,6 +95,21 @@ export default function DiagnosticPage() {
       plan: result.plan,
       answers: finalAnswers,
     });
+    const seconds = Math.max(1, Math.round((Date.now() - startedAt.current) / 1000));
+    const durationBand = seconds < 600 ? "under_10m" : seconds < 900 ? "10_15m" : "over_15m";
+    trackProductEvent(
+      "diagnostic_completed",
+      {
+        question_count: finalAnswers.length,
+        duration_band: durationBand,
+        result_confidence: Math.round(
+          Object.values(result.confidence || {}).reduce((sum, value) => sum + value, 0) /
+          Math.max(1, Object.keys(result.confidence || {}).length),
+        ),
+      },
+      { metaEvent: "DiagnosticCompleted" },
+    );
+    trackProductEvent("plan_generated", { item_count: result.plan?.length || 0 });
     router.push("/resultados");
   }
 

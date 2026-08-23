@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import { LogoWordmark } from "@/components/Logo";
 import { useProgress } from "@/lib/progress";
+import { setAnalyticsJourney, trackProductEvent } from "@/lib/analytics";
 
 const AGES = Array.from({ length: 9 }, (_, index) => index + 10);
 const ROLES = [
@@ -69,8 +70,46 @@ export default function Onboarding() {
 
   const selectedGoal = GOALS.find((goal) => goal.id === primaryGoal);
 
+  function chooseRole(nextRole) {
+    setRole(nextRole);
+    setStudentPresentNow(nextRole === "self" ? true : null);
+    trackProductEvent(
+      "onboarding_started",
+      { role: nextRole },
+      { once: "session", metaEvent: "OnboardingStarted" },
+    );
+  }
+
+  function continueFlow() {
+    trackProductEvent("onboarding_step_completed", {
+      step_id: currentStep,
+      step_index: step + 1,
+      role: role || "unknown",
+    });
+    setStep((value) => value + 1);
+  }
+
   function finish() {
     const canDiagnoseNow = role === "self" || studentPresentNow === true;
+    const journey = role === "self" ? "self" : canDiagnoseNow ? "diagnostic_now" : "diagnostic_later";
+    const ageBand = age <= 12 ? "10-12" : age <= 15 ? "13-15" : "16-18";
+    setAnalyticsJourney(journey);
+    trackProductEvent("onboarding_step_completed", {
+      step_id: currentStep,
+      step_index: step + 1,
+      role,
+    });
+    trackProductEvent(
+      "onboarding_completed",
+      {
+        role,
+        journey,
+        age_band: ageBand,
+        goal: primaryGoal,
+        daily_minutes: dailyMinutes,
+      },
+      { metaEvent: "OnboardingCompleted" },
+    );
     progress.saveOnboarding({
       name: learnerName,
       role,
@@ -109,7 +148,7 @@ export default function Onboarding() {
               <ChoiceScreen eyebrow="Tu ruta matemática" title="¿Para quién es este plan?" description="Esto cambia el lenguaje del diagnóstico y la forma de mostrar el progreso.">
                 <div className="mt-7 grid gap-3">
                   {ROLES.map((item) => (
-                    <ChoiceButton key={item.id} selected={role === item.id} onClick={() => { setRole(item.id); setStudentPresentNow(item.id === "self" ? true : null); }}>
+                    <ChoiceButton key={item.id} selected={role === item.id} onClick={() => chooseRole(item.id)}>
                       <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-night font-display text-xl font-bold text-honey">{item.symbol}</span>
                       <span><span className="block">{item.title}</span><span className="mt-1 block text-sm font-medium text-muted">{item.description}</span></span>
                     </ChoiceButton>
@@ -191,7 +230,7 @@ export default function Onboarding() {
 
         <div className="flex gap-3 pb-2">
           {step > 0 && <button onClick={() => setStep((value) => value - 1)} className="rounded-full border-2 border-ink/10 bg-white px-5 py-3.5 font-bold text-ink transition hover:border-ink/25">← Atrás</button>}
-          <button disabled={!canContinue} onClick={step === flowSteps.length - 1 ? finish : () => setStep((value) => value + 1)} className="flex-1 rounded-full bg-honey px-6 py-3.5 font-display text-lg font-bold text-night shadow-card transition enabled:hover:-translate-y-0.5 enabled:hover:bg-honey-deep enabled:hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
+          <button disabled={!canContinue} onClick={step === flowSteps.length - 1 ? finish : continueFlow} className="flex-1 rounded-full bg-honey px-6 py-3.5 font-display text-lg font-bold text-night shadow-card transition enabled:hover:-translate-y-0.5 enabled:hover:bg-honey-deep enabled:hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
             {step === flowSteps.length - 1 ? (role === "dependent" && studentPresentNow === false ? "Dejar listo el acceso →" : "Ir al diagnóstico →") : "Continuar"}
           </button>
         </div>

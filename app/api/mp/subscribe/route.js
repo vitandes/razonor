@@ -18,6 +18,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { getMpToken, getPlanDetails, mpFetch } from "@/lib/mercadopago";
 import { getSupabaseAdmin } from "@/lib/supabase-server";
 import { FREE_TRIAL_DAYS, HAS_TRIAL } from "@/lib/trial";
+import { sanitizeAnalyticsContext } from "@/lib/analytics-server";
 
 export const runtime = "nodejs";
 
@@ -86,6 +87,7 @@ export async function POST(req) {
       user?.primaryPhoneNumber?.phoneNumber ||
       user?.phoneNumbers?.[0]?.phoneNumber ||
       null,
+    analytics: sanitizeAnalyticsContext(body?.analytics),
   };
   const supabase = getSupabaseAdmin();
   if (supabase) {

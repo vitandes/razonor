@@ -18,6 +18,7 @@ import { getSupabaseAdmin } from "@/lib/supabase-server";
 import { sendCapiPurchase } from "@/lib/meta-capi";
 import { sendTikTokPurchase } from "@/lib/tiktok-events";
 import { USD_PRICES } from "@/lib/lemonsqueezy";
+import { recordAnalyticsEvent } from "@/lib/analytics-server";
 
 export const runtime = "nodejs";
 
@@ -113,6 +114,20 @@ export async function POST(req) {
       };
       await sendCapiPurchase(conversion);
       await sendTikTokPurchase(conversion);
+      await recordAnalyticsEvent({
+        eventId: `purchase_ls_${subId}`,
+        eventName: "subscription_purchased",
+        userId,
+        context: existing?.fb_data?.analytics || {},
+        country: existing?.country || null,
+        properties: {
+          provider: "lemonsqueezy",
+          plan,
+          billing,
+          currency: "USD",
+          value,
+        },
+      });
     }
 
     console.log("[ls/webhook] OK active", userId, plan, billing);

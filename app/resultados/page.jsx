@@ -1,20 +1,42 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { Show, useAuth } from "@clerk/nextjs";
 import { LogoWordmark } from "@/components/Logo";
 import { useProgress, isSubscribed } from "@/lib/progress";
 import { DIAGNOSTIC_SKILLS, DIAGNOSTIC_VERSION, diagnosticInsight, lowestSkill } from "@/lib/diagnostic";
 import { SKILL_BY_ID, skillStatus } from "@/lib/mathCatalog";
+import { trackProductEvent } from "@/lib/analytics";
 
 export default function ResultsPage() {
   const progress = useProgress();
   const { isLoaded, isSignedIn } = useAuth();
-  if (!progress.hydrated) return <Loading />;
-
   const diagnostic = progress.diagnostic;
   const scores = diagnostic?.scores;
-  if (!diagnostic?.completed || diagnostic.version !== DIAGNOSTIC_VERSION || !scores) {
+  const validDiagnostic = Boolean(
+    diagnostic?.completed && diagnostic.version === DIAGNOSTIC_VERSION && scores,
+  );
+  const subscribed = Boolean(isLoaded && isSignedIn && isSubscribed(progress.subscription));
+
+  useEffect(() => {
+    if (!progress.hydrated || !validDiagnostic) return;
+    trackProductEvent("diagnostic_result_viewed", {}, {
+      once: "session",
+      onceKey: "diagnostic_result_viewed",
+    });
+    if (isLoaded && !subscribed) {
+      trackProductEvent(
+        "paywall_viewed",
+        { surface: "results" },
+        { once: "session", onceKey: "paywall_results", metaEvent: "PaywallViewed" },
+      );
+    }
+  }, [progress.hydrated, validDiagnostic, isLoaded, subscribed]);
+
+  if (!progress.hydrated) return <Loading />;
+
+  if (!validDiagnostic) {
     return (
       <main className="grid min-h-screen place-items-center bg-cream px-5 text-center">
         <div className="max-w-md">
@@ -32,8 +54,6 @@ export default function ResultsPage() {
   const plan = (diagnostic.plan || []).map((id) => SKILL_BY_ID[id]).filter(Boolean);
   const average = Math.round(Object.values(scores).reduce((sum, score) => sum + score, 0) / Math.max(1, Object.keys(scores).length));
   const evidence = Math.round(Object.values(diagnostic.confidence || {}).reduce((sum, score) => sum + score, 0) / Math.max(1, Object.keys(diagnostic.confidence || {}).length));
-  const subscribed = Boolean(isLoaded && isSignedIn && isSubscribed(progress.subscription));
-
   return (
     <main className="min-h-screen bg-[#f8f5ee] pb-16">
       <div className="mx-auto max-w-5xl px-5 py-6">

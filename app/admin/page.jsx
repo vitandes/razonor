@@ -4,6 +4,7 @@
 // en el servidor. No se cachea (datos siempre frescos).
 
 import { getSupabaseAdmin } from "@/lib/supabase-server";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -402,10 +403,16 @@ function Shell({ children }) {
   return (
     <main className="min-h-screen bg-cream pb-16">
       <div className="mx-auto max-w-3xl px-5 pt-8">
-        <h1 className="font-display text-2xl font-semibold text-ink">
-          Dashboard · Leotutor
-        </h1>
-        <p className="text-sm text-muted">Métricas de suscripción (privado).</p>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="font-display text-2xl font-semibold text-ink">Dashboard · Razonor</h1>
+            <p className="text-sm text-muted">Métricas privadas del negocio.</p>
+          </div>
+          <nav className="flex rounded-full bg-white p-1 shadow-card">
+            <Link href="/admin" className="rounded-full bg-night px-4 py-2 text-sm font-bold text-white">Suscripciones</Link>
+            <Link href="/admin/embudo" className="rounded-full px-4 py-2 text-sm font-bold text-muted">Embudo</Link>
+          </nav>
+        </div>
         <div className="mt-6">{children}</div>
       </div>
     </main>

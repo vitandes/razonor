@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogoWordmark } from "@/components/Logo";
@@ -11,6 +11,7 @@ import { trackMeta } from "@/lib/meta";
 import { trackTikTok } from "@/lib/tiktok";
 import PriceBlock from "@/components/PriceBlock";
 import { DIAGNOSTIC_VERSION } from "@/lib/diagnosticMeta";
+import { getAnalyticsContext, trackProductEvent } from "@/lib/analytics";
 
 // math_v1 ofrece un solo plan individual con dos periodos de cobro. La
 // infraestructura familiar se conserva únicamente para cuentas existentes.
@@ -57,6 +58,15 @@ export default function Planes() {
   const hasDiagnostic = diagnostic?.completed && diagnostic?.version === DIAGNOSTIC_VERSION;
   const plan = PLANS.individual;
 
+  useEffect(() => {
+    if (!hydrated || subscribed) return;
+    trackProductEvent(
+      "paywall_viewed",
+      { surface: "plans", has_diagnostic: Boolean(hasDiagnostic) },
+      { once: "session", onceKey: "paywall_plans", metaEvent: "PaywallViewed" },
+    );
+  }, [hydrated, subscribed, hasDiagnostic]);
+
   // Checkout INTERNACIONAL: Lemon Squeezy en dólares (USD). El acceso lo
   // activa solo el webhook de LS.
   async function handleStartIntl(planId, billing) {
@@ -67,11 +77,18 @@ export default function Planes() {
       const res = await fetch("/api/ls/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planId, billing }),
+        body: JSON.stringify({ plan: planId, billing, analytics: getAnalyticsContext() }),
       });
       if (res.ok) {
         const { url } = await res.json();
         if (url) {
+          trackProductEvent("checkout_started", {
+            provider: "lemonsqueezy",
+            plan: planId,
+            billing,
+            currency: "USD",
+            value: usdAmount,
+          });
           trackMeta("InitiateCheckout", {
             value: usdAmount,
             currency: "USD",
@@ -88,8 +105,10 @@ export default function Planes() {
           return;
         }
       }
+      trackProductEvent("checkout_failed", { provider: "lemonsqueezy", billing, reason: "no_url" });
       setError("No pudimos abrir el checkout. Inténtalo de nuevo.");
     } catch {
+      trackProductEvent("checkout_failed", { provider: "lemonsqueezy", billing, reason: "network" });
       setError("No pudimos conectar. Revisa tu conexión e inténtalo de nuevo.");
     }
     setLoading(null);
@@ -113,11 +132,19 @@ export default function Planes() {
           plan: planId,
           billing,
           deviceId: typeof window !== "undefined" ? window.MP_DEVICE_SESSION_ID : undefined,
+          analytics: getAnalyticsContext(),
         }),
       });
       if (res.ok) {
         const { init_point } = await res.json();
         if (init_point) {
+          trackProductEvent("checkout_started", {
+            provider: "mercadopago",
+            plan: planId,
+            billing,
+            currency: "COP",
+            value: amount,
+          });
           // Disparamos InitiateCheckout SOLO cuando MP de verdad abre (no en el
           // clic), para que la métrica y la optimización de ads sean fieles.
           trackMeta("InitiateCheckout", {
@@ -136,8 +163,10 @@ export default function Planes() {
           return;
         }
       }
+      trackProductEvent("checkout_failed", { provider: "mercadopago", billing, reason: "no_url" });
       setError("No pudimos abrir el checkout de Mercado Pago. Inténtalo de nuevo.");
     } catch {
+      trackProductEvent("checkout_failed", { provider: "mercadopago", billing, reason: "network" });
       setError("No pudimos conectar con Mercado Pago. Revisa tu conexión e inténtalo de nuevo.");
     }
     setLoading(null);

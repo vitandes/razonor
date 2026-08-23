@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { CTA_START } from "@/lib/trial";
+import { trackProductEvent } from "@/lib/analytics";
 
 // Estrellas de calificación. value = cuántas estrellas llenas (0–5).
 export function Stars({ value = 5, className = "" }) {
@@ -28,6 +31,7 @@ export function TrialButton({
   size = "md",
   variant = "honey",
   className = "",
+  analyticsContext = "landing",
 }) {
   // El CTA grande late con un halo ámbar para atraer la mirada.
   const pad =
@@ -43,6 +47,7 @@ export function TrialButton({
   return (
     <Link
       href="/onboarding"
+      onClick={() => trackProductEvent("cta_clicked", { context: analyticsContext })}
       className={`inline-flex items-center justify-center rounded-full font-display font-bold shadow-card transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey ${color} ${pad} ${className}`}
     >
       {children}

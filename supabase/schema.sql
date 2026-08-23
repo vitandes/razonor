@@ -39,3 +39,42 @@ alter table public.profiles enable row level security;
 -- Índice para consultar suscripciones activas (reportes, métricas, etc.).
 create index if not exists profiles_subscription_status_idx
   on public.profiles (subscription_status);
+
+-- Eventos propios del embudo. Una fila por hito; nunca guarda nombres,
+-- correos ni respuestas del diagnóstico. El service_role es el único acceso.
+create table if not exists public.analytics_events (
+  id                uuid primary key default gen_random_uuid(),
+  event_id          text not null unique,
+  event_name        text not null,
+  occurred_at       timestamptz not null default now(),
+  visitor_id        text,
+  session_id        text,
+  user_id           text,
+  journey           text,
+  path              text,
+  device_type       text,
+  country           text,
+  utm_source        text,
+  utm_medium        text,
+  utm_campaign      text,
+  utm_content       text,
+  utm_term          text,
+  fbclid            text,
+  user_agent        text,
+  product_version   text not null default 'math_v1',
+  properties        jsonb not null default '{}'::jsonb,
+  created_at        timestamptz not null default now()
+);
+
+alter table public.analytics_events enable row level security;
+
+create index if not exists analytics_events_occurred_idx
+  on public.analytics_events (occurred_at desc);
+create index if not exists analytics_events_name_occurred_idx
+  on public.analytics_events (event_name, occurred_at desc);
+create index if not exists analytics_events_visitor_idx
+  on public.analytics_events (visitor_id);
+create index if not exists analytics_events_user_idx
+  on public.analytics_events (user_id);
+create index if not exists analytics_events_campaign_idx
+  on public.analytics_events (utm_campaign, occurred_at desc);

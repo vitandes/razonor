@@ -10,6 +10,7 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { getCheckoutToken, getPlanDetails, mpFetch } from "@/lib/mercadopago";
 import { getSupabaseAdmin } from "@/lib/supabase-server";
+import { sanitizeAnalyticsContext } from "@/lib/analytics-server";
 
 export const runtime = "nodejs";
 
@@ -83,6 +84,7 @@ export async function POST(req) {
     fn: user?.firstName || null,
     ln: user?.lastName || null,
     ph: phone,
+    analytics: sanitizeAnalyticsContext(body?.analytics),
   };
   const supabase = getSupabaseAdmin();
   if (supabase) {

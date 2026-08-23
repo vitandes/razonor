@@ -40,7 +40,7 @@ export default function AccessButtons({
           >
             Iniciar sesión
           </Link>
-          <TrialButton size="sm">{trialLabel}</TrialButton>
+          <TrialButton size="sm" analyticsContext="header">{trialLabel}</TrialButton>
         </Show>
         <Show when="signed-in">
           <Link
@@ -63,7 +63,7 @@ export default function AccessButtons({
   return (
     <>
       <Show when="signed-out">
-        <TrialButton size="lg">{trialLabel}</TrialButton>
+        <TrialButton size="lg" analyticsContext={context}>{trialLabel}</TrialButton>
       </Show>
       <Show when="signed-in">
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">

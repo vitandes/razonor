@@ -15,6 +15,7 @@ import { mpFetch, getPlanDetails, getCheckoutToken } from "@/lib/mercadopago";
 import { getSupabaseAdmin } from "@/lib/supabase-server";
 import { sendCapiPurchase } from "@/lib/meta-capi";
 import { sendTikTokPurchase } from "@/lib/tiktok-events";
+import { recordAnalyticsEvent } from "@/lib/analytics-server";
 
 export const runtime = "nodejs";
 
@@ -64,6 +65,21 @@ async function fireConversions({ email, value, currency, eventId, externalId, co
   const conversion = { email, value, currency, eventId, externalId, contentId, country, fb };
   await sendCapiPurchase(conversion);
   await sendTikTokPurchase(conversion);
+  const [plan = "individual", billing = "monthly"] = String(contentId || "individual-monthly").split("-");
+  await recordAnalyticsEvent({
+    eventId: `purchase_${eventId}`,
+    eventName: "subscription_purchased",
+    userId: externalId,
+    context: fb?.analytics || {},
+    country,
+    properties: {
+      provider: "mercadopago",
+      plan,
+      billing,
+      currency,
+      value,
+    },
+  });
 }
 
 // ---------- Suscripción (tarjeta, recurrente) ----------

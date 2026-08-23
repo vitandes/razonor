@@ -9,6 +9,7 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { lsConfigured, getLsVariant, lsCreateCheckout } from "@/lib/lemonsqueezy";
 import { getSupabaseAdmin } from "@/lib/supabase-server";
+import { sanitizeAnalyticsContext } from "@/lib/analytics-server";
 
 export const runtime = "nodejs";
 
@@ -73,6 +74,7 @@ export async function POST(req) {
       user?.primaryPhoneNumber?.phoneNumber ||
       user?.phoneNumbers?.[0]?.phoneNumber ||
       null,
+    analytics: sanitizeAnalyticsContext(body?.analytics),
   };
   const supabase = getSupabaseAdmin();
   if (supabase) {

@@ -1,11 +1,13 @@
 import { SignUp } from "@clerk/nextjs";
 import Link from "next/link";
 import { LogoWordmark } from "@/components/Logo";
+import SignupTracker from "@/components/SignupTracker";
 
 export default function SignUpPage({ searchParams }) {
   const parentFlow = searchParams?.flow === "parent";
   return (
     <main className="min-h-screen bg-cream">
+      <SignupTracker flow={parentFlow ? "parent_without_student" : "after_diagnostic"} />
       <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-5 py-10">
         <Link href="/" className="mb-3 flex items-center">
           <LogoWordmark size={46} />

@@ -5,6 +5,7 @@ import "./globals.css";
 import { Baloo_2, Nunito } from "next/font/google";
 import { ProgressProvider } from "@/lib/progress";
 import PixelIdentify from "@/components/PixelIdentify";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 // Google Analytics (gtag.js). Configurable con NEXT_PUBLIC_GA_ID.
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-R2FD24XVJY";
@@ -75,6 +76,7 @@ export default function RootLayout({ children }) {
         />
         <ClerkProvider localization={esES} appearance={clerkAppearance}>
           <PixelIdentify />
+          <AnalyticsTracker />
           <ProgressProvider>{children}</ProgressProvider>
         </ClerkProvider>
 

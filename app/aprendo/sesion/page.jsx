@@ -11,6 +11,7 @@ import { DIAGNOSTIC_VERSION } from "@/lib/diagnosticMeta";
 import { CATEGORY_BY_ID, SKILL_BY_ID, initialPlanFromDiagnostic } from "@/lib/mathCatalog";
 import { PRACTICE_LESSONS } from "@/lib/mathPractice";
 import { buildAdaptivePracticeSet } from "@/lib/mathQuestionBank";
+import { trackProductEvent } from "@/lib/analytics";
 
 export default function DailyMathSession() {
   const progress = useProgress();
@@ -74,6 +75,11 @@ export default function DailyMathSession() {
 
     const minutes = Math.max(1, Math.round((Date.now() - startedAt.current) / 60000));
     progress.finishMathSession({ skillId: skill.id, results: nextResults, minutes });
+    trackProductEvent(
+      "first_practice_completed",
+      { skill_id: skill.id, question_count: nextResults.length, minutes },
+      { once: "local" },
+    );
     setResults(nextResults);
     setPhase("complete");
   }
@@ -110,7 +116,7 @@ export default function DailyMathSession() {
               <p className="text-base leading-8 text-ink/80">{lesson.explanation}</p>
               <div className="mt-6 rounded-3xl bg-honey-soft p-5"><p className="text-xs font-extrabold uppercase tracking-[0.15em] text-honey-deep">Ejemplo</p><p className="mt-2 text-base font-semibold leading-relaxed text-ink"><FractionText>{lesson.example}</FractionText></p></div>
               <div className="mt-4 rounded-3xl bg-teal-soft p-5"><p className="text-xs font-extrabold uppercase tracking-[0.15em] text-teal">Idea clave</p><p className="mt-2 text-base font-semibold leading-relaxed text-ink">{lesson.summary}</p></div>
-              <button disabled={loadingQuestions || !questions.length} onClick={() => { startedAt.current = Date.now(); setPhase("practice"); }} className="mt-7 w-full rounded-full bg-honey px-7 py-4 font-display text-lg font-bold text-night transition enabled:hover:bg-honey-deep enabled:hover:text-white disabled:opacity-50">{loadingQuestions ? "Preparando práctica…" : "Empezar práctica →"}</button>
+              <button disabled={loadingQuestions || !questions.length} onClick={() => { startedAt.current = Date.now(); trackProductEvent("first_practice_started", { skill_id: skill.id }, { once: "local" }); setPhase("practice"); }} className="mt-7 w-full rounded-full bg-honey px-7 py-4 font-display text-lg font-bold text-night transition enabled:hover:bg-honey-deep enabled:hover:text-white disabled:opacity-50">{loadingQuestions ? "Preparando práctica…" : "Empezar práctica →"}</button>
             </div>
           </section>
         </div>
