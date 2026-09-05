@@ -43,7 +43,7 @@ export default function Pricing() {
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-lg text-muted">
             {HAS_TRIAL
-              ? `Empieza con ${TRIAL_LABEL} gratis y conserva el progreso del diagnóstico.`
+              ? `Activa el acceso con ${TRIAL_LABEL} gratis y haz el diagnóstico después dentro de Aprendo.`
               : "Ambas opciones incluyen diagnóstico, ruta personalizada, práctica y seguimiento."}
           </p>
           <p className="mt-3 text-sm font-semibold text-muted">{PLAN.sub}</p>

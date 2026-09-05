@@ -15,8 +15,8 @@ export default function FinalCta({ market = "co" }) {
             Deja de adivinar qué debería practicar
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-white/70">
-            Deja listo el acceso hoy. Cuando estén juntos, el diagnóstico mostrará
-            qué fundamento conviene reforzar y por qué debe empezar allí.
+            Deja listos sus datos y activa el acceso hoy. Después, el estudiante hará
+            el diagnóstico dentro de Aprendo para saber por dónde empezar.
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-3">
@@ -24,7 +24,7 @@ export default function FinalCta({ market = "co" }) {
           </div>
 
           <p className="mt-6 text-sm text-white/60">
-            Puedes comenzar ahora aunque tu hijo no esté contigo.
+            La compra no depende de que tu hijo esté contigo en este momento.
           </p>
         </div>
         </Reveal>

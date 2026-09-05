@@ -2,22 +2,28 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { Show, useAuth } from "@clerk/nextjs";
 import { LogoWordmark } from "@/components/Logo";
-import { useProgress, isSubscribed } from "@/lib/progress";
+import SubscriptionGuard from "@/components/SubscriptionGuard";
+import { useProgress } from "@/lib/progress";
 import { DIAGNOSTIC_SKILLS, DIAGNOSTIC_VERSION, diagnosticInsight, lowestSkill } from "@/lib/diagnostic";
 import { SKILL_BY_ID, skillStatus } from "@/lib/mathCatalog";
 import { trackProductEvent } from "@/lib/analytics";
 
 export default function ResultsPage() {
+  return (
+    <SubscriptionGuard>
+      <ResultsContent />
+    </SubscriptionGuard>
+  );
+}
+
+function ResultsContent() {
   const progress = useProgress();
-  const { isLoaded, isSignedIn } = useAuth();
   const diagnostic = progress.diagnostic;
   const scores = diagnostic?.scores;
   const validDiagnostic = Boolean(
     diagnostic?.completed && diagnostic.version === DIAGNOSTIC_VERSION && scores,
   );
-  const subscribed = Boolean(isLoaded && isSignedIn && isSubscribed(progress.subscription));
 
   useEffect(() => {
     if (!progress.hydrated || !validDiagnostic) return;
@@ -25,14 +31,7 @@ export default function ResultsPage() {
       once: "session",
       onceKey: "diagnostic_result_viewed",
     });
-    if (isLoaded && !subscribed) {
-      trackProductEvent(
-        "paywall_viewed",
-        { surface: "results" },
-        { once: "session", onceKey: "paywall_results", metaEvent: "PaywallViewed" },
-      );
-    }
-  }, [progress.hydrated, validDiagnostic, isLoaded, subscribed]);
+  }, [progress.hydrated, validDiagnostic]);
 
   if (!progress.hydrated) return <Loading />;
 
@@ -113,32 +112,16 @@ export default function ResultsPage() {
               {plan.slice(0, 3).map((skill, index) => (
                 <div key={skill.id} className={`flex items-center gap-4 rounded-2xl border p-4 ${index === 0 ? "border-honey bg-honey-soft" : "border-ink/10 bg-cream"}`}>
                   <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full font-display font-bold ${index === 0 ? "bg-honey text-night" : "bg-ink/10 text-muted"}`}>{index + 1}</span>
-                  <div className="min-w-0 flex-1"><p className="font-bold text-ink">{index === 0 || subscribed ? skill.title : "Siguiente habilidad del plan"}</p><p className="mt-0.5 text-sm text-muted">{index === 0 ? "Primera habilidad recomendada" : subscribed ? `Paso ${index + 1} de tu ruta inicial` : "Se revela con el plan completo"}</p></div>
-                  {index > 0 && !subscribed && <span aria-hidden="true" className="text-muted">●●●</span>}
+                  <div className="min-w-0 flex-1"><p className="font-bold text-ink">{skill.title}</p><p className="mt-0.5 text-sm text-muted">{index === 0 ? "Primera habilidad recomendada" : `Paso ${index + 1} de tu ruta inicial`}</p></div>
                 </div>
               ))}
             </div>
           </div>
           <div className="flex flex-col justify-center border-t border-ink/5 bg-night p-7 text-center text-white lg:border-l lg:border-t-0 lg:p-9">
-            {subscribed ? (
-              <>
-                <p className="font-display text-2xl font-bold">Tu ruta ya está lista</p>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">La primera práctica quedó elegida con estas respuestas. Desde ahora, cada sesión seguirá ajustando el recorrido.</p>
-                <Link href="/aprendo" className="mt-6 inline-flex w-full justify-center rounded-full bg-honey px-6 py-3.5 font-display font-bold text-night transition hover:bg-honey-deep hover:text-white">Ir a mi dashboard</Link>
-                <Link href="/aprendo/sesion" className="mt-3 inline-flex w-full justify-center rounded-full border border-white/20 px-6 py-3.5 font-display font-bold text-white transition hover:bg-white/10">Empezar mi primera práctica</Link>
-              </>
-            ) : (
-              <>
-                <p className="font-display text-2xl font-bold">Desbloquea la ruta completa</p>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">Incluye sesiones diarias, repaso y seguimiento de dominio y confianza.</p>
-                <Show when="signed-out">
-                  <Link href="/sign-up" className="mt-6 inline-flex w-full justify-center rounded-full bg-honey px-6 py-3.5 font-display font-bold text-night transition hover:bg-honey-deep hover:text-white">Guardar resultado y continuar</Link>
-                </Show>
-                <Show when="signed-in">
-                  <Link href="/planes" className="mt-6 inline-flex w-full justify-center rounded-full bg-honey px-6 py-3.5 font-display font-bold text-night transition hover:bg-honey-deep hover:text-white">Ver opciones del plan</Link>
-                </Show>
-              </>
-            )}
+            <p className="font-display text-2xl font-bold">Tu ruta ya está lista</p>
+            <p className="mt-3 text-sm leading-relaxed text-white/70">La primera práctica quedó elegida con estas respuestas. Desde ahora, cada sesión seguirá ajustando el recorrido.</p>
+            <Link href="/aprendo" className="mt-6 inline-flex w-full justify-center rounded-full bg-honey px-6 py-3.5 font-display font-bold text-night transition hover:bg-honey-deep hover:text-white">Ir a mi dashboard</Link>
+            <Link href="/aprendo/sesion" className="mt-3 inline-flex w-full justify-center rounded-full border border-white/20 px-6 py-3.5 font-display font-bold text-white transition hover:bg-white/10">Empezar mi primera práctica</Link>
           </div>
         </section>
       </div>

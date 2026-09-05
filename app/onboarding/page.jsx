@@ -9,10 +9,6 @@ import { useProgress } from "@/lib/progress";
 import { setAnalyticsJourney, trackProductEvent } from "@/lib/analytics";
 
 const AGES = Array.from({ length: 9 }, (_, index) => index + 10);
-const ROLES = [
-  { id: "self", symbol: "x", title: "Estoy creando mi propio plan", description: "Yo responderé el diagnóstico y haré las sesiones." },
-  { id: "dependent", symbol: "+", title: "Soy madre, padre o tutor", description: "Estoy preparando el plan para un estudiante." },
-];
 const GOALS = [
   { id: "school", symbol: "01", label: "Mejorar el rendimiento escolar" },
   { id: "gaps", symbol: "02", label: "Recuperar bases que no quedaron claras" },
@@ -27,16 +23,13 @@ const FEELINGS = [
   { id: "unknown", label: "Todavía no lo sé" },
 ];
 const MINUTES = [10, 15];
-const SELF_STEPS = ["role", "name", "age", "goal", "feeling", "minutes"];
-const PARENT_STEPS = ["role", "presence", "name", "age", "goal", "feeling", "minutes"];
+const PARENT_STEPS = ["name", "age", "goal", "feeling", "minutes"];
 
 export default function Onboarding() {
   const router = useRouter();
   const { isSignedIn } = useAuth();
   const progress = useProgress();
   const [step, setStep] = useState(0);
-  const [role, setRole] = useState(null);
-  const [studentPresentNow, setStudentPresentNow] = useState(null);
   const [learnerName, setLearnerName] = useState("");
   const [age, setAge] = useState(null);
   const [primaryGoal, setPrimaryGoal] = useState(null);
@@ -45,8 +38,6 @@ export default function Onboarding() {
 
   useEffect(() => {
     if (!progress.hydrated) return;
-    setRole((value) => value || progress.onboarding?.role || null);
-    setStudentPresentNow((value) => value ?? progress.onboarding?.studentPresentNow ?? null);
     setLearnerName((value) => value || progress.name || "");
     setAge((value) => value ?? progress.onboarding?.age ?? null);
     setPrimaryGoal((value) => value ?? progress.onboarding?.primaryGoal ?? null);
@@ -54,13 +45,20 @@ export default function Onboarding() {
     setDailyMinutes((value) => progress.onboarding?.dailyMinutes ?? value);
   }, [progress.hydrated, progress.name, progress.onboarding]);
 
+  useEffect(() => {
+    if (!progress.serverLoaded) return;
+    trackProductEvent(
+      "onboarding_started",
+      { role: "dependent" },
+      { once: "session", onceKey: "onboarding_started", metaEvent: "OnboardingStarted" },
+    );
+  }, [progress.serverLoaded]);
+
   if (!progress.serverLoaded) return <Loading />;
 
-  const flowSteps = role === "dependent" ? PARENT_STEPS : SELF_STEPS;
+  const flowSteps = PARENT_STEPS;
   const currentStep = flowSteps[step] || flowSteps[0];
   const canContinue = {
-    role: Boolean(role),
-    presence: typeof studentPresentNow === "boolean",
     name: learnerName.trim().length > 0,
     age: Boolean(age),
     goal: Boolean(primaryGoal),
@@ -70,34 +68,23 @@ export default function Onboarding() {
 
   const selectedGoal = GOALS.find((goal) => goal.id === primaryGoal);
 
-  function chooseRole(nextRole) {
-    setRole(nextRole);
-    setStudentPresentNow(nextRole === "self" ? true : null);
-    trackProductEvent(
-      "onboarding_started",
-      { role: nextRole },
-      { once: "session", metaEvent: "OnboardingStarted" },
-    );
-  }
-
   function continueFlow() {
     trackProductEvent("onboarding_step_completed", {
       step_id: currentStep,
       step_index: step + 1,
-      role: role || "unknown",
+      role: "dependent",
     });
     setStep((value) => value + 1);
   }
 
   function finish() {
-    const canDiagnoseNow = role === "self" || studentPresentNow === true;
-    const journey = role === "self" ? "self" : canDiagnoseNow ? "diagnostic_now" : "diagnostic_later";
+    const journey = "diagnostic_later";
     const ageBand = age <= 12 ? "10-12" : age <= 15 ? "13-15" : "16-18";
     setAnalyticsJourney(journey);
     trackProductEvent("onboarding_step_completed", {
       step_id: currentStep,
       step_index: step + 1,
-      role,
+      role: "dependent",
     });
     trackProductEvent(
       "onboarding_completed",
@@ -112,8 +99,8 @@ export default function Onboarding() {
     );
     progress.saveOnboarding({
       name: learnerName,
-      role,
-      studentPresentNow: canDiagnoseNow,
+      role: "dependent",
+      studentPresentNow: false,
       age,
       primaryGoal,
       mathFeeling,
@@ -121,10 +108,6 @@ export default function Onboarding() {
       goals: primaryGoal ? [primaryGoal] : [],
       interests: [],
     });
-    if (canDiagnoseNow) {
-      router.push("/diagnostico");
-      return;
-    }
     router.push(isSignedIn ? "/planes" : "/sign-up?flow=parent");
   }
 
@@ -144,50 +127,17 @@ export default function Onboarding() {
 
         <section className="flex flex-1 items-center py-5 sm:py-7">
           <div className="w-full rounded-[2rem] bg-white p-6 shadow-card sm:p-8">
-            {currentStep === "role" && (
-              <ChoiceScreen eyebrow="Tu ruta matemática" title="¿Para quién es este plan?" description="Esto cambia el lenguaje del diagnóstico y la forma de mostrar el progreso.">
-                <div className="mt-7 grid gap-3">
-                  {ROLES.map((item) => (
-                    <ChoiceButton key={item.id} selected={role === item.id} onClick={() => chooseRole(item.id)}>
-                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-night font-display text-xl font-bold text-honey">{item.symbol}</span>
-                      <span><span className="block">{item.title}</span><span className="mt-1 block text-sm font-medium text-muted">{item.description}</span></span>
-                    </ChoiceButton>
-                  ))}
-                </div>
-              </ChoiceScreen>
-            )}
-
-            {currentStep === "presence" && (
-              <ChoiceScreen eyebrow="Sin frenar el proceso" title="¿El estudiante está contigo ahora?" description="Puedes dejar listo el acceso aunque hagan el diagnóstico en otro momento.">
-                <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                  <ChoiceButton selected={studentPresentNow === true} onClick={() => setStudentPresentNow(true)} compact>
-                    <span className="grid h-11 w-11 place-items-center rounded-xl bg-teal-soft text-xl font-bold text-teal">✓</span>
-                    <span>Está conmigo</span>
-                    <span className="text-sm font-medium text-muted">Haremos el diagnóstico al terminar.</span>
-                  </ChoiceButton>
-                  <ChoiceButton selected={studentPresentNow === false} onClick={() => setStudentPresentNow(false)} compact>
-                    <span className="grid h-11 w-11 place-items-center rounded-xl bg-grape-soft text-xl font-bold text-grape">→</span>
-                    <span>No está conmigo</span>
-                    <span className="text-sm font-medium text-muted">Prepararé el acceso y podrá hacerlo después.</span>
-                  </ChoiceButton>
-                </div>
-                <div className="mt-5 rounded-2xl bg-honey-soft p-4 text-sm leading-relaxed text-ink/75">
-                  No usaremos las respuestas del adulto para inventar un nivel. El diagnóstico siempre lo responderá el estudiante.
-                </div>
-              </ChoiceScreen>
-            )}
-
             {currentStep === "name" && (
-              <ChoiceScreen title={role === "self" ? "¿Cómo quieres que te llamemos?" : "¿Cómo quieres que llamemos al estudiante?"} description="Puedes usar un nombre o apodo. Solo se utiliza dentro de la experiencia.">
+              <ChoiceScreen eyebrow="Cuéntanos sobre tu hijo" title="¿Cómo quieres que llamemos al estudiante?" description="Puedes usar su nombre o un apodo. No necesitas que esté contigo para completar estos datos.">
                 <label className="mt-7 block text-sm font-bold text-ink">
-                  {role === "self" ? "Tu nombre o apodo" : "Nombre o apodo del estudiante"}
+                  Nombre o apodo del estudiante
                   <input value={learnerName} onChange={(event) => setLearnerName(event.target.value)} maxLength={24} autoFocus placeholder="Por ejemplo, Mateo" className="mt-2 w-full rounded-2xl border-2 border-ink/10 bg-cream px-4 py-4 text-lg font-medium outline-none transition focus:border-honey" />
                 </label>
               </ChoiceScreen>
             )}
 
             {currentStep === "age" && (
-              <ChoiceScreen title={role === "self" ? "¿Cuántos años tienes?" : `¿Cuántos años tiene ${learnerName.trim() || "el estudiante"}?`} description="La edad define el punto de entrada, pero el diagnóstico puede retroceder o avanzar según las respuestas.">
+              <ChoiceScreen title={`¿Cuántos años tiene ${learnerName.trim() || "el estudiante"}?`} description="Usaremos la edad para preparar el diagnóstico que hará después de activar el acceso.">
                 <div className="mt-7 grid grid-cols-3 gap-3 sm:grid-cols-5">
                   {AGES.map((value) => <ChoiceButton key={value} selected={age === value} onClick={() => setAge(value)} compact><span className="font-display text-2xl font-bold">{value}</span><span className="text-xs text-muted">años</span></ChoiceButton>)}
                 </div>
@@ -203,7 +153,7 @@ export default function Onboarding() {
             )}
 
             {currentStep === "feeling" && (
-              <ChoiceScreen title={role === "dependent" ? "Según lo que has observado, ¿cómo se sienten hoy las matemáticas?" : "¿Cómo se sienten hoy las matemáticas?"} description={role === "dependent" ? "Esta percepción prepara la experiencia, pero no reemplaza las respuestas del estudiante." : "No es una calificación. Solo ajusta el tono y el punto de entrada del diagnóstico."}>
+              <ChoiceScreen title="Según lo que has observado, ¿cómo se sienten hoy las matemáticas?" description="Tu percepción prepara la experiencia, pero no define el nivel ni reemplaza las respuestas del estudiante.">
                 <div className="mt-7 grid gap-3">
                   {FEELINGS.map((feeling) => <ChoiceButton key={feeling.id} selected={mathFeeling === feeling.id} onClick={() => setMathFeeling(feeling.id)}><span>{feeling.label}</span></ChoiceButton>)}
                 </div>
@@ -216,11 +166,7 @@ export default function Onboarding() {
                   {MINUTES.map((value) => <ChoiceButton key={value} selected={dailyMinutes === value} onClick={() => setDailyMinutes(value)} compact>{value === 15 && <span className="text-xs font-extrabold uppercase tracking-wide text-honey-deep">Recomendado</span>}<span className="font-display text-3xl font-bold">{value}</span><span className="text-sm text-muted">minutos al día</span></ChoiceButton>)}
                 </div>
                 <div className="mt-6 rounded-2xl bg-teal-soft p-4 text-sm leading-relaxed text-teal">
-                  {role === "dependent" && studentPresentNow === false ? (
-                    <><strong>Siguiente paso:</strong> dejarás listo el acceso y podrás pagar ahora. Cuando estén juntos, el estudiante hará el diagnóstico para generar su ruta.</>
-                  ) : (
-                    <><strong>Siguiente paso:</strong> un diagnóstico de 15 a 18 preguntas para encontrar la primera base que conviene fortalecer.</>
-                  )}
+                  <strong>Siguiente paso:</strong> crearás tu cuenta y elegirás el plan. Después de activar el acceso, el estudiante hará el diagnóstico desde Aprendo para generar su ruta.
                 </div>
                 <p className="mt-4 text-center text-sm font-semibold text-muted">Objetivo: {selectedGoal?.label}</p>
               </ChoiceScreen>
@@ -231,7 +177,7 @@ export default function Onboarding() {
         <div className="flex gap-3 pb-2">
           {step > 0 && <button onClick={() => setStep((value) => value - 1)} className="rounded-full border-2 border-ink/10 bg-white px-5 py-3.5 font-bold text-ink transition hover:border-ink/25">← Atrás</button>}
           <button disabled={!canContinue} onClick={step === flowSteps.length - 1 ? finish : continueFlow} className="flex-1 rounded-full bg-honey px-6 py-3.5 font-display text-lg font-bold text-night shadow-card transition enabled:hover:-translate-y-0.5 enabled:hover:bg-honey-deep enabled:hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
-            {step === flowSteps.length - 1 ? (role === "dependent" && studentPresentNow === false ? "Dejar listo el acceso →" : "Ir al diagnóstico →") : "Continuar"}
+            {step === flowSteps.length - 1 ? "Continuar para activar el acceso →" : "Continuar"}
           </button>
         </div>
       </div>

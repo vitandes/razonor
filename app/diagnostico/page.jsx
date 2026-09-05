@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogoWordmark } from "@/components/Logo";
+import SubscriptionGuard from "@/components/SubscriptionGuard";
 import AdaptiveQuestionBoard from "@/components/math/AdaptiveQuestionBoard";
 import FractionText from "@/components/math/FractionText";
 import { useProgress } from "@/lib/progress";
@@ -16,6 +17,14 @@ import {
 import { trackProductEvent } from "@/lib/analytics";
 
 export default function DiagnosticPage() {
+  return (
+    <SubscriptionGuard>
+      <DiagnosticContent />
+    </SubscriptionGuard>
+  );
+}
+
+function DiagnosticContent() {
   const router = useRouter();
   const progress = useProgress();
   const age = Number(progress.onboarding?.age);
@@ -135,7 +144,7 @@ export default function DiagnosticPage() {
               <button onClick={start} className="mt-7 w-full rounded-full bg-honey px-7 py-4 font-display text-lg font-bold text-night transition hover:-translate-y-0.5 hover:bg-honey-deep hover:text-white sm:w-auto">
                 Empezar diagnóstico
               </button>
-              <Link href="/" className="mt-4 block text-sm font-semibold text-muted hover:text-ink sm:ml-5 sm:inline-block">Continuar después</Link>
+              <Link href="/aprendo" className="mt-4 block text-sm font-semibold text-muted hover:text-ink sm:ml-5 sm:inline-block">Continuar después</Link>
             </div>
             <div className="relative overflow-hidden bg-night p-7 text-white sm:p-10">
               <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full border-[34px] border-honey/15" />

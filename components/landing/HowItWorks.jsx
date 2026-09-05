@@ -8,11 +8,16 @@ const STEPS = [
   },
   {
     emoji: "02",
-    title: "Completen el diagnóstico cuando puedan",
-    desc: "Cuando estén juntos, el estudiante responde 15–18 preguntas que se ajustan según sus respuestas.",
+    title: "Activa el acceso",
+    desc: "Crea tu cuenta y elige el plan. No necesitas tener al estudiante contigo para completar la compra.",
   },
   {
     emoji: "03",
+    title: "Hagan el diagnóstico en Aprendo",
+    desc: "Con el acceso activo, el estudiante responde 15–18 preguntas que cambian según sus respuestas.",
+  },
+  {
+    emoji: "04",
     title: "Sigue una ruta que se ajusta",
     desc: "Razonor elige qué reforzar primero y adapta las siguientes sesiones con cada nueva evidencia.",
   },
@@ -27,10 +32,10 @@ export default function HowItWorks() {
             Cómo funciona
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
-            De dejar listo el acceso a saber qué reforzar
+            Del registro del padre a una ruta personalizada
           </h2>
           <p className="mt-4 text-lg text-muted">
-            El padre puede comenzar hoy y el estudiante completa su parte cuando estén juntos.
+            Tú activas el acceso primero. El estudiante hace el diagnóstico después, dentro de Aprendo.
           </p>
         </Reveal>
 
@@ -40,7 +45,7 @@ export default function HowItWorks() {
             className="absolute left-0 right-0 top-10 hidden border-t-2 border-dashed border-ink/15 lg:block"
             aria-hidden="true"
           />
-          <ol className="mx-auto grid max-w-5xl gap-5 md:grid-cols-3">
+          <ol className="mx-auto grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((step, i) => (
               <Reveal key={step.title} delay={i * 140}>
                 <li className="group relative flex h-full flex-col rounded-4xl bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-soft">

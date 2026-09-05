@@ -51,6 +51,10 @@ export default function LearnHome() {
   if (progress.isFamiliar && picking) return <KidProfileGate onEnter={() => setPicking(false)} />;
 
   const hasMathDiagnostic = progress.diagnostic?.completed && progress.diagnostic?.version === DIAGNOSTIC_VERSION;
+  if (!hasMathDiagnostic) {
+    return <DiagnosticRequired progress={progress} onChangeProfile={() => setPicking(true)} />;
+  }
+
   const plan = hasMathDiagnostic ? initialPlanFromDiagnostic(progress.diagnostic, progress.mathV1?.mastery) : [];
   const current = plan[0];
   const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -186,4 +190,82 @@ function CategoryCard({ category, diagnostic }) {
 
 function WeekStat({ value, label }) {
   return <div className="rounded-2xl bg-cream px-2 py-3 text-center"><strong className="block font-display text-xl text-ink">{value}</strong><span className="mt-1 block text-[10px] font-bold text-muted">{label}</span></div>;
+}
+
+function DiagnosticRequired({ progress, onChangeProfile }) {
+  const name = progress.name || "el estudiante";
+  const initials = name.trim().slice(0, 2).toUpperCase();
+
+  return (
+    <main className="min-h-screen bg-[#f8f5ee] pb-12">
+      <div className="mx-auto max-w-5xl px-4 py-4 sm:px-6 sm:py-6">
+        <header className="flex items-center justify-between gap-3">
+          <Link href="/"><LogoWordmark size={34} /></Link>
+          <div className="flex items-center gap-2">
+            {progress.isFamiliar && (
+              <button type="button" onClick={onChangeProfile} className="hidden rounded-full border border-ink/10 bg-white px-4 py-2 text-sm font-semibold text-muted shadow-card sm:block">
+                Cambiar perfil
+              </button>
+            )}
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-grape font-display text-sm font-bold text-white shadow-card" title={`Perfil de ${name}`}>
+              {initials}
+            </span>
+          </div>
+        </header>
+
+        <section className="mt-6 overflow-hidden rounded-[2rem] bg-white shadow-soft lg:grid lg:grid-cols-[1.08fr_.92fr]">
+          <div className="relative p-6 sm:p-9 lg:p-11">
+            <div className="absolute -left-14 -top-16 h-44 w-44 rounded-full border-[30px] border-honey-soft" aria-hidden="true" />
+            <div className="relative">
+              <span className="inline-flex items-center gap-2 rounded-full bg-teal-soft px-3 py-1.5 text-xs font-extrabold uppercase tracking-wide text-teal">
+                <span aria-hidden="true">✓</span> Acceso activado
+              </span>
+              <p className="mt-6 text-sm font-extrabold uppercase tracking-[0.16em] text-honey-deep">Primer paso en Aprendo</p>
+              <h1 className="mt-2 max-w-xl font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
+                Falta el diagnóstico para crear la ruta de {name}
+              </h1>
+              <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted">
+                Ahora sí debe responderlo el estudiante. Sus respuestas permitirán elegir qué fundamento reforzar primero, sin hacerlo practicar a ciegas.
+              </p>
+
+              <Link href="/diagnostico?start=1" className="mt-7 inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-honey px-7 py-4 font-display text-lg font-bold text-night shadow-card transition hover:-translate-y-0.5 hover:bg-honey-deep hover:text-white sm:w-auto">
+                Empezar diagnóstico <span aria-hidden="true">→</span>
+              </Link>
+
+              <div className="mt-6 flex flex-wrap gap-2 text-sm font-semibold text-muted">
+                <span className="rounded-full bg-cream px-3 py-1.5">15–18 preguntas</span>
+                <span className="rounded-full bg-cream px-3 py-1.5">12–15 minutos</span>
+                <span className="rounded-full bg-cream px-3 py-1.5">Sin calificación</span>
+              </div>
+            </div>
+          </div>
+
+          <aside className="relative overflow-hidden bg-night p-6 text-white sm:p-9 lg:p-10">
+            <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full border-[34px] border-grape/25" aria-hidden="true" />
+            <p className="relative text-sm font-extrabold uppercase tracking-[0.16em] text-honey">Qué ocurrirá después</p>
+            <ol className="relative mt-6 space-y-4">
+              <DiagnosticStep number="1" title="Responde el estudiante" text="Las preguntas cambian de dificultad según sus respuestas." />
+              <DiagnosticStep number="2" title="Razonor encuentra la base" text="Identifica la habilidad previa que conviene fortalecer primero." />
+              <DiagnosticStep number="3" title="Se genera su ruta" text="El botón principal mostrará siempre la siguiente práctica recomendada." />
+            </ol>
+            <div className="relative mt-7 rounded-2xl border border-white/10 bg-white/10 p-4 text-sm leading-relaxed text-white/70">
+              ¿El estudiante no está contigo? Puede hacer este paso más tarde. El acceso ya quedó activo y no perderás la configuración.
+            </div>
+          </aside>
+        </section>
+      </div>
+    </main>
+  );
+}
+
+function DiagnosticStep({ number, title, text }) {
+  return (
+    <li className="flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-honey font-display font-bold text-night">{number}</span>
+      <div>
+        <p className="font-display text-lg font-bold">{title}</p>
+        <p className="mt-1 text-sm leading-relaxed text-white/65">{text}</p>
+      </div>
+    </li>
+  );
 }

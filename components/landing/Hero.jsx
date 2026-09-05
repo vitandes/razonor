@@ -63,7 +63,7 @@ export default function Hero({ market = "co" }) {
             style={{ animationDelay: "480ms" }}
           >
             <span className="text-sm text-white/60">
-              ✓ Puedes dejar listo el acceso hoy; el diagnóstico se hace cuando estén juntos
+              ✓ Activa el acceso hoy; el diagnóstico se hace después dentro de Aprendo
             </span>
           </div>
         </div>

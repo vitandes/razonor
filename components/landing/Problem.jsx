@@ -62,7 +62,7 @@ export default function Problem() {
           <Reveal>
             <div className="mt-7 flex flex-col items-start gap-3">
               <AccessButtons context="problem" trialLabel={CTA_PROBLEM} />
-              <p className="text-sm text-muted">Puedes hacer el onboarding aunque tu hijo no esté contigo.</p>
+              <p className="text-sm text-muted">Tú completas el onboarding y activas el acceso; tu hijo hará el diagnóstico después.</p>
             </div>
           </Reveal>
         </div>
