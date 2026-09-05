@@ -89,7 +89,7 @@ export default function Onboarding() {
     trackProductEvent(
       "onboarding_completed",
       {
-        role,
+        role: "dependent",
         journey,
         age_band: ageBand,
         goal: primaryGoal,
@@ -177,7 +177,7 @@ export default function Onboarding() {
         <div className="flex gap-3 pb-2">
           {step > 0 && <button onClick={() => setStep((value) => value - 1)} className="rounded-full border-2 border-ink/10 bg-white px-5 py-3.5 font-bold text-ink transition hover:border-ink/25">← Atrás</button>}
           <button disabled={!canContinue} onClick={step === flowSteps.length - 1 ? finish : continueFlow} className="flex-1 rounded-full bg-honey px-6 py-3.5 font-display text-lg font-bold text-night shadow-card transition enabled:hover:-translate-y-0.5 enabled:hover:bg-honey-deep enabled:hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
-            {step === flowSteps.length - 1 ? "Continuar para activar el acceso →" : "Continuar"}
+            Continuar
           </button>
         </div>
       </div>
