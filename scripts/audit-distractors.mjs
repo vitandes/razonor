@@ -1,9 +1,10 @@
 import { FRACTION_QUESTIONS } from "../lib/fractionQuestions.js";
 import { RATIO_QUESTIONS } from "../lib/ratioQuestions.js";
 
-// Audita los distractores de los bancos de fracciones y proporciones:
-// ninguna opción incorrecta puede valer lo mismo que la respuesta, no puede
-// haber opciones repetidas por valor y cada error necesita su propia explicación.
+// Audita los bancos de fracciones y proporciones: ninguna opción incorrecta
+// puede valer lo mismo que la respuesta, no puede haber opciones repetidas por
+// valor, cada error necesita su propia explicación y los textos visibles usan
+// coma decimal, «¿…?» y respuestas que no se repiten en toda una familia.
 
 const BANKS = { FRACTION_QUESTIONS, RATIO_QUESTIONS };
 const EXPECTED_OPTIONS = 4;
@@ -14,6 +15,7 @@ const TOLERANCE = 1e-4;
 
 const errors = [];
 const warnings = [];
+const familyAnswers = new Map();
 let distractorCount = 0;
 
 function parseNumber(token) {
@@ -42,8 +44,9 @@ function canonical(raw) {
       return { kind: "comparison", op, values: [a, b] };
     }
   }
-  if (text.includes(", ")) {
-    const values = text.split(", ").map(parseNumber);
+  const separator = text.includes("; ") ? "; " : text.includes(", ") ? ", " : null;
+  if (separator) {
+    const values = text.split(separator).map(parseNumber);
     if (values.every((value) => value != null)) return { kind: "list", values };
   }
   const number = parseNumber(text);
@@ -68,6 +71,24 @@ function equivalent(a, b) {
 
 const decimalStyle = (value) => (/\d\.\d/.test(value) ? "punto" : /\d,\d/.test(value) ? "coma" : null);
 const wordCount = (text) => text.trim().split(/\s+/).length;
+// "1.000" o "120.000" son miles; "2.5" o "0.625" son decimales con punto.
+const hasDotDecimal = (text) => /\d\.\d/.test(text.replace(/\b[1-9]\d{0,2}(?:\.\d{3})+\b/g, ""));
+// Un "?" que ocupa el lugar de un número ("?/12", "+ ? =") no es una pregunta.
+const asksWithoutOpening = (prompt) => prompt.replace(/\?\/\d+|[+=] \? [=+]/g, "").includes("?") && !prompt.includes("¿");
+
+// Todos los textos que el estudiante puede ver: enunciado, opciones, explicaciones, pasos y visual.
+function visibleTexts(question) {
+  const texts = [question.prompt, question.hint, question.answer, question.success];
+  for (const option of question.options || []) texts.push(option.value, option.feedback);
+  for (const step of question.steps || []) texts.push(step.eyebrow, step.title, step.text, step.equation);
+  const walk = (node) => {
+    if (typeof node === "string") texts.push(node);
+    else if (Array.isArray(node)) node.forEach(walk);
+    else if (node && typeof node === "object") Object.values(node).forEach(walk);
+  };
+  walk(question.visual);
+  return texts.filter((text) => typeof text === "string" && text);
+}
 
 for (const [bankName, questions] of Object.entries(BANKS)) {
   const ids = new Set();
@@ -128,7 +149,25 @@ for (const [bankName, questions] of Object.entries(BANKS)) {
     for (const step of question.steps || []) {
       if (BROKEN_TEXT.test(`${step.title} ${step.text} ${step.equation}`)) fail(`el paso «${step.eyebrow}» tiene texto roto.`);
     }
+
+    // Formato visible: en español el decimal va con coma y sin ruido de coma flotante.
+    for (const text of new Set(visibleTexts(question))) {
+      if (hasDotDecimal(text)) fail(`usa punto decimal en «${text}».`);
+      if (/\d[.,]\d{5,}/.test(text)) fail(`tiene demasiados decimales en «${text}».`);
+    }
+    // Cuatro cifras decimales en la respuesta suelen ser un periódico redondeado (6,6667 = 20/3).
+    if (/\d,\d{4}/.test(answer)) fail(`la respuesta «${answer}» parece un decimal periódico redondeado; elige datos que den un valor exacto.`);
+    if (asksWithoutOpening(question.prompt)) fail(`al enunciado le falta «¿»: «${question.prompt}».`);
+    if (/\d,\d/.test(answer) && answer.split(", ").length > 1) fail(`la lista «${answer}» mezcla la coma decimal con la coma separadora; usa «; ».`);
+
+    const family = `${question.skillId}/${question.family}`;
+    familyAnswers.set(family, [...(familyAnswers.get(family) || []), answer]);
   }
+}
+
+// Una familia cuya respuesta es siempre la misma se puede contestar sin pensar.
+for (const [family, answers] of familyAnswers) {
+  if (answers.length >= 3 && new Set(answers).size === 1) errors.push(`${family}: la respuesta es siempre «${answers[0]}».`);
 }
 
 const total = Object.values(BANKS).reduce((sum, questions) => sum + questions.length, 0);

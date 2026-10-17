@@ -33,14 +33,15 @@ function FractionLine({ numerator, denominator }) {
   );
 }
 
-function FractionSet({ selected, total }) {
+// hidden: la cantidad seleccionada es justo lo que se pregunta; no se muestra antes de responder.
+function FractionSet({ selected, total, hidden = false }) {
   return (
     <div className="text-center">
       <p className="text-sm font-extrabold uppercase tracking-wide text-grape">El conjunto completo es la unidad</p>
       <div className="mx-auto mt-5 grid max-w-sm grid-cols-5 gap-2 sm:grid-cols-8">
-        {Array.from({ length: total }).map((_, index) => <span key={index} className={`aspect-square rounded-xl border-2 ${index < selected ? "border-grape bg-grape" : "border-ink/10 bg-white"}`} />)}
+        {Array.from({ length: total }).map((_, index) => <span key={index} className={`aspect-square rounded-xl border-2 ${!hidden && index < selected ? "border-grape bg-grape" : "border-ink/10 bg-white"}`} />)}
       </div>
-      <p className="mt-4 font-display text-xl font-bold text-ink">{selected} seleccionadas de {total}</p>
+      <p className="mt-4 font-display text-xl font-bold text-ink">{hidden ? "?" : selected} seleccionadas de {total}</p>
     </div>
   );
 }
@@ -81,9 +82,14 @@ function Area({ fractions }) {
   );
 }
 
-function DecimalModel({ value, label }) {
-  const cells=value<=1?Math.round(value*100):Math.round((value%1)*100);
-  return <div className="text-center"><p className="text-sm font-extrabold uppercase tracking-wide text-grape">La cuadrícula completa representa 1</p><div className="mx-auto mt-5 grid aspect-square max-w-[250px] grid-cols-10 overflow-hidden rounded-2xl border-2 border-night">{Array.from({length:100}).map((_,index)=><span key={index} className={`border-b border-r border-night/10 ${index<cells?"bg-grape":"bg-white"}`} />)}</div><p className="mt-4 font-display text-xl font-bold text-ink"><FractionText>{label}</FractionText> · {cells} centésimas</p></div>;
+// Una cuadrícula llena por cada entero y otra con las centésimas restantes.
+// hidden: el decimal es lo que se pregunta; la cuadrícula queda vacía hasta responder.
+function DecimalModel({ value, label, hidden = false }) {
+  const wholes=Math.floor(value+1e-9);
+  const cells=Math.round((value-wholes)*100);
+  const grids=[...Array(wholes).fill(100),...(cells||!wholes?[cells]:[])];
+  const detail=hidden?"? centésimas":wholes?`${wholes} ${wholes===1?"entero":"enteros"} y ${cells} centésimas`:`${cells} centésimas`;
+  return <div className="text-center"><p className="text-sm font-extrabold uppercase tracking-wide text-grape">Cada cuadrícula completa representa 1</p><div className="mt-5 flex flex-wrap justify-center gap-3">{grids.map((filled,grid)=><div key={grid} className={`grid aspect-square w-full grid-cols-10 overflow-hidden rounded-2xl border-2 border-night ${grids.length>1?"max-w-[170px]":"max-w-[250px]"}`}>{Array.from({length:100}).map((_,index)=><span key={index} className={`border-b border-r border-night/10 ${!hidden&&index<filled?"bg-grape":"bg-white"}`} />)}</div>)}</div><p className="mt-4 font-display text-xl font-bold text-ink"><FractionText>{label}</FractionText> · {detail}</p></div>;
 }
 
 function ErrorModel({ claim, check }) {
@@ -92,15 +98,17 @@ function ErrorModel({ claim, check }) {
 
 export default function FractionReasoningBoard({question,step=0}){
   const v=question.visual;
+  // Antes de responder, ningún visual muestra el resultado que se pregunta.
+  const hideResult=step<3;
   let scene=null;
   if(v.type==="bar") scene=<FractionBar numerator={v.numerator} denominator={v.denominator}/>;
   if(v.type==="line") scene=<FractionLine numerator={v.numerator} denominator={v.denominator}/>;
-  if(v.type==="set") scene=<FractionSet selected={v.selected} total={v.total}/>;
+  if(v.type==="set") scene=<FractionSet selected={v.selected} total={v.total} hidden={hideResult&&`${v.selected}`===`${question.answer}`}/>;
   if(v.type==="compare-bars") scene=<CompareBars fractions={v.fractions}/>;
   if(v.type==="multi-bars") scene=<MultiBars fractions={v.fractions}/>;
   if(v.type==="operation") scene=<Operation visual={v} step={step} answer={question.answer}/>;
   if(v.type==="area") scene=<Area fractions={v.fractions}/>;
-  if(v.type==="decimal") scene=<DecimalModel value={v.value} label={v.label}/>;
+  if(v.type==="decimal") scene=<DecimalModel value={v.value} label={v.label} hidden={hideResult&&/\d,\d/.test(question.answer)}/>;
   if(v.type==="compare-mixed") scene=<CompareBars fractions={[v.fraction,[Math.round(v.decimal*100),100]]}/>;
   if(v.type==="multi-mixed") scene=<div className="grid gap-3 sm:grid-cols-3">{v.values.map((item,index)=><div key={index} className="rounded-2xl bg-white p-4 text-center font-display text-2xl font-bold text-ink shadow-sm"><FractionText>{item.s}</FractionText></div>)}</div>;
   if(v.type==="error") scene=<ErrorModel claim={v.claim} check={v.check}/>;
