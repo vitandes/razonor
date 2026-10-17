@@ -5,6 +5,7 @@ import TrustBar from "@/components/landing/TrustBar";
 import Problem from "@/components/landing/Problem";
 import HowItWorks from "@/components/landing/HowItWorks";
 import Differentiator from "@/components/landing/Differentiator";
+import DemoCta from "@/components/landing/DemoCta";
 import Skills from "@/components/landing/Skills";
 import ReportPreview from "@/components/landing/ReportPreview";
 import Reviews from "@/components/landing/Reviews";
@@ -30,6 +31,7 @@ export default function Home({ searchParams }) {
       <TrustBar />
       <Problem market={market} />
       <Differentiator />
+      <DemoCta />
       <HowItWorks />
       <ReportPreview />
       <Pricing />

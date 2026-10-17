@@ -7,23 +7,16 @@ import { useAuth } from "@clerk/nextjs";
 import { LogoWordmark } from "@/components/Logo";
 import { useProgress } from "@/lib/progress";
 import { setAnalyticsJourney, trackProductEvent } from "@/lib/analytics";
+import { HAS_TRIAL, TRIAL_LABEL } from "@/lib/trial";
 
 const AGES = Array.from({ length: 9 }, (_, index) => index + 10);
-const GOALS = [
-  { id: "school", symbol: "01", label: "Mejorar el rendimiento escolar" },
-  { id: "gaps", symbol: "02", label: "Recuperar bases que no quedaron claras" },
-  { id: "confidence", symbol: "03", label: "Ganar seguridad con las matemáticas" },
-  { id: "advanced", symbol: "04", label: "Prepararse para temas más avanzados" },
-];
-const FEELINGS = [
-  { id: "easy", label: "La mayoría de temas se sienten fáciles" },
-  { id: "mixed", label: "Depende mucho del tema" },
-  { id: "stuck", label: "A veces no sé por dónde empezar" },
-  { id: "gaps", label: "Siento que faltan varias bases" },
-  { id: "unknown", label: "Todavía no lo sé" },
-];
-const MINUTES = [10, 15];
-const PARENT_STEPS = ["name", "age", "goal", "feeling", "minutes"];
+// Onboarding mínimo para no frenar la activación: solo nombre + edad (la edad
+// elige la banda de ruta). El objetivo, la percepción y los minutos quedan con
+// valores por defecto y se afinan dentro de la app; el diagnóstico real lo hace
+// el estudiante después, dentro de la prueba.
+const PARENT_STEPS = ["name", "age"];
+const DEFAULT_GOAL = "gaps";
+const DEFAULT_MINUTES = 15;
 
 export default function Onboarding() {
   const router = useRouter();
@@ -66,8 +59,6 @@ export default function Onboarding() {
     minutes: Boolean(dailyMinutes),
   }[currentStep];
 
-  const selectedGoal = GOALS.find((goal) => goal.id === primaryGoal);
-
   function continueFlow() {
     trackProductEvent("onboarding_step_completed", {
       step_id: currentStep,
@@ -80,6 +71,8 @@ export default function Onboarding() {
   function finish() {
     const journey = "diagnostic_later";
     const ageBand = age <= 12 ? "10-12" : age <= 15 ? "13-15" : "16-18";
+    const goal = primaryGoal || DEFAULT_GOAL;
+    const minutes = dailyMinutes || DEFAULT_MINUTES;
     setAnalyticsJourney(journey);
     trackProductEvent("onboarding_step_completed", {
       step_id: currentStep,
@@ -92,8 +85,8 @@ export default function Onboarding() {
         role: "dependent",
         journey,
         age_band: ageBand,
-        goal: primaryGoal,
-        daily_minutes: dailyMinutes,
+        goal,
+        daily_minutes: minutes,
       },
       { metaEvent: "OnboardingCompleted" },
     );
@@ -102,10 +95,10 @@ export default function Onboarding() {
       role: "dependent",
       studentPresentNow: false,
       age,
-      primaryGoal,
+      primaryGoal: goal,
       mathFeeling,
-      dailyMinutes,
-      goals: primaryGoal ? [primaryGoal] : [],
+      dailyMinutes: minutes,
+      goals: [goal],
       interests: [],
     });
     router.push(isSignedIn ? "/planes" : "/sign-up?flow=parent");
@@ -137,38 +130,15 @@ export default function Onboarding() {
             )}
 
             {currentStep === "age" && (
-              <ChoiceScreen title={`¿Cuántos años tiene ${learnerName.trim() || "el estudiante"}?`} description="Usaremos la edad para preparar el diagnóstico que hará después de activar el acceso.">
+              <ChoiceScreen title={`¿Cuántos años tiene ${learnerName.trim() || "el estudiante"}?`} description="Usamos la edad para preparar su ruta. El diagnóstico lo hará el estudiante después, cuando pueda.">
                 <div className="mt-7 grid grid-cols-3 gap-3 sm:grid-cols-5">
                   {AGES.map((value) => <ChoiceButton key={value} selected={age === value} onClick={() => setAge(value)} compact><span className="font-display text-2xl font-bold">{value}</span><span className="text-xs text-muted">años</span></ChoiceButton>)}
                 </div>
-              </ChoiceScreen>
-            )}
-
-            {currentStep === "goal" && (
-              <ChoiceScreen title="¿Qué te gustaría lograr primero?" description="El objetivo ayuda a explicar el plan, pero no cambia los prerrequisitos matemáticos.">
-                <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                  {GOALS.map((goal) => <ChoiceButton key={goal.id} selected={primaryGoal === goal.id} onClick={() => setPrimaryGoal(goal.id)}><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-cream font-display text-sm font-bold text-grape">{goal.symbol}</span><span>{goal.label}</span></ChoiceButton>)}
-                </div>
-              </ChoiceScreen>
-            )}
-
-            {currentStep === "feeling" && (
-              <ChoiceScreen title="Según lo que has observado, ¿cómo se sienten hoy las matemáticas?" description="Tu percepción prepara la experiencia, pero no define el nivel ni reemplaza las respuestas del estudiante.">
-                <div className="mt-7 grid gap-3">
-                  {FEELINGS.map((feeling) => <ChoiceButton key={feeling.id} selected={mathFeeling === feeling.id} onClick={() => setMathFeeling(feeling.id)}><span>{feeling.label}</span></ChoiceButton>)}
-                </div>
-              </ChoiceScreen>
-            )}
-
-            {currentStep === "minutes" && (
-              <ChoiceScreen title="Elige una rutina realista" description="Razonor organizará explicación, práctica, razonamiento y repaso dentro de este tiempo.">
-                <div className="mt-7 grid grid-cols-2 gap-3">
-                  {MINUTES.map((value) => <ChoiceButton key={value} selected={dailyMinutes === value} onClick={() => setDailyMinutes(value)} compact>{value === 15 && <span className="text-xs font-extrabold uppercase tracking-wide text-honey-deep">Recomendado</span>}<span className="font-display text-3xl font-bold">{value}</span><span className="text-sm text-muted">minutos al día</span></ChoiceButton>)}
-                </div>
                 <div className="mt-6 rounded-2xl bg-teal-soft p-4 text-sm leading-relaxed text-teal">
-                  <strong>Siguiente paso:</strong> crearás tu cuenta y elegirás el plan. Después de activar el acceso, el estudiante hará el diagnóstico desde Aprendo para generar su ruta.
+                  <strong>Siguiente paso:</strong> {HAS_TRIAL
+                    ? `creas tu cuenta y activas la prueba de ${TRIAL_LABEL} gratis. No se cobra hoy y no necesitas al estudiante contigo.`
+                    : "creas tu cuenta y eliges el plan. No necesitas al estudiante contigo para activar el acceso."}
                 </div>
-                <p className="mt-4 text-center text-sm font-semibold text-muted">Objetivo: {selectedGoal?.label}</p>
               </ChoiceScreen>
             )}
           </div>

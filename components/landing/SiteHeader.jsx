@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LogoWordmark } from "@/components/Logo";
 import AccessButtons from "@/components/landing/AccessButtons";
-import { CTA_START } from "@/lib/trial";
+import { CTA_START, DEMO_HREF } from "@/lib/trial";
 
 export default function SiteHeader() {
   return (
@@ -12,9 +12,9 @@ export default function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-7 text-sm font-semibold text-white/60 md:flex">
-          <a href="#resultado" className="transition hover:text-white">
-            Resultado
-          </a>
+          <Link href={DEMO_HREF} className="text-honey transition hover:text-honey-deep">
+            Ver ejemplo
+          </Link>
           <a href="#como-funciona" className="transition hover:text-white">
             Cómo funciona
           </a>

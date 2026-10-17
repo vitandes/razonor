@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CTA_START } from "@/lib/trial";
+import { CTA_START, CTA_DEMO, DEMO_HREF } from "@/lib/trial";
 import { trackProductEvent } from "@/lib/analytics";
 
 // Estrellas de calificación. value = cuántas estrellas llenas (0–5).
@@ -48,8 +48,39 @@ export function TrialButton({
     <Link
       href="/onboarding"
       onClick={() => trackProductEvent("cta_clicked", { context: analyticsContext })}
-      className={`inline-flex items-center justify-center rounded-full font-display font-bold shadow-card transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey ${color} ${pad} ${className}`}
+      className={`inline-flex items-center justify-center whitespace-nowrap rounded-full font-display font-bold shadow-card transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey ${color} ${pad} ${className}`}
     >
+      {children}
+    </Link>
+  );
+}
+
+// CTA secundario hacia la demo interactiva pública. Deja que el padre pruebe la
+// experiencia real (sin login y sin el niño) antes de pedir datos o pago.
+// `dark`: estilos para fondos noche (hero/cierre oscuros).
+export function DemoButton({
+  children = CTA_DEMO,
+  size = "lg",
+  dark = false,
+  className = "",
+  analyticsContext = "demo",
+}) {
+  const pad =
+    size === "lg"
+      ? "px-8 py-4 text-lg"
+      : size === "sm"
+        ? "px-4 py-2.5 text-sm"
+        : "px-6 py-3.5 text-base";
+  const color = dark
+    ? "border-2 border-white/30 text-white hover:border-white/60 hover:bg-white/5"
+    : "border-2 border-ink/15 text-ink hover:border-ink/35";
+  return (
+    <Link
+      href={DEMO_HREF}
+      onClick={() => trackProductEvent("cta_clicked", { context: analyticsContext })}
+      className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-display font-bold transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-honey ${color} ${pad} ${className}`}
+    >
+      <span aria-hidden="true">▶</span>
       {children}
     </Link>
   );

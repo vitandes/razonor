@@ -1,8 +1,9 @@
 import AccessButtons from "@/components/landing/AccessButtons";
+import { DemoButton } from "@/components/landing/bits";
 import HeroReto from "@/components/landing/HeroReto";
 import HeroFx from "@/components/landing/HeroFx";
 import Torn from "@/components/landing/Torn";
-import { CTA_START_LONG } from "@/lib/trial";
+import { CTA_START_LONG, HAS_TRIAL, TRIAL_LABEL } from "@/lib/trial";
 
 export default function Hero({ market = "co" }) {
   return (
@@ -52,10 +53,11 @@ export default function Hero({ market = "co" }) {
           </p>
 
           <div
-            className="mt-7 flex animate-slidein flex-col items-center gap-3 md:items-start"
+            className="mt-7 flex animate-slidein flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center md:items-start md:justify-start"
             style={{ animationDelay: "360ms" }}
           >
             <AccessButtons context="hero" dark trialLabel={CTA_START_LONG} />
+            <DemoButton dark analyticsContext="hero_demo" />
           </div>
 
           <div
@@ -63,7 +65,9 @@ export default function Hero({ market = "co" }) {
             style={{ animationDelay: "480ms" }}
           >
             <span className="text-sm text-white/60">
-              ✓ Activa el acceso hoy; el diagnóstico se hace después dentro de Aprendo
+              {HAS_TRIAL
+                ? `✓ ${TRIAL_LABEL} gratis · tu hijo hace el diagnóstico cuando pueda · cancela antes del cobro`
+                : "✓ Activa el acceso hoy; el diagnóstico se hace después dentro de Aprendo"}
             </span>
           </div>
         </div>

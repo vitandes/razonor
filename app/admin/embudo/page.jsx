@@ -131,6 +131,14 @@ export default async function FunnelDashboard({ searchParams }) {
   const diagnosticAfterPurchase = afterPurchase("diagnostic_completed", "diagnostic_later");
   const checkoutFailures = uniqueByEvent(events, "checkout_failed", identity).size;
 
+  // Demo gratis: paso opcional, por eso va aparte del embudo secuencial.
+  const demoViewed = uniqueByEvent(events, "demo_viewed", identity);
+  const demoStarted = uniqueByEvent(events, "demo_started", identity);
+  const demoCompleted = uniqueByEvent(events, "demo_completed", identity);
+  const countIn = (people, stage) => [...people].filter((id) => stageSets[stage].has(id)).length;
+  const demoToOnboarding = countIn(demoCompleted, "onboarding_started");
+  const demoToPurchase = countIn(demoCompleted, "subscription_purchased");
+
   const devices = ["mobile", "tablet", "desktop"].map((device) => {
     const related = events.filter((event) => event.device_type === device);
     return {
@@ -209,6 +217,19 @@ export default async function FunnelDashboard({ searchParams }) {
           </div>
         </section>
       </div>
+
+      <section className="mt-5 rounded-[2rem] bg-white p-6 shadow-card">
+        <p className="text-xs font-extrabold uppercase tracking-[.16em] text-grape">Demo gratis</p>
+        <h2 className="mt-1 font-display text-2xl font-bold text-ink">¿La demo convence?</h2>
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-5">
+          <LightMetric value={demoViewed.size} label="vieron la demo" />
+          <LightMetric value={demoStarted.size} label="la empezaron" />
+          <LightMetric value={demoCompleted.size} label="la terminaron" />
+          <LightMetric value={`${demoToOnboarding}/${demoCompleted.size}`} label="terminaron → onboarding" />
+          <LightMetric value={`${demoToPurchase}/${demoCompleted.size}`} label="terminaron → compra" />
+        </div>
+        <p className="mt-4 text-xs leading-relaxed text-muted">Compara “terminaron → onboarding” con la tasa general de la landing al onboarding: si es claramente mayor, la demo está ayudando a decidir.</p>
+      </section>
 
       {checkoutFailures > 0 && <Notice tone="error">{checkoutFailures} personas encontraron un error al intentar abrir el checkout en este periodo.</Notice>}
 

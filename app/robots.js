@@ -21,6 +21,9 @@ export default function robots() {
         "/planes",
         "/sign-in",
         "/sign-up",
+        // Bancos completos de ejercicios: herramienta interna de revisión, no
+        // contenido para regalar ni indexar. La demo pública es /demo.
+        "/prototipo-",
       ],
     },
     sitemap: `${base}/sitemap.xml`,

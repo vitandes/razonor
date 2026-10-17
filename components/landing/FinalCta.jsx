@@ -1,6 +1,7 @@
 import AccessButtons from "@/components/landing/AccessButtons";
+import { DemoButton } from "@/components/landing/bits";
 import Reveal from "@/components/landing/Reveal";
-import { CTA_START_LONG } from "@/lib/trial";
+import { CTA_START_LONG, HAS_TRIAL, TRIAL_LABEL } from "@/lib/trial";
 
 export default function FinalCta({ market = "co" }) {
   return (
@@ -15,16 +16,20 @@ export default function FinalCta({ market = "co" }) {
             Deja de adivinar qué debería practicar
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-white/70">
-            Deja listos sus datos y activa el acceso hoy. Después, el estudiante hará
-            el diagnóstico dentro de Aprendo para saber por dónde empezar.
+            {HAS_TRIAL
+              ? `Pruébalo ${TRIAL_LABEL} gratis. El estudiante hará el diagnóstico cuando pueda, dentro de la prueba, para saber por dónde empezar.`
+              : "Deja listos sus datos y activa el acceso hoy. Después, el estudiante hará el diagnóstico dentro de Aprendo para saber por dónde empezar."}
           </p>
 
-          <div className="mt-8 flex flex-col items-center gap-3">
+          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
             <AccessButtons context="final" dark trialLabel={CTA_START_LONG} />
+            <DemoButton dark analyticsContext="final_demo" />
           </div>
 
           <p className="mt-6 text-sm text-white/60">
-            La compra no depende de que tu hijo esté contigo en este momento.
+            {HAS_TRIAL
+              ? "No se cobra hoy · cancela antes del cobro · no necesitas a tu hijo contigo para empezar."
+              : "La compra no depende de que tu hijo esté contigo en este momento."}
           </p>
         </div>
         </Reveal>

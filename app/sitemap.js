@@ -10,6 +10,7 @@ export default function sitemap() {
   const now = new Date();
   const routes = [
     { path: "/", priority: 1, changeFrequency: "weekly" },
+    { path: "/demo", priority: 0.8, changeFrequency: "monthly" },
     { path: "/privacidad", priority: 0.5, changeFrequency: "yearly" },
     { path: "/terminos", priority: 0.5, changeFrequency: "yearly" },
     { path: "/contacto", priority: 0.6, changeFrequency: "monthly" },

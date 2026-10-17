@@ -1,6 +1,6 @@
 import AccessButtons from "@/components/landing/AccessButtons";
 import Reveal from "@/components/landing/Reveal";
-import { CTA_PROBLEM } from "@/lib/trial";
+import { CTA_PROBLEM, HAS_TRIAL, TRIAL_LABEL } from "@/lib/trial";
 
 const SITUATIONS = [
   {
@@ -62,7 +62,11 @@ export default function Problem() {
           <Reveal>
             <div className="mt-7 flex flex-col items-start gap-3">
               <AccessButtons context="problem" trialLabel={CTA_PROBLEM} />
-              <p className="text-sm text-muted">Tú completas el onboarding y activas el acceso; tu hijo hará el diagnóstico después.</p>
+              <p className="text-sm text-muted">
+                {HAS_TRIAL
+                  ? `Empiezas gratis en 2 pasos; tu hijo hace el diagnóstico cuando pueda, dentro de los ${TRIAL_LABEL} de prueba.`
+                  : "Tú completas el onboarding y activas el acceso; tu hijo hará el diagnóstico después."}
+              </p>
             </div>
           </Reveal>
         </div>

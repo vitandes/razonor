@@ -1,19 +1,15 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-// Rutas públicas (no requieren login): landing de marketing, páginas legales,
-// las pantallas de login y los endpoints. El onboarding parental es público
-// para reducir fricción antes de pedir el correo. Planes, la app del
-// niño y el reporte de padres siguen protegidos por Clerk.
+// Rutas públicas (no requieren login): landing de marketing, demo guiada,
+// páginas legales, las pantallas de login y los endpoints. El onboarding
+// parental es público para reducir fricción antes de pedir el correo. Planes,
+// la app del niño, el reporte de padres y los bancos completos de ejercicios
+// (/prototipo-*, herramienta interna de revisión) siguen protegidos por Clerk.
 const isPublicRoute = createRouteMatcher([
   "/",
   "/onboarding",
-  "/prototipo-geometria",
-  "/prototipo-numeros",
-  "/prototipo-fracciones",
-  "/prototipo-proporciones",
-  "/prototipo-algebra",
-  "/prototipo-datos",
+  "/demo",
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/privacidad",
