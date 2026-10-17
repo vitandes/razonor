@@ -1,5 +1,5 @@
 import AccessButtons from "@/components/landing/AccessButtons";
-import { DemoButton } from "@/components/landing/bits";
+import ProspectOnly from "@/components/landing/ProspectOnly";
 import HeroReto from "@/components/landing/HeroReto";
 import HeroFx from "@/components/landing/HeroFx";
 import Torn from "@/components/landing/Torn";
@@ -56,20 +56,21 @@ export default function Hero({ market = "co" }) {
             className="mt-7 flex animate-slidein flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center md:items-start md:justify-start"
             style={{ animationDelay: "360ms" }}
           >
-            <AccessButtons context="hero" dark trialLabel={CTA_START_LONG} />
-            <DemoButton dark analyticsContext="hero_demo" />
+            <AccessButtons context="hero" dark trialLabel={CTA_START_LONG} withDemo />
           </div>
 
-          <div
-            className="mt-7 flex animate-slidein items-center justify-center gap-2 md:justify-start"
-            style={{ animationDelay: "480ms" }}
-          >
-            <span className="text-sm text-white/60">
-              {HAS_TRIAL
-                ? `✓ ${TRIAL_LABEL} gratis · tu hijo hace el diagnóstico cuando pueda · cancela antes del cobro`
-                : "✓ Activa el acceso hoy; el diagnóstico se hace después dentro de Aprendo"}
-            </span>
-          </div>
+          <ProspectOnly>
+            <div
+              className="mt-7 flex animate-slidein items-center justify-center gap-2 md:justify-start"
+              style={{ animationDelay: "480ms" }}
+            >
+              <span className="text-sm text-white/60">
+                {HAS_TRIAL
+                  ? `✓ ${TRIAL_LABEL} gratis · tu hijo hace el diagnóstico cuando pueda · cancela antes del cobro`
+                  : "✓ Activa el acceso hoy; el diagnóstico se hace después dentro de Aprendo"}
+              </span>
+            </div>
+          </ProspectOnly>
         </div>
 
         {/* Vista previa del nuevo diagnóstico y su plan matemático. */}

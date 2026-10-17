@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Show, UserButton } from "@clerk/nextjs";
-import { TrialButton } from "@/components/landing/bits";
+import { DemoButton, TrialButton } from "@/components/landing/bits";
 import { CTA_START } from "@/lib/trial";
 import { isSubscribed, useProgress } from "@/lib/progress";
 
@@ -10,13 +10,17 @@ import { isSubscribed, useProgress } from "@/lib/progress";
 // - sin sesión  -> CTA para empezar (lleva a registro) + reversa de riesgo
 // - con sesión  -> accesos a la app (estudiante / padre) + cuenta
 // `dark`: estilos para fondos noche (header y hero oscuros).
+// `withDemo`: añade "Ver un ejemplo gratis" solo para quien aún no es
+// suscriptor; quien ya pagó solo ve sus accesos a la app.
 export default function AccessButtons({
   context = "hero",
   dark = false,
   trialLabel = CTA_START,
+  withDemo = false,
 }) {
   const progress = useProgress();
   const subscribed = progress.hydrated && isSubscribed(progress.subscription);
+  const memberDemo = withDemo && progress.hydrated && !subscribed;
   const memberHref = subscribed
     ? "/aprendo"
     : progress.onboarding?.done
@@ -65,6 +69,7 @@ export default function AccessButtons({
     <>
       <Show when="signed-out">
         <TrialButton size="lg" analyticsContext={context}>{trialLabel}</TrialButton>
+        {withDemo && <DemoButton dark={dark} analyticsContext={`${context}_demo`} />}
       </Show>
       <Show when="signed-in">
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
@@ -82,6 +87,9 @@ export default function AccessButtons({
               Entrar como padre
             </Link>
           )}
+          {/* Cuenta creada pero sin plan: la demo todavía ayuda a decidir. Mismo
+              tamaño que el botón de al lado para que queden parejos. */}
+          {memberDemo && <DemoButton size="md" dark={dark} analyticsContext={`${context}_demo`} />}
         </div>
       </Show>
     </>
