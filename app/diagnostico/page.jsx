@@ -217,7 +217,7 @@ function DiagnosticContent() {
           {selected && (
             <div className={`mt-6 animate-pop rounded-2xl p-4 ${correct ? "bg-teal-soft" : "bg-honey-soft"}`}>
               <p className="font-display text-lg font-bold text-ink">{correct ? "Correcto" : "Revisemos la idea"}</p>
-              <p className="mt-1 text-sm leading-relaxed text-ink/75"><FractionText>{current.explanation}</FractionText></p>
+              <p className="mt-1 text-sm leading-relaxed text-ink/75"><FractionText>{correct ? current.explanation : current.feedbackMap?.[selected] || current.explanation}</FractionText></p>
             </div>
           )}
         </section>
